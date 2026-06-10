@@ -1,0 +1,2309 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歐美獨立遊戲展深度研究</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f13;--bg2:#1a1a24;--bg3:#13131e;
+  --border:#2a2a3a;--border2:#1e1e2e;
+  --g:#64ffda;--o:#ff8a65;--p:#b388ff;
+  --y:#ffd54f;--b:#42a5f5;--r:#ef5350;
+  --text:#e8e8f0;--muted:#8888aa;--dim:#555570;
+}
+body{font-family:'Segoe UI','PingFang TC','Microsoft JhengHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+
+/* HERO */
+.hero{
+  background:linear-gradient(135deg,#0d1a33 0%,#1a0d2e 40%,#0d2010 100%);
+  padding:52px 40px 0;border-bottom:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;top:-40%;left:-20%;width:140%;height:200%;
+  background:radial-gradient(ellipse at 30% 50%,rgba(66,165,245,0.07) 0%,transparent 50%),
+             radial-gradient(ellipse at 70% 50%,rgba(179,136,255,0.07) 0%,transparent 50%);
+  pointer-events:none;
+}
+.hero-inner{position:relative;z-index:1;}
+.hero-tag{display:inline-block;background:rgba(66,165,245,0.2);border:1px solid rgba(66,165,245,0.4);color:var(--b);font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:4px 14px;border-radius:20px;margin-bottom:16px}
+.hero h1{font-size:2rem;font-weight:800;background:linear-gradient(90deg,#fff,var(--b),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+.hero p{color:var(--muted);font-size:13px;margin-bottom:28px}
+
+/* GLOBAL NAV */
+.utility-nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 24px;background:rgba(15,15,19,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.utility-nav a{flex:0 0 auto;color:var(--muted);text-decoration:none;font-size:12px;padding:5px 10px;border:1px solid transparent;border-radius:8px}
+.utility-nav a:hover{color:var(--text);background:rgba(255,255,255,.04);border-color:var(--border)}
+.utility-nav .home{color:var(--b);border-color:rgba(66,165,245,.35);background:rgba(66,165,245,.08)}
+@media(max-width:720px){.utility-nav{padding:8px 14px}}
+
+/* TABS */
+.tabs{display:flex;align-items:stretch;gap:6px;padding-bottom:18px;position:relative}
+.tab{flex:1 1 0;min-width:0;min-height:36px;padding:8px 10px;font-size:12px;font-weight:600;color:var(--muted);border:1px solid var(--border);background:rgba(15,15,22,.45);cursor:pointer;border-radius:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.25;text-align:center;transition:all .18s}
+.tab:hover{color:var(--text);background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,.16)}
+.tab.active{color:var(--text);border-color:rgba(66,165,245,.55);background:rgba(66,165,245,0.1);box-shadow:inset 0 0 0 1px rgba(66,165,245,.18)}
+.more-menu{position:relative;flex:0 0 auto}
+.more-menu summary{list-style:none;min-height:36px;padding:8px 12px;font-size:12px;font-weight:600;color:var(--muted);border:1px solid var(--border);background:rgba(15,15,22,.55);border-radius:8px;cursor:pointer}
+.more-menu summary::-webkit-details-marker{display:none}
+.more-menu[open] summary,.more-menu summary:hover{color:var(--text);background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.16)}
+.more-panel{position:fixed;z-index:500;min-width:210px;padding:6px;background:#14141d;border:1px solid var(--border);border-radius:10px;box-shadow:0 12px 28px rgba(0,0,0,.35)}
+.menu-item{display:block;width:100%;padding:9px 10px;border:0;border-radius:7px;background:transparent;color:var(--muted);font-size:12px;text-align:left;cursor:pointer}
+.menu-item:hover,.menu-item.active{color:var(--text);background:rgba(66,165,245,.1)}
+@media(max-width:720px){.tab{font-size:11px;padding:8px 5px}.more-menu summary{font-size:11px;padding:8px 8px}}
+
+/* CONTENT */
+.content{display:none;max-width:1100px;margin:0 auto;padding:36px 24px 80px}
+.content.active{display:block}
+
+/* SECTION */
+.section{margin-bottom:48px}
+.section-title{font-size:.95rem;font-weight:600;color:var(--b);letter-spacing:1px;text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,#1a3a5a,transparent)}
+
+/* EXPO HEADER */
+.expo-header{
+  background:var(--bg2);border:1px solid var(--border);border-radius:14px;
+  padding:24px;margin-bottom:24px;display:flex;gap:20px;align-items:flex-start;
+}
+.expo-flag{font-size:2.5rem;flex-shrink:0;line-height:1}
+.expo-info h2{font-size:1.2rem;font-weight:700;color:#fff;margin-bottom:4px}
+.expo-info .expo-meta{font-size:12px;color:var(--muted);margin-bottom:10px}
+.expo-tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:8px;font-weight:600}
+.tag.g{background:rgba(100,255,218,0.12);color:var(--g)}
+.tag.o{background:rgba(255,138,101,0.12);color:var(--o)}
+.tag.p{background:rgba(179,136,255,0.12);color:var(--p)}
+.tag.b{background:rgba(66,165,245,0.12);color:var(--b)}
+.tag.y{background:rgba(255,213,79,0.12);color:var(--y)}
+.tag.r{background:rgba(239,83,80,0.12);color:var(--r)}
+
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:24px}
+.kpi{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.kpi.g::before{background:linear-gradient(90deg,var(--g),#1de9b6)}
+.kpi.o::before{background:linear-gradient(90deg,#ff6b6b,#ffa726)}
+.kpi.p::before{background:linear-gradient(90deg,var(--p),#7c4dff)}
+.kpi.b::before{background:linear-gradient(90deg,var(--b),#1565c0)}
+.kpi.y::before{background:linear-gradient(90deg,var(--y),#ff8f00)}
+.kpi-label{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px}
+.kpi-val{font-size:1.4rem;font-weight:700;line-height:1.1}
+.kpi.g .kpi-val{color:var(--g)}.kpi.o .kpi-val{color:var(--o)}.kpi.p .kpi-val{color:var(--p)}.kpi.b .kpi-val{color:var(--b)}.kpi.y .kpi-val{color:var(--y)}
+.kpi-sub{font-size:10px;color:var(--dim);margin-top:3px}
+
+/* CHART CARD */
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.chart-grid.single{grid-template-columns:1fr}
+.chart-grid.three{grid-template-columns:1fr 1fr 1fr}
+@media(max-width:720px){.chart-grid,.chart-grid.three{grid-template-columns:1fr}}
+.cc{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px}
+.cc h3{font-size:13px;font-weight:600;color:#ccccdd;margin-bottom:2px}
+.cc .cs{font-size:11px;color:var(--dim);margin-bottom:16px}
+.cw{position:relative;height:230px}
+.cw.tall{height:300px}
+
+/* TABLE */
+.tbl-wrap{border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.dt{width:100%;border-collapse:collapse;font-size:13px}
+.dt th{background:#1e1e2e;padding:9px 14px;text-align:left;color:var(--muted);font-size:11px;font-weight:600;letter-spacing:.5px;border-bottom:1px solid var(--border)}
+.dt td{padding:9px 14px;border-bottom:1px solid var(--border2);vertical-align:top}
+.dt tr:hover td{background:rgba(255,255,255,0.018)}
+.dt td:first-child{color:#ccccdd;font-weight:500}
+
+/* NOTE */
+.note{background:var(--bg3);border-left:3px solid var(--b);border-radius:0 8px 8px 0;padding:10px 14px;font-size:12px;color:var(--dim);margin-top:12px}
+.note.green{border-left-color:var(--g)}
+.note.orange{border-left-color:var(--o)}
+.note.purple{border-left-color:var(--p)}
+
+/* ATTR GRID */
+.attr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.attr-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px}
+.attr-icon{font-size:20px;margin-bottom:8px}
+.attr-card h4{font-size:13px;font-weight:600;color:#ddddee;margin-bottom:6px}
+.attr-card p{font-size:12px;color:#777790;line-height:1.75}
+.impact{display:inline-block;margin-top:8px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px}
+.impact.h{background:rgba(100,255,218,0.12);color:var(--g)}
+.impact.m{background:rgba(255,167,38,0.12);color:#ffa726}
+.impact.l{background:rgba(150,150,180,0.12);color:var(--muted)}
+
+/* GAP BARS */
+.gap-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:22px}
+.gap-row{margin-bottom:14px}.gap-row:last-child{margin-bottom:0}
+.gap-lbl{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px}
+.gap-lbl .nm{color:var(--muted)}.gap-lbl .vl{color:#ddddee;font-weight:600}
+.gap-bg{background:#0f0f18;border-radius:4px;height:10px;overflow:hidden}
+.gap-fill{height:100%;border-radius:4px}
+.fill-gamescom{background:linear-gradient(90deg,#1565c0,var(--b))}
+.fill-pax{background:linear-gradient(90deg,#ff8f00,var(--y))}
+.fill-egx{background:linear-gradient(90deg,#880e4f,#e91e63)}
+.fill-bit{background:linear-gradient(90deg,#ff6b6b,var(--o))}
+.fill-geight{background:linear-gradient(90deg,#1de9b6,var(--g))}
+.fill-dot{background:linear-gradient(90deg,#4a148c,var(--p))}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border2);margin:32px 0}
+
+/* HIGHLIGHT BOX */
+.highlight{background:linear-gradient(135deg,rgba(66,165,245,0.07),rgba(179,136,255,0.07));border:1px solid rgba(66,165,245,0.2);border-radius:12px;padding:20px;margin-bottom:24px}
+.highlight h3{font-size:14px;font-weight:700;color:#ccccdd;margin-bottom:10px}
+.highlight p{font-size:13px;color:var(--muted);line-height:1.8}
+.highlight strong{color:#ddddee}
+
+/* COST TABLE */
+.cost-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border2)}
+.cost-row:last-child{border-bottom:none}
+.cost-label{flex:1;font-size:13px;color:#aaaacc}
+.cost-val{font-size:14px;font-weight:700;color:var(--y)}
+.cost-sub{font-size:11px;color:var(--dim)}
+
+.badge{display:inline-block;font-size:10px;padding:1px 7px;border-radius:8px;font-weight:600;margin-left:4px}
+.badge.g{background:rgba(100,255,218,0.15);color:var(--g)}
+.badge.o{background:rgba(255,138,101,0.15);color:var(--o)}
+.badge.p{background:rgba(179,136,255,0.15);color:var(--p)}
+.badge.b{background:rgba(66,165,245,0.15);color:var(--b)}
+
+.footer{text-align:center;padding:28px;color:#333348;font-size:12px;border-top:1px solid var(--border2)}
+</style>
+</head>
+<body>
+
+<nav class="utility-nav" aria-label="研究導覽">
+  <a class="home" href="../00_總覽.html">← 研究總覽</a>
+  <a href="05_BitSummit研究.html">BitSummit</a>
+  <a href="06_歐美獨立遊戲展深度研究.html">歐美展比較</a>
+  <a href="07_成人遊戲海外市場地圖與招商研究.html">Adult / Mature</a>
+</nav>
+
+<div class="hero">
+<div class="hero-inner">
+  <div class="hero-tag">深度研究報告 · 2026-06-09</div>
+  <h1>歐美主要獨立遊戲展深度研究</h1>
+  <p>Gamescom · PAX · EGX · BitSummit · Gamescom Asia · 台北電玩展 · Day of the Devs · 東南亞展覽生態｜含商業模式 B2C/B2B 分析、費用結構、展覽商招商與營運決策</p>
+  <div class="tabs">
+    <button class="tab active" onclick="sw(this,5)">啟示</button>
+    <button class="tab" onclick="sw(this,0)">總體比較</button>
+    <button class="tab" onclick="sw(this,1)">Gamescom</button>
+    <button class="tab" onclick="sw(this,2)">PAX</button>
+    <button class="tab" onclick="sw(this,7)">亞洲展</button>
+    <details class="more-menu">
+      <summary>更多 ▾</summary>
+      <div class="more-panel">
+        <button class="menu-item" onclick="sw(this,3)">EGX</button>
+        <button class="menu-item" onclick="sw(this,4)">線上展覽</button>
+        <button class="menu-item" onclick="sw(this,6)">BitSummit</button>
+        <button class="menu-item" onclick="sw(this,8)">展覽商決策框架</button>
+        <button class="menu-item" onclick="sw(this,9)">深度 B2C 招商</button>
+        <button class="menu-item" onclick="sw(this,10)">參考資料</button>
+        <button class="menu-item" onclick="sw(this,11)">BIC 釜山</button>
+      </div>
+    </details>
+  </div>
+</div>
+</div>
+
+<!-- ═══ TAB 0: 總體比較 ═══ -->
+<div class="content" id="t0">
+
+  <div class="section">
+    <div class="section-title">各展覽人次規模比較</div>
+    <div class="chart-grid single">
+      <div class="cc">
+        <h3>全球主要遊戲展人次（最新數據）</h3>
+        <div class="cs">注意：Gamescom 為大型綜合展（AAA+Indie）；BitSummit、G-EIGHT 為純獨立遊戲展</div>
+        <div class="cw tall"><canvas id="c_total_att"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">票價水位比較（一般觀眾單日，NT$ 換算）</div>
+    <div class="chart-grid">
+      <div class="cc">
+        <h3>一般觀眾票（公眾日）</h3>
+        <div class="cs">換算基準：1 EUR≈35 NTD、1 USD≈32 NTD、1 GBP≈41 NTD、1 JPY≈0.22 NTD</div>
+        <div class="cw"><canvas id="c_ticket"></canvas></div>
+      </div>
+      <div class="cc">
+        <h3>業界/媒體日票價</h3>
+        <div class="cs">B2B 進場或專業日票</div>
+        <div class="cw"><canvas id="c_biz_ticket"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">全面對比表</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead>
+          <tr>
+            <th>展覽</th><th>國家</th><th>類型</th><th>最新人次</th><th>業界人次</th>
+            <th>公眾票/日</th><th>業界日機制</th><th>獨立遊戲展區</th><th>政府支持</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Gamescom</td><td>🇩🇪 德國</td>
+            <td><span class="tag b">大型綜合</span></td>
+            <td>357,000 <span class="badge g">2025 紀錄</span></td>
+            <td>34,000 <span class="badge g">紀錄</span></td>
+            <td>€15–40 ≈ NT$525–1,400</td>
+            <td>✅ 2+2 天 Business Area<br>€64 Wildcard</td>
+            <td>✅ Indie Arena Booth<br>200+ 遊戲，39 國</td>
+            <td>✅ Koelnmesse 市/州共有</td>
+          </tr>
+          <tr>
+            <td>PAX West</td><td>🇺🇸 美國</td>
+            <td><span class="tag y">混合型</span></td>
+            <td>~120,000</td>
+            <td>N/A（無專屬業界日）</td>
+            <td>$71 ≈ NT$2,270</td>
+            <td>❌ 無獨立業界日</td>
+            <td>✅ PAX Rising Showcase<br>✅ Indie Megabooth（休眠中）</td>
+            <td>❌ 商業運營（ReedPop）</td>
+          </tr>
+          <tr>
+            <td>PAX East</td><td>🇺🇸 美國</td>
+            <td><span class="tag y">混合型</span></td>
+            <td>100,000+</td>
+            <td>N/A</td>
+            <td>$66–71 ≈ NT$2,110–2,270</td>
+            <td>❌ 無</td>
+            <td>✅ PAX Rising<br>280+ 展商</td>
+            <td>❌ 商業運營</td>
+          </tr>
+          <tr>
+            <td>EGX London</td><td>🇬🇧 英國</td>
+            <td><span class="tag y">混合型</span></td>
+            <td>75,000–80,000</td>
+            <td>N/A</td>
+            <td>£25–35 ≈ NT$1,025–1,435</td>
+            <td>❌ 無</td>
+            <td>✅ Rezzed Zone<br>✅ Leftfield Collection</td>
+            <td>❌ 商業運營（ReedPop）</td>
+          </tr>
+          <tr>
+            <td>BitSummit</td><td>🇯🇵 日本</td>
+            <td><span class="tag g">純獨立</span></td>
+            <td>68,208 <span class="badge g">2026 紀錄</span></td>
+            <td>~14,000</td>
+            <td>¥2,000 ≈ NT$440</td>
+            <td>✅ ¥20,000/人<br>≈ NT$4,400</td>
+            <td>✅ 全部 300+ 款均為獨立</td>
+            <td>✅ 京都府 + KYOTO CMEX</td>
+          </tr>
+          <tr>
+            <td>Day of the Devs</td><td>🇺🇸 美國</td>
+            <td><span class="tag g">純獨立</span></td>
+            <td>數千（現場）<br>100M+ 線上累積</td>
+            <td>N/A（非營利）</td>
+            <td>免費</td>
+            <td>❌ 無</td>
+            <td>✅ 100% 獨立，策展制</td>
+            <td>❌ 非營利，贊助維持</td>
+          </tr>
+          <tr style="background:rgba(100,255,218,0.03)">
+            <td><strong>G-EIGHT</strong></td><td>🇹🇼 台灣</td>
+            <td><span class="tag g">純獨立</span></td>
+            <td>~25,000（估）</td>
+            <td>N/A（無業界日）</td>
+            <td>NT$300–350</td>
+            <td>❌ 無 <span class="badge o">最大機會</span></td>
+            <td>✅ 100% 獨立</td>
+            <td>❌ 純民間</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">indie 展商進入成本比較</div>
+    <div class="gap-wrap">
+      <div style="font-size:12px;color:var(--dim);margin-bottom:18px">最小展示單位（NT$ 換算，不含差旅）</div>
+      <div class="gap-row">
+        <div class="gap-lbl"><span class="nm">Gamescom Indie Arena Booth（Small Booth）</span><span class="vl">€3,337 ≈ NT$116,795</span></div>
+        <div class="gap-bg"><div class="gap-fill fill-gamescom" style="width:100%"></div></div>
+      </div>
+      <div class="gap-row">
+        <div class="gap-lbl"><span class="nm">PAX West（PAX Rising 半 pod）</span><span class="vl">~$1,200 ≈ NT$38,400</span></div>
+        <div class="gap-bg"><div class="gap-fill fill-pax" style="width:32.8%"></div></div>
+      </div>
+      <div class="gap-row">
+        <div class="gap-lbl"><span class="nm">BitSummit（標準展攤）</span><span class="vl">¥33,000 ≈ NT$7,260</span></div>
+        <div class="gap-bg"><div class="gap-fill fill-bit" style="width:6.2%"></div></div>
+      </div>
+      <div class="gap-row">
+        <div class="gap-lbl"><span class="nm">G-EIGHT indie team 報名費</span><span class="vl">未公開（推估低或免費）</span></div>
+        <div class="gap-bg"><div class="gap-fill fill-geight" style="width:3%"></div></div>
+      </div>
+      <div class="gap-row">
+        <div class="gap-lbl"><span class="nm">Day of the Devs</span><span class="vl">免費（策展制，不保證入選）</span></div>
+        <div class="gap-bg"><div class="gap-fill fill-dot" style="width:0.5%"></div></div>
+      </div>
+    </div>
+    <div class="note">各展進入門檻差距極大。這些成本資料對 G-EIGHT 的用途，是反推海外展商的心理門檻與可接受方案，而不是建議團隊該去哪裡參展。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">商業模式雷達比較</div>
+    <div class="chart-grid single">
+      <div class="cc">
+        <h3>各展多維度評分（10 分制，主觀）</h3>
+        <div class="cs">純獨立遊戲展 G-EIGHT / BitSummit vs 混合型 PAX West vs 大型展 Gamescom</div>
+        <div class="cw tall"><canvas id="c_radar_all"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 1: Gamescom ═══ -->
+<div class="content" id="t1">
+
+  <div class="expo-header">
+    <div class="expo-flag">🇩🇪</div>
+    <div class="expo-info">
+      <h2>Gamescom — 世界最大遊戲展</h2>
+      <div class="expo-meta">📍 Koelnmesse，科隆，德國 ｜ 📅 每年 8 月下旬（5天）｜ 🏛 主辦：Koelnmesse GmbH（科隆市 / 北萊茵-威斯特法倫邦 共同所有）</div>
+      <div class="expo-tags">
+        <span class="tag b">大型綜合展</span>
+        <span class="tag g">含獨立遊戲專區</span>
+        <span class="tag y">業界+消費者混合</span>
+        <span class="tag p">政府機構主辦</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">2025 年關鍵數據</div>
+    <div class="kpi-grid">
+      <div class="kpi b"><div class="kpi-label">總入場人次</div><div class="kpi-val">357,000</div><div class="kpi-sub">歷史新高，+6.5% YoY</div></div>
+      <div class="kpi b"><div class="kpi-label">業界/媒體人次</div><div class="kpi-val">34,000</div><div class="kpi-sub">歷史新高，來自 122 國</div></div>
+      <div class="kpi b"><div class="kpi-label">參展商數</div><div class="kpi-val">1,500+</div><div class="kpi-sub">70% 為國際展商（72 國）</div></div>
+      <div class="kpi y"><div class="kpi-label">ONL 線上總觸及</div><div class="kpi-val">630M+</div><div class="kpi-sub">Opening Night Live，YoY +105%</div></div>
+      <div class="kpi y"><div class="kpi-label">ONL 峰值同時在線</div><div class="kpi-val">2M+</div><div class="kpi-sub">YoY +60%，1,100+ 頻道直播</div></div>
+      <div class="kpi g"><div class="kpi-label">Indie Arena Booth</div><div class="kpi-val">200+ 遊戲</div><div class="kpi-sub">來自 39 國，2,000 sqm</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">展會結構：5 天如何運作</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>日期</th><th>類型</th><th>開放對象</th><th>票種</th><th>票價</th></tr></thead>
+        <tbody>
+          <tr><td>週三（Day 1）</td><td><span class="tag p">媒體/業界日</span></td><td>媒體、業界人士（邀請制）</td><td>Trade Visitor / Wildcard</td><td>€64 Wildcard（下午1點起）</td></tr>
+          <tr><td>週四（Day 2）</td><td><span class="tag p">業界+媒體</span></td><td>業界、媒體、Business Area 持票者</td><td>Business 5-Day Ticket</td><td>€63.87+（基礎）</td></tr>
+          <tr><td>週五（Day 3）</td><td><span class="tag y">業界+消費者</span></td><td>業界人士 + 一般消費者（有票）</td><td>Business 5-Day / Day Ticket</td><td>€15–25（消費者）</td></tr>
+          <tr><td>週六（Day 4）</td><td><span class="tag o">消費者日</span></td><td>所有持票者（最多人）</td><td>Day Ticket</td><td>€30–40（最貴，需求最高）</td></tr>
+          <tr><td>週日（Day 5）</td><td><span class="tag o">消費者日</span></td><td>所有持票者</td><td>Day Ticket</td><td>€20–30</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">⚠️ 所有票均需線上預購，無現場購票。週六票通常在開賣後數小時內售罄。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">展商費用結構</div>
+    <div class="highlight">
+      <h3>重要背景：Koelnmesse 是政府機構</h3>
+      <p>Koelnmesse GmbH 100% 由<strong>科隆市（持股約 80%）</strong>和<strong>北萊茵-威斯特法倫邦（NRW，持股約 20%）</strong>共同持有。這意味著場館基礎設施費用、國際行銷預算、部分場地租金均有政府背書，展商承擔的成本結構與純商業展完全不同。</p>
+    </div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>費用項目</th><th>金額</th><th>備註</th></tr></thead>
+        <tbody>
+          <tr><td>展位租金（Terrace Stand，≤150 sqm）</td><td>€183.50/sqm</td><td>最小 12 sqm = €2,202</td></tr>
+          <tr><td>展位租金（Corner Stand，≤150 sqm）</td><td>€190.00/sqm</td><td>兩面臨走道，溢價</td></tr>
+          <tr><td>能源費用</td><td>€16.00/sqm</td><td>強制附加</td></tr>
+          <tr><td>AUMA 基金費用</td><td>€0.60/sqm</td><td>德國展覽協會費</td></tr>
+          <tr><td>NOW 行銷套件（B2C）</td><td>€995 固定</td><td>強制，線上曝光套件</td></tr>
+          <tr><td>Co-exhibitor 登記費</td><td>€500 固定</td><td>共同展出不另立展位</td></tr>
+          <tr><td><strong>小型展商估算（12 sqm）</strong></td><td><strong>~€4,400</strong></td><td>≈ NT$154,000</td></tr>
+          <tr><td><strong>中型展商估算（50 sqm）</strong></td><td><strong>~€11,000</strong></td><td>≈ NT$385,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note orange">Indie Arena Booth 是另一條路：Small Booth €3,337 all-inclusive（含桌椅、電力、照明、清潔、飲料點心、B2B 通行證），不需自己租展位，是進入 Gamescom 的最低成本方案。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Indie Arena Booth — 獨立遊戲的護城河</div>
+    <div class="kpi-grid">
+      <div class="kpi g"><div class="kpi-label">2025 入選遊戲</div><div class="kpi-val">200+</div><div class="kpi-sub">來自 39 個國家</div></div>
+      <div class="kpi g"><div class="kpi-label">展區大小</div><div class="kpi-val">2,000 sqm</div><div class="kpi-sub">Hall 10.2（2025 年首次獨立整廳）</div></div>
+      <div class="kpi y"><div class="kpi-label">Small Booth 費用</div><div class="kpi-val">€3,337</div><div class="kpi-sub">≈ NT$116,795（all-inclusive）</div></div>
+      <div class="kpi y"><div class="kpi-label">Big Booth 費用</div><div class="kpi-val">€5,337</div><div class="kpi-sub">≈ NT$186,795（all-inclusive）</div></div>
+      <div class="kpi p"><div class="kpi-label">選拔評審數</div><div class="kpi-val">60+</div><div class="kpi-sub">產業專家，全球來源</div></div>
+      <div class="kpi p"><div class="kpi-label">申請截止</div><div class="kpi-val">約 4 月初</div><div class="kpi-sub">結果約 4–5 月公布</div></div>
+    </div>
+
+    <div class="attr-grid" style="margin-top:20px">
+      <div class="attr-card">
+        <div class="attr-icon">📦</div>
+        <h4>Small / Arcade Booth（€3,337）包含</h4>
+        <p>· 桌子、椅子、電力、地毯、照明、清潔<br>
+           · 展區內飲料與點心<br>
+           · USK 年齡分級協調<br>
+           · B2B 區域通行證<br>
+           · MeetToMatch 帳號（業界媒合）<br>
+           · 列入 gamescom Steam 活動<br>
+           · 官方網站 + lineup 宣傳影片曝光<br>
+           · Indie Arena Booth B2B 活動邀請</p>
+        <span class="impact h">CP 值最高方案</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🆓</div>
+        <h4>免費名額管道（政府補助）</h4>
+        <p>多個地區政府每年補助本地團隊參展費用：<br><br>
+           · 🇨🇭 <strong>Swiss Games</strong>（瑞士政府）<br>
+           · 🇬🇧 <strong>Northern Ireland Screen</strong>（北愛爾蘭）<br>
+           · 🇧🇪 <strong>Flanders Audiovisual Fund</strong>（比利時法蘭德斯區）<br>
+           · 🇪🇸 <strong>Catalan Arts</strong>（西班牙加泰隆尼亞）<br>
+           · 🇦🇺 <strong>SAFC / IGEA</strong>（澳洲各州）<br><br>
+           台灣目前<strong style="color:var(--o)">尚無對應機制</strong>，這是文策院（TAICCA）可以切入的角色。</p>
+        <span class="impact m">台灣的空缺</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🎯</div>
+        <h4>選拔邏輯</h4>
+        <p>Indie Arena Booth 不只看品質，也考量：<br><br>
+           · <strong>多樣性</strong>：類型、美術風格、國家、開發階段<br>
+           · <strong>預計發售時間</strong><br>
+           · <strong>誰最受益於展出</strong>（傾向選無大型發行商支持的團隊）<br><br>
+           這意味著台灣獨立團隊有機會入選，<strong>但需要英語化的宣傳材料和提前規劃</strong>。</p>
+        <span class="impact m">需提前 4–5 個月申請</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">數位影響力：Opening Night Live 的力量</div>
+    <div class="chart-grid">
+      <div class="cc">
+        <h3>ONL 線上觸及成長</h3>
+        <div class="cs">2024 → 2025</div>
+        <div class="cw"><canvas id="c_onl_growth"></canvas></div>
+      </div>
+      <div class="cc">
+        <h3>2025 數位觸及分解</h3>
+        <div class="cs">全球 630M+ 觸及</div>
+        <div class="cw"><canvas id="c_onl_breakdown"></canvas></div>
+      </div>
+    </div>
+    <div class="note green">ONL 2025 峰值 2M+ 同時在線，1,100+ 頻道直播，630M+ 總觸及——獨立遊戲在 ONL 曝光相當於一次全球性的媒體轟炸。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">devcom → gamescom dev：開發者大會</div>
+    <div class="kpi-grid">
+      <div class="kpi p"><div class="kpi-label">2025 參與人數</div><div class="kpi-val">5,400</div><div class="kpi-sub">YoY +6%，歷史新高</div></div>
+      <div class="kpi p"><div class="kpi-label">來源國家</div><div class="kpi-val">89 國</div><div class="kpi-sub">2,500+ 家公司</div></div>
+      <div class="kpi p"><div class="kpi-label">演講 / 講座</div><div class="kpi-val">220 場</div><div class="kpi-sub">390 位講者，17 個舞台</div></div>
+      <div class="kpi y"><div class="kpi-label">最低票價</div><div class="kpi-val">€113</div><div class="kpi-sub">學生早鳥</div></div>
+      <div class="kpi y"><div class="kpi-label">最高票價</div><div class="kpi-val">€1,975</div><div class="kpi-sub">VIP 5天套票</div></div>
+      <div class="kpi g"><div class="kpi-label">indie expo 展商</div><div class="kpi-val">53 家</div><div class="kpi-sub">含獎學金計畫 220 人免費</div></div>
+    </div>
+    <div class="note purple">2025 年正式改名為「gamescom dev」，完全整合進 Gamescom 生態系——這代表 Gamescom 現在擁有 <strong>消費者展、業界展、開發者大會</strong> 三層收入結構。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">商業模式深度：B2C vs B2B 收入結構</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>收入來源</th><th>B2C / B2B</th><th>估算占比</th><th>具體推算依據</th></tr></thead>
+        <tbody>
+          <tr><td>展商費（1,500+ 展商）</td><td><span class="tag b">B2B</span></td><td>~45%</td><td>均費估 €200/sqm × 平均 80 sqm × 1,500 家。AAA 大廠高達 €5,000/sqm，拉高均值</td></tr>
+          <tr><td>企業贊助（Presenting Partner 等）</td><td><span class="tag b">B2B</span></td><td>~20%</td><td>頂級贊助商（如 DHL、AMD、Razer）七位數歐元年贊助費；多層次套餐</td></tr>
+          <tr><td>Business / Trade 票務</td><td><span class="tag b">B2B</span></td><td>~5%</td><td>€64 Wildcard × 34,000 業界人士（部分免費邀請）= €2.2M 估</td></tr>
+          <tr><td>消費者票務</td><td><span class="tag g">B2C</span></td><td>~25%</td><td>357,000 – 34,000 = 323,000 消費者 × 均 €22 = €7.1M 估</td></tr>
+          <tr><td>gamescom dev 票務</td><td><span class="tag p">B2B 開發者</span></td><td>~3%</td><td>5,400 人 × 均 €300（含不同票種）= €1.6M 估</td></tr>
+          <tr><td>場地服務 / 餐飲 / 授權</td><td><span class="tag g">B2C + B2B</span></td><td>~2%</td><td>場館內部服務收入</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note orange"><strong>關鍵洞察：</strong>Gamescom 的 B2B 收入（展商費 + 贊助 + 業界票）估計占 <strong>70%</strong>，B2C 票務只占 25–28%。但消費者的 323,000 人次是吸引 AAA 大廠掏出 €5,000/sqm 的根本原因。<strong>B2C 規模 = B2B 定價權的基礎。</strong>這個邏輯對 G-EIGHT 完全適用——要提高展商費，必須先衝人次。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">客群分析：廠商面 vs 玩家群</div>
+    <div class="kpi-grid">
+      <div class="kpi b"><div class="kpi-label">總展商數</div><div class="kpi-val">1,500+</div><div class="kpi-sub">72 國，70% 國際</div></div>
+      <div class="kpi b"><div class="kpi-label">業界人士</div><div class="kpi-val">34,000</div><div class="kpi-sub">歷史新高，122 國</div></div>
+      <div class="kpi g"><div class="kpi-label">消費者人次</div><div class="kpi-val">~323,000</div><div class="kpi-sub">357K 總人次 − 34K 業界</div></div>
+      <div class="kpi g"><div class="kpi-label">週六票售罄速度</div><div class="kpi-val">&lt;數小時</div><div class="kpi-sub">消費者需求遠超供給</div></div>
+    </div>
+    <div class="attr-grid">
+      <div class="attr-card">
+        <div class="attr-icon">🏢</div>
+        <h4>廠商面（B2B 參與者）</h4>
+        <p>
+          <strong>AAA 大廠</strong><br>
+          Sony PlayStation、Xbox（Microsoft）、EA、Ubisoft、2K Games、Capcom、Bandai Namco<br><br>
+          <strong>硬體 / 周邊廠商</strong><br>
+          Intel、AMD、NVIDIA、Razer、Corsair、Logitech、MSI、Acer（贊助主力，年費可達七位數歐元）<br><br>
+          <strong>獨立遊戲層</strong><br>
+          Indie Arena Booth：200+ 遊戲、39 國、評審選拔制；多國政府館（Swiss Games、Northern Ireland Screen、澳洲 IGEA 等）帶隊參展<br><br>
+          <strong>服務 / 工具廠商</strong><br>
+          Unity、Epic Games（Unreal）、本地化公司、音效中介<br><br>
+          <strong>媒體機構</strong><br>
+          100+ 媒體出席（IGN、Eurogamer、VGC、GameSpot、各國本地媒體）<br><br>
+          <strong>投資 / 發行端</strong><br>
+          MeetToMatch 平台上的發行商、VC 基金、平台 BD 人員是業界 34K 人次的核心組成
+        </p>
+        <span class="impact h">廠商多樣性全球最高</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🎮</div>
+        <h4>玩家群（B2C 消費者）</h4>
+        <p>
+          <strong>地域分布</strong><br>
+          德國本地（估 40%）+ 歐洲鄰國（英、法、荷、比、波蘭，估 40%）+ 全球其他（20%）<br><br>
+          <strong>年齡結構</strong><br>
+          主力 16–35 歲；週六「家庭日」吸引帶孩子的父母，25%+ 為家庭觀眾，年齡層最廣<br><br>
+          <strong>消費力與偏好</strong><br>
+          德國是歐洲最大遊戲市場（2024 年 €6.2B），玩家消費習慣成熟、付費意願高；PC gaming 文化濃厚（德國 PC 市占率遠高於歐洲均值）；主機、手機次之<br><br>
+          <strong>購票行為</strong><br>
+          週六票在開賣後數小時內售罄，顯示超強需求；玩家通常提前 2–3 個月規劃行程並購票<br><br>
+          <strong>對 indie 的態度</strong><br>
+          Indie Arena Booth 長期人氣高，歐洲玩家對實驗性 indie 接受度高（比亞洲市場更開放）
+        </p>
+        <span class="impact h">歐洲消費力最強的遊戲觀眾</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-title">策展機制解析：Indie Arena Booth 如何成為護城河</div>
+    <div class="highlight">
+      <h3>選拔邏輯：「誰最受益於展出？」才是核心問題</h3>
+      <p>Indie Arena Booth 的 60+ 全球評審，選拔標準不只是遊戲品質——評審明確<strong>傾向選「沒有大型發行商支持的獨立開發者」</strong>。這個設計確保 IAB 不會被有資源的發行商塞滿，維持了真正 indie 的純粹性。對 G-EIGHT 而言，這是最直接的策展啟示：<strong>展位費用不能是唯一篩選機制。</strong></p>
+    </div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>選拔維度</th><th>Indie Arena Booth 的做法</th><th>G-EIGHT 可參考的方向</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>評審規模與來源</td>
+            <td>60+ 全球產業專家，跨國多元，名單不公開但存在</td>
+            <td>公開 5–10 名評審名單，邀請至少 1–2 位海外評審增加國際信度</td>
+          </tr>
+          <tr>
+            <td>多樣性要求</td>
+            <td>明確考量類型、美術風格、國家、開發階段</td>
+            <td>在選拔說明中明訂「台灣製首發」「成人向」「實驗性」的保留比例</td>
+          </tr>
+          <tr>
+            <td>發行商限制</td>
+            <td>傾向無大型發行商支持的團隊</td>
+            <td>明確區分「indie team」vs「publisher-backed team」的入選標準</td>
+          </tr>
+          <tr>
+            <td>政府館補助模式</td>
+            <td>Swiss Games、IGEA 等政府買單，讓本地開發者免費進 IAB</td>
+            <td>爭取 TAICCA（文策院）補助台灣開發者進 G-EIGHT，複製這個邏輯</td>
+          </tr>
+          <tr>
+            <td>入選後的價值包</td>
+            <td>官網曝光、B2B 通行證、MeetToMatch 帳號、Steam 活動、Lineup 影片</td>
+            <td>設計「G-EIGHT Selection 套餐」：徽章 + 社群素材 + 媒體引薦 + 玩家資料報告</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note green">政府補助進入 IAB 是一個信號：<strong>IAB 的品牌已有「值得政府補助才能參加」的地位</strong>。台灣的 TAICCA 正在尋找支持本地遊戲團隊國際化的管道——G-EIGHT 若能建立策展公信力，TAICCA 補助的邏輯就自然成立了。</div>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 2: PAX ═══ -->
+<div class="content" id="t2">
+
+  <div class="expo-header">
+    <div class="expo-flag">🇺🇸</div>
+    <div class="expo-info">
+      <h2>PAX — Penny Arcade Expo</h2>
+      <div class="expo-meta">📍 PAX West（西雅圖）/ PAX East（波士頓）/ PAX Aus（墨爾本）等 ｜ 📅 全年多場 ｜ 🏛 主辦：ReedPop（商業公司）</div>
+      <div class="expo-tags">
+        <span class="tag y">混合型（AAA+Indie）</span>
+        <span class="tag o">商業運營</span>
+        <span class="tag b">強玩家社群</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">2025 各場次關鍵數據</div>
+    <div class="kpi-grid">
+      <div class="kpi y"><div class="kpi-label">PAX West 2025 人次</div><div class="kpi-val">~120,000</div><div class="kpi-sub">西雅圖，8月29-9/1</div></div>
+      <div class="kpi y"><div class="kpi-label">PAX East 2025 人次</div><div class="kpi-val">100,000+</div><div class="kpi-sub">波士頓，5月8-11日</div></div>
+      <div class="kpi y"><div class="kpi-label">PAX East 展商數</div><div class="kpi-val">280+</div><div class="kpi-sub">2025 年數據</div></div>
+      <div class="kpi o"><div class="kpi-label">PAX West 單日票</div><div class="kpi-val">$71</div><div class="kpi-sub">≈ NT$2,270 / 4天 $260</div></div>
+      <div class="kpi o"><div class="kpi-label">PAX East 單日票</div><div class="kpi-val">$66–71</div><div class="kpi-sub">≈ NT$2,110–2,270</div></div>
+      <div class="kpi p"><div class="kpi-label">業界日</div><div class="kpi-val">無</div><div class="kpi-sub">消費者與業界混合</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">PAX 的獨立遊戲機制</div>
+    <div class="attr-grid">
+      <div class="attr-card">
+        <div class="attr-icon">⭐</div>
+        <h4>PAX Rising Showcase — 策展精選</h4>
+        <p>PAX 官方精選的獨立遊戲展示區，強調「在玩法、娛樂性或創意上脫穎而出」的作品。<br><br>
+           · 每年開放申請（截止約 6 月中，展會前約 3 個月）<br>
+           · 費用：PAX Aus 約 AU$2,150 / 其他場次約 USD$1,200 半 pod<br>
+           · Screen NSW 等政府機構補助本地團隊費用<br>
+           · 無獨立業界媒合機制</p>
+        <span class="impact m">費用中等，地區差異大</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🏟️</div>
+        <h4>Indie Megabooth — 歷史性集體展示</h4>
+        <p>獨立遊戲展示的集體攤位概念，曾是北美最重要的獨立遊戲平台。<br><br>
+           · 疫情期間進入休眠，2024年後嘗試重新啟動<br>
+           · 全盛期：10×30 ft 展示 3 款遊戲需 USD$4,000（2019年）<br>
+           · 申請費 $50，入選後另計攤位費<br>
+           · 目前狀態不穩定，不建議作為主要策略</p>
+        <span class="impact l">目前狀態：休眠復甦中</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">💡</div>
+        <h4>PAX vs 純獨立展：本質差異</h4>
+        <p>PAX 的核心是「玩家博覽會」，AAA 廠商（Capcom、The Pokémon Company、Larian Studios 等）佔據最顯眼位置。<br><br>
+           <strong>獨立遊戲在 PAX 的困境：</strong>被大廠包圍，現場排隊集中在 AAA 展示區，獨立遊戲展位相對難以被發現。<br><br>
+           <strong>獨立遊戲在 PAX 的優勢：</strong>高票價（$71）代表觀眾都是有消費力的核心玩家，媒體曝光機會豐富。</p>
+        <span class="impact m">機會與挑戰並存</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">票價收入估算</div>
+    <div class="chart-grid">
+      <div class="cc">
+        <h3>PAX West 票價收入估算</h3>
+        <div class="cs">120,000 人 × $71 avg ≈ NT$2.7億（估）</div>
+        <div class="cw"><canvas id="c_pax_rev"></canvas></div>
+      </div>
+      <div class="cc">
+        <h3>PAX 生態系各場次人次</h3>
+        <div class="cs">全年 PAX 系列合計</div>
+        <div class="cw"><canvas id="c_pax_events"></canvas></div>
+      </div>
+    </div>
+    <div class="note">PAX 系列展覽（West + East + Aus + Unplugged）全年合計估計超過 350,000 人次，是全球規模最大的玩家社群展覽體系。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">ReedPop 商業模式分析</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>收入來源</th><th>估算</th><th>特點</th></tr></thead>
+        <tbody>
+          <tr><td>票務收入（PAX West）</td><td>~$8.5M USD ≈ NT$272M</td><td>120,000 人 × $71 avg，核心收入</td></tr>
+          <tr><td>展商費用</td><td>未公開，推估高</td><td>AAA 大廠支付高額展位費，補貼整體</td></tr>
+          <tr><td>PAX Rising 費用</td><td>~$500K USD</td><td>~400+ indie 團隊 × ~$1,200</td></tr>
+          <tr><td>合作/贊助</td><td>顯著但未公開</td><td>周邊販售、獨家合作</td></tr>
+          <tr><td>全球 PAX 系列</td><td>總計顯著</td><td>West + East + Aus + Unplugged 共 4 場</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note orange">PAX 的高票價（NT$2,270）比 G-EIGHT（NT$300）貴約 <strong>6.9 倍</strong>——但 PAX 玩家接受度高，因為 4 天展覽內容密度極高。這對 G-EIGHT 的定價策略有重要參考意義。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">商業模式深度：B2C vs B2B 結構分析</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>收入來源</th><th>B2C / B2B</th><th>金額（估）</th><th>占比</th><th>說明</th></tr></thead>
+        <tbody>
+          <tr><td>消費者票務（PAX West）</td><td><span class="tag g">B2C</span></td><td>~$8.5M USD</td><td>~35–40%</td><td>120,000 人 × $71 均價；最透明的收入來源</td></tr>
+          <tr><td>AAA / 大廠展商費</td><td><span class="tag b">B2B</span></td><td>~$10–15M（估）</td><td>~40–45%</td><td>大廠展位 10K–30K sqft，費率未公開但為主力</td></tr>
+          <tr><td>PAX Rising 展商費（indie）</td><td><span class="tag b">B2B</span></td><td>~$500K</td><td>~2%</td><td>400+ 團隊 × $1,200，indie 費率極低</td></tr>
+          <tr><td>贊助商</td><td><span class="tag b">B2B</span></td><td>顯著，未公開</td><td>~10–15%</td><td>Corsair、Intel 等多年合約贊助商</td></tr>
+          <tr><td>周邊 / Creator Zone / 授權</td><td><span class="tag g">B2C</span></td><td>~$1–2M（估）</td><td>~5%</td><td>PAX 官方周邊、合作商品</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note orange"><strong>關鍵洞察：</strong>PAX 是目前最接近「B2C 主導」的大型遊戲展——B2C 票務占 35–40%，遠高於 Gamescom（25%）和 BitSummit（25%）。這反映 <strong>PAX 完全缺乏 Business Day 這個 B2B 貨幣化機制</strong>。沒有業界日，就無法對業界人士額外收費，B2B 收入只能依賴展商費和贊助。這是 PAX 商業天花板低於 Gamescom 的結構性原因。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">客群分析：廠商面 vs 玩家群</div>
+    <div class="kpi-grid">
+      <div class="kpi y"><div class="kpi-label">PAX Rising 展商</div><div class="kpi-val">400+</div><div class="kpi-sub">每場次，indie 主力</div></div>
+      <div class="kpi y"><div class="kpi-label">PAX West 消費者</div><div class="kpi-val">~120,000</div><div class="kpi-sub">4天（2025）</div></div>
+      <div class="kpi g"><div class="kpi-label">全球 PAX 系列合計</div><div class="kpi-val">400,000+</div><div class="kpi-sub">West + East + Aus + Unplugged</div></div>
+      <div class="kpi g"><div class="kpi-label">玩家票價</div><div class="kpi-val">$71 均</div><div class="kpi-sub">≈ NT$2,270，接受度高</div></div>
+    </div>
+    <div class="attr-grid">
+      <div class="attr-card">
+        <div class="attr-icon">🏢</div>
+        <h4>廠商面（展商組成）</h4>
+        <p>
+          <strong>主要平台廠商</strong><br>
+          Xbox（Microsoft）、PlayStation（Sony）、Nintendo of America、EA、Activision/Blizzard、2K Games；各廠均投入大型體驗型展位<br><br>
+          <strong>PAX Rising（indie 核心）</strong><br>
+          400+ 獨立遊戲工作室，費用 ~$1,200，由 PAX 評審選拔；歷屆校友《Celeste》《Slay the Princess》《Hades》在此起步<br><br>
+          <strong>桌遊 / 周邊廠商</strong><br>
+          PAX 桌遊廠商比例明顯高於 Gamescom，Wizards of the Coast、Fantasy Flight Games、Razer、SteelSeries 均有固定參展<br><br>
+          <strong>Creator 生態</strong><br>
+          PAX 設有 Creator Zone，YouTube / Twitch 創作者以展商身分進駐，與玩家互動，是 Gamescom 沒有的獨特機制<br><br>
+          <strong>媒體</strong><br>
+          IGN、Polygon、PC Gamer、GameSpot；Creator 媒體（YouTube 頻道）比傳統媒體比例更高
+        </p>
+        <span class="impact h">Indie + Creator 生態最豐富</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🎮</div>
+        <h4>玩家群（消費者特質）</h4>
+        <p>
+          <strong>地域</strong><br>
+          PAX West：美國西岸（西雅圖 + 周邊州）；PAX East：美國東岸（波士頓）；兩場各有強烈的「本地社群」認同感<br><br>
+          <strong>年齡與身分</strong><br>
+          主力 18–35 歲（大學生 + 職場初期）；cosplay 文化高度滲透，gamer identity 強烈<br><br>
+          <strong>消費偏好</strong><br>
+          美國是全球最大遊戲市場（$57B+，2024）；PAX 觀眾是「重度消費者」——願意為內容和體驗支付高溢價<br>
+          PC gaming 和主機均衡；桌遊玩家比例顯著（PAX Unplugged 單獨拆成桌遊展）<br><br>
+          <strong>對 indie 的態度</strong><br>
+          PAX Rising 歷史上孕育出多個知名 indie IP，顯示 PAX 觀眾有強烈的 indie 發現欲望；試玩後願意當場 wishlist<br><br>
+          <strong>關鍵行為指標</strong><br>
+          Session 試玩數據顯示：好的 Demo 在 4 天展期可累積 149 次試玩，比展前預測高出近 2 倍
+        </p>
+        <span class="impact h">北美最高 indie 發現意願的玩家群</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-title">PAX Rising 策展哲學：孕育下一代 indie 旗艦的土壤</div>
+    <div class="highlight">
+      <h3>校友名單是最強的招商材料</h3>
+      <p>PAX Rising 的最大資產不是名氣，而是<strong>校友名單</strong>：《Celeste》、《Hades》、《Slay the Princess》——這些現在全球知名的獨立遊戲，都在 PAX Rising 的展台上第一次被玩家發現。這個歷史記錄讓未入選的開發者產生「我也想在這裡起步」的強烈動力，也讓媒體和玩家信任「PAX Rising 選出來的遊戲值得試玩」。<br><br>G-EIGHT 每一屆過後，都應該記錄「這個遊戲在 G-EIGHT 第一次展出，後來⋯⋯」——這個記錄的複利效應會隨著年份越來越強。</p>
+    </div>
+    <div class="attr-grid">
+      <div class="attr-card">
+        <div class="attr-icon">🏛</div>
+        <h4>選拔邏輯：低門檻但有品管</h4>
+        <p>PAX Rising 攤位費刻意設計低門檻（~$1,200 half pod），讓更多 indie 工作室能嘗試，但入選仍需通過選拔，確保基本品質。這個設計讓 PAX Rising 兼顧<strong>廣度（400+ 款）</strong>和<strong>信任度（有篩選）</strong>——展商數量多但玩家仍然信任展台品質。</p>
+        <span class="impact h">低門檻 + 品管 = 最佳招商組合</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🎥</div>
+        <h4>Creator Zone：讓 KOL 成為展覽的一部分</h4>
+        <p>PAX 設有 Creator Zone，YouTube / Twitch 創作者以<strong>展商身份</strong>進駐，在展場直播、與玩家互動。這讓 KOL 不只是來報導的媒體，而是展覽體驗的組成部分。<br><br>G-EIGHT 可設計「G-EIGHT Creator Showcase」——給台灣遊戲 KOL / 串流主固定位置，讓他們的觀眾也成為 G-EIGHT 的觀眾。</p>
+        <span class="impact h">KOL 作為展覽組成，不只是媒體</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">📚</div>
+        <h4>建立「G-EIGHT Alumni」記錄</h4>
+        <p>PAX Rising 不主動行銷校友名單，但業界自然形成「PAX Rising 出身」的品牌記憶。G-EIGHT 可以更主動：<br>· 每年更新官網「G-EIGHT 歷屆精選」頁<br>· 追蹤展後 6 個月 / 1 年的成績（Steam 好評、銷量、獲獎）<br>· 讓開發者和媒體看到「G-EIGHT 選過的遊戲後來如何」</p>
+        <span class="impact m">主動建立校友記錄是護城河複利</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">💡</div>
+        <h4>沒有業界日的代價</h4>
+        <p>PAX 完全沒有 Business Day 或業界媒合機制，讓 PAX 的 B2B 收入被鎖死。G-EIGHT 設計業界機制前應先評估：台灣現在有多少發行商、平台、VC 願意付高價業界票來台灣？<strong>買方密度不夠，業界日只是成本，不是收入。</strong></p>
+        <span class="impact m">業界日的前提是買方密度</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 3: EGX ═══ -->
+<div class="content" id="t3">
+
+  <div class="expo-header">
+    <div class="expo-flag">🇬🇧</div>
+    <div class="expo-info">
+      <h2>EGX — Eurogamer Expo</h2>
+      <div class="expo-meta">📍 ExCeL London（10月）/ NEC Birmingham（11月）｜ 📅 每年 10–11 月 ｜ 🏛 主辦：ReedPop（商業公司）</div>
+      <div class="expo-tags">
+        <span class="tag y">混合型（AAA+Indie）</span>
+        <span class="tag o">商業運營</span>
+        <span class="tag b">與 MCM Comic Con 合併</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">2025 年關鍵數據</div>
+    <div class="kpi-grid">
+      <div class="kpi b"><div class="kpi-label">倫敦場人次</div><div class="kpi-val">75,000–80,000</div><div class="kpi-sub">ExCeL London，10月24-26</div></div>
+      <div class="kpi b"><div class="kpi-label">活動天數</div><div class="kpi-val">3 天</div><div class="kpi-sub">週五至週日</div></div>
+      <div class="kpi o"><div class="kpi-label">單日票</div><div class="kpi-val">£25–35</div><div class="kpi-sub">≈ NT$1,025–1,435</div></div>
+      <div class="kpi p"><div class="kpi-label">獨立遊戲區塊</div><div class="kpi-val">Rezzed + Leftfield</div><div class="kpi-sub">兩個策展式獨立展區</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">EGX 的獨立遊戲兩大展區</div>
+    <div class="attr-grid">
+      <div class="attr-card">
+        <div class="attr-icon">🎯</div>
+        <h4>Rezzed Zone — 精選獨立遊戲</h4>
+        <p>EGX Rezzed 最初是倫敦獨立辦理的純獨立遊戲展（2012年創立），後來被整合進 EGX 主展作為獨立區塊。<br><br>
+           特色：聚焦獨立與 AA 開發商，強調「新銳與上升中的遊戲」，比 EGX 主展更有策展感。</p>
+        <span class="impact h">最有策展質感的區塊</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🧪</div>
+        <h4>Leftfield Collection — 實驗性遊戲</h4>
+        <p>EGX 獨有的實驗性遊戲展區，類似 IndieCade 的定位——強調「打破規則、顛覆類型」的作品。<br><br>
+           · 完全策展制，免費展出<br>
+           · 強調遊戲設計的創意而非商業性<br>
+           · 成功作品往往獲得媒體大篇幅報導</p>
+        <span class="impact m">小眾但高影響力</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🎪</div>
+        <h4>EGX × MCM Comic Con 合併策略</h4>
+        <p>2024 年起，EGX 與 MCM Comic Con（英國最大流行文化展）合併在同一場館同期舉辦。<br><br>
+           <strong>優點：</strong>觀眾基礎大幅擴大，跨界吸引動漫、電影、玩家群體<br>
+           <strong>缺點：</strong>EGX 的遊戲專注度被稀釋，部分玩家反映「遊戲感變弱了」<br><br>
+           這是一個以規模換取多元性的取捨決策。</p>
+        <span class="impact m">值得 G-EIGHT 思考的模式</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">EGX 的商業定位 vs G-EIGHT</div>
+    <div class="chart-grid">
+      <div class="cc">
+        <h3>票價比較（NT$ 換算）</h3>
+        <div class="cs">EGX 票價是 G-EIGHT 的 3–4 倍</div>
+        <div class="cw"><canvas id="c_egx_ticket"></canvas></div>
+      </div>
+      <div class="cc">
+        <h3>EGX 收入來源估算</h3>
+        <div class="cs">純商業展，無政府補助</div>
+        <div class="cw"><canvas id="c_egx_rev"></canvas></div>
+      </div>
+    </div>
+    <div class="note">EGX 的成功建立在：（1）票價是 G-EIGHT 的 4 倍但仍有 75,000+ 付費觀眾，（2）合併 Comic Con 帶來跨界流量，（3）英國是歐洲最大遊戲市場之一，本地需求強勁。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">商業模式深度：B2C vs B2B 結構分析</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>收入來源</th><th>B2C / B2B</th><th>估算（GBP）</th><th>占比</th><th>說明</th></tr></thead>
+        <tbody>
+          <tr><td>消費者票務</td><td><span class="tag g">B2C</span></td><td>~£2.3M</td><td>~45%</td><td>75,000 人 × £30 均（早鳥 £17 – 週末 £37）</td></tr>
+          <tr><td>MCM Comic Con 協同收入</td><td><span class="tag g">B2C</span></td><td>合併計算</td><td>~20%</td><td>合辦後共享票務和場地收益，遊戲 vs ACG 比例不拆分</td></tr>
+          <tr><td>展商費</td><td><span class="tag b">B2B</span></td><td>~£1M</td><td>~20%</td><td>規模比 Gamescom 小，大廠出席率較低</td></tr>
+          <tr><td>贊助商</td><td><span class="tag b">B2B</span></td><td>~£500K</td><td>~10%</td><td>ReedPop（Eventbrite 集團）自有關係，贊助池較小</td></tr>
+          <tr><td>周邊 / 現場販售</td><td><span class="tag g">B2C</span></td><td>~£250K</td><td>~5%</td><td>官方 EGX 週邊，規模有限</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note"><strong>關鍵洞察：</strong>EGX 是這幾個展覽中 <strong>B2C 占比最高</strong>的（約 65–70%），原因是它缺乏 Gamescom 的 Business Day 和大廠贊助密度。這讓 EGX 的商業規模被票務天花板鎖死——票價再高，英國本地市場就那麼大。合辦 Comic Con 是突破天花板的嘗試，但代價是遊戲純粹度降低。這個「純度 vs 規模」的兩難，G-EIGHT 未來同樣會遇到。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">客群分析：廠商面 vs 玩家群</div>
+    <div class="kpi-grid">
+      <div class="kpi p"><div class="kpi-label">EGX 人次</div><div class="kpi-val">75,000+</div><div class="kpi-sub">倫敦 ExCeL，2025</div></div>
+      <div class="kpi p"><div class="kpi-label">合辦 MCM Comic Con</div><div class="kpi-val">同期同館</div><div class="kpi-sub">共享觀眾，跨界</div></div>
+      <div class="kpi g"><div class="kpi-label">英國遊戲市場</div><div class="kpi-val">£7.9B</div><div class="kpi-sub">歐洲最大（2024）</div></div>
+      <div class="kpi y"><div class="kpi-label">Leftfield Collection</div><div class="kpi-val">~20 款</div><div class="kpi-sub">評審選拔，免費展位</div></div>
+    </div>
+    <div class="attr-grid">
+      <div class="attr-card">
+        <div class="attr-icon">🏢</div>
+        <h4>廠商面（展商組成）</h4>
+        <p>
+          <strong>主要平台廠商</strong><br>
+          PlayStation UK、Xbox UK、Nintendo UK；規模比 Gamescom 更專注本地市場，大廠體驗型展位仍存在但較小<br><br>
+          <strong>MCM Comic Con 廠商</strong><br>
+          Crunchyroll、Funimation（動漫）；電影 IP 廠商、模型 / 公仔品牌（如 Funko Pop）；這部分展商與遊戲無關，但帶來跨界觀眾<br><br>
+          <strong>獨立遊戲層</strong><br>
+          Leftfield Collection（~20 款，評審選拔，免費）；Rising Star Games 代理 indie；Indie 比例低於 PAX Rising 但精選度更高<br><br>
+          <strong>英國本地廠商</strong><br>
+          Frontier Developments、Rebellion、Ninja Theory（英國工作室）有地主優勢<br><br>
+          <strong>媒體</strong><br>
+          Eurogamer、GamesRadar、Edge Magazine（英國主流）；BBC（偶有報導）
+        </p>
+        <span class="impact m">英國本地廠商 + 動漫跨界</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🎮</div>
+        <h4>玩家群（消費者特質）</h4>
+        <p>
+          <strong>地域</strong><br>
+          英格蘭 + 英國各地（倫敦 ExCeL 地理位置吸引全英觀眾）；少量歐洲鄰國玩家（法、德）<br><br>
+          <strong>年齡結構</strong><br>
+          更廣（12–45 歲）：Comic Con 吸引大量青少年和家庭；純 EGX 區域偏 18–30 歲<br><br>
+          <strong>雙重身分興趣者</strong><br>
+          「動漫 + 遊戲」雙重興趣者比例高於其他遊戲展，是 MCM 合辦帶來的獨特客群<br><br>
+          <strong>消費偏好</strong><br>
+          Console 強（英國 PS5 / Xbox 滲透率高）；手機 gaming 接受度高；PC 次之<br>
+          英國玩家對 BAFTA Games Award 獲獎作品有高認知度（品牌效應）<br><br>
+          <strong>對 indie 的態度</strong><br>
+          Leftfield Collection 的「非主流體驗」有穩定客群，英國 indie gaming 文化成熟（如 Bafta 每年有 indie 獎項）
+        </p>
+        <span class="impact m">英國本地消費力強，動漫跨界客群獨特</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-title">Leftfield Collection：「非主流才是主角」的策展哲學</div>
+    <div class="kpi-grid">
+      <div class="kpi p"><div class="kpi-label">Leftfield 入選數</div><div class="kpi-val">~20 款</div><div class="kpi-sub">評審選拔，每年精選</div></div>
+      <div class="kpi g"><div class="kpi-label">展位費用</div><div class="kpi-val">免費</div><div class="kpi-sub">開發者無需支付，展覽吸收成本</div></div>
+      <div class="kpi b"><div class="kpi-label">BAFTA 連結</div><div class="kpi-val">✅</div><div class="kpi-sub">歷屆入選作品有 BAFTA 提名先例</div></div>
+      <div class="kpi o"><div class="kpi-label">選拔核心標準</div><div class="kpi-val">實驗性</div><div class="kpi-sub">刻意選「非商業主流向」的作品</div></div>
+    </div>
+    <div class="attr-grid" style="margin-top:20px">
+      <div class="attr-card">
+        <div class="attr-icon">🆓</div>
+        <h4>免費展位是招徠好遊戲的工具</h4>
+        <p>Leftfield Collection 不向入選開發者收費——展位成本由展覽承擔。邏輯是：<strong>把策展當作展覽為了維持名單品質而做的投資</strong>，而不是收入來源。<br><br>因為不收費，開發者更願意把實驗性的、尚未完成的作品拿來展示，反而帶來比「付費展位」更有趣的內容。</p>
+        <span class="impact h">免費展位 = 提高名單品質的工具</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🏛</div>
+        <h4>制度性背書：BAFTA 連結的力量</h4>
+        <p>Leftfield 的部分歷屆入選作品後來獲得 BAFTA Games Award 提名。這不是刻意設計的，而是長期選拔品質累積的自然結果。<br><br>G-EIGHT 可以主動追求制度性背書：與 TAICCA、金馬或台灣創意設計中心合作，讓 G-EIGHT 的策展結果有政府文化機構的背書。</p>
+        <span class="impact m">制度性背書 = 策展公信力加速器</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">⚠️</div>
+        <h4>純度 vs 規模：G-EIGHT 未來會遇到同樣選擇</h4>
+        <p>EGX 同期合辦 MCM Comic Con，讓人次更多，但「純遊戲」氛圍被稀釋。<br><br>G-EIGHT 成長時會面對同樣選擇：引入動漫、桌遊元素 → 人次增加但策展定位模糊；維持純 indie 遊戲 → 人次天花板受限但品牌更強。<strong>EGX 的案例顯示：合辦可以增加人流，但代價是策展純粹度。</strong></p>
+        <span class="impact m">G-EIGHT 未來必須做的選擇</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">💡</div>
+        <h4>G-EIGHT 的「Leftfield」等價設計</h4>
+        <p>G-EIGHT 可以設計「G-EIGHT Curated」精選區：<br>· 只有通過嚴格評審才能進入的精選展區<br>· 展位費用低或免費（成本由展覽吸收）<br>· 視覺設計和動線刻意區隔<br>· 讓玩家知道「這個區域的遊戲是被選進來的，不是付錢進來的」</p>
+        <span class="impact h">策展區 = 品牌內的品牌</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 4: 線上展覽 ═══ -->
+<div class="content" id="t4">
+
+  <div class="section">
+    <div class="section-title">以媒體曝光為核心的展覽模式</div>
+    <div class="highlight">
+      <h3>線上展覽的崛起：實體 vs 數位的新平衡</h3>
+      <p>疫情加速了線上獨立遊戲展的成熟。Day of the Devs、Summer Game Fest Play Days、INDIE Live Expo 等展覽證明：<strong>主辦方可以用策展、直播與 Steam 活動放大實體展以外的觸及</strong>。理解這個生態，對 G-EIGHT 的混合策略（實體+數位）有直接啟示。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Day of the Devs — 非營利策展典範</div>
+    <div class="expo-header">
+      <div class="expo-flag">🎮</div>
+      <div class="expo-info">
+        <h2>Day of the Devs</h2>
+        <div class="expo-meta">📍 舊金山 SFMOMA 一帶（現場）+ 線上發布展 ｜ 🏛 主辦：Day of the Devs 非營利組織（2024 年獨立，前身為 Double Fine Productions 主辦）</div>
+        <div class="expo-tags">
+          <span class="tag g">純獨立遊戲</span>
+          <span class="tag p">非營利</span>
+          <span class="tag b">策展制</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi p"><div class="kpi-label">2025 現場人次</div><div class="kpi-val">數千人</div><div class="kpi-sub">舊金山，免費入場</div></div>
+      <div class="kpi p"><div class="kpi-label">線上累積觀看（總計）</div><div class="kpi-val">100M+</div><div class="kpi-sub">歷屆線上展合計</div></div>
+      <div class="kpi p"><div class="kpi-label">2025 遊戲申請數</div><div class="kpi-val">1,700+</div><div class="kpi-sub">Summer Game Fest 版本</div></div>
+      <div class="kpi g"><div class="kpi-label">現場入場費</div><div class="kpi-val">免費</div><div class="kpi-sub">現場 + 線上均免費</div></div>
+    </div>
+
+    <div class="attr-grid" style="margin-top:20px">
+      <div class="attr-card">
+        <div class="attr-icon">📅</div>
+        <h4>每年兩次發布展</h4>
+        <p><strong>Summer Game Fest 版本（6月）：</strong>與 Summer Game Fest 同期，在 YouTube Theater 或線上直播，配合 SGF 的全球媒體熱度<br><br>
+           <strong>The Game Awards 版本（12月）：</strong>TGA 直播前一天，借助 TGA 數千萬觀眾的熱度期待值</p>
+        <span class="impact h">借勢策略大師</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🏆</div>
+        <h4>2024 年改制為非營利</h4>
+        <p>原本由 Double Fine（現為微軟 Xbox 旗下）主辦，2024 年以非營利組織形式獨立。<br><br>
+           意義：確保即使微軟策略改變，展覽仍可持續。展覽的獨立性和公信力得到保障。</p>
+        <span class="impact m">持續性保障</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">💡</div>
+        <h4>對 G-EIGHT 的啟示</h4>
+        <p>Day of the Devs 的核心不是賣票，是<strong>為獨立遊戲創造媒體時刻</strong>。<br><br>
+           G-EIGHT 若在展前一週舉辦「G-EIGHT 直播發布展」——類似 Nintendo Direct 格式、聚焦台灣 indie 新作——可以在不增加場地成本的情況下，<strong>大幅放大線上曝光，吸引海外媒體注意</strong>。</p>
+        <span class="impact h">低成本高影響</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-title">Summer Game Fest Play Days — 媒體實體體驗</div>
+    <div class="kpi-grid">
+      <div class="kpi b"><div class="kpi-label">2025 ONL 峰值觀看</div><div class="kpi-val">50M</div><div class="kpi-sub">YoY +89%</div></div>
+      <div class="kpi b"><div class="kpi-label">Play Days 日期</div><div class="kpi-val">6月7–9日</div><div class="kpi-sub">洛杉磯，媒體 / KOL 限定</div></div>
+    </div>
+    <div class="highlight">
+      <h3>媒體日 vs 消費者日的本質差異</h3>
+      <p>SGF Play Days 是<strong>邀請制的媒體試玩活動</strong>，不開放一般消費者——這和 BitSummit Business Day 的思路類似，但商業化程度更低。對展覽商而言，重點是它把「媒體採訪效率」本身做成產品，而非單純依賴票務收入。</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-title">IndieCade — 學術性策展展覽</div>
+    <div class="kpi-grid">
+      <div class="kpi p"><div class="kpi-label">運作模式</div><div class="kpi-val">線上為主</div><div class="kpi-sub">2020 後 IndieCade A&amp;E</div></div>
+      <div class="kpi p"><div class="kpi-label">每年入選遊戲</div><div class="kpi-val">~40 款</div><div class="kpi-sub">Juried 評審制</div></div>
+      <div class="kpi g"><div class="kpi-label">入場費</div><div class="kpi-val">免費</div><div class="kpi-sub">觀眾免費，展出團隊靠評審入選</div></div>
+    </div>
+    <div class="note purple">IndieCade 的價值在於<strong>「評審認可的公信力」</strong>——入選名單本身能產生媒體曝光。G-EIGHT 可以建立類似的「G-EIGHT 精選」或「年度最佳獨立遊戲」評審計畫，提升展覽的媒體公信力。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">商業模式分析：非營利策展 vs 商業活動</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>展覽</th><th>B2C / B2B</th><th>收入模式</th><th>主要資金來源</th><th>對展出團隊收費</th></tr></thead>
+        <tbody>
+          <tr><td>Day of the Devs</td><td><span class="tag g">B2C 主導</span></td><td>非營利，Double Fine + iam8bit 策展</td><td>精品贊助商（少數）、主辦方自籌</td><td>❌ 完全免費</td></tr>
+          <tr><td>Summer Game Fest</td><td><span class="tag g">B2C 主導</span></td><td>商業活動，Geoff Keighley 個人品牌</td><td>展示費（中型廠商）、廣告贊助</td><td>💰 有費用（未公開）</td></tr>
+          <tr><td>INDIE Live Expo</td><td><span class="tag g">B2C 主導</span></td><td>日本商業媒體，iwi Inc. 主辦</td><td>展示費、贊助商（電玩廠商）</td><td>💰 入選費（低）</td></tr>
+          <tr><td>IndieCade</td><td><span class="tag p">學術 / 非營利</span></td><td>評審展覽，提交費</td><td>提交費（$45–95）、教育機構贊助</td><td>💰 提交費</td></tr>
+          <tr><td>gamescom Steam Festival</td><td><span class="tag g">B2C</span></td><td>Steam 平台活動，Valve 主導</td><td>Steam 平台商業利益，免費讓展出團隊參與</td><td>❌ 免費（需入選）</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note green"><strong>關鍵洞察：</strong>線上展覽對展出團隊幾乎零成本，但對主辦方而言商業邏輯各異：Day of the Devs 靠策展品牌聲譽維持不收費；SGF 靠大廠展示費；IndieCade 靠評審提交費。<strong>對 G-EIGHT 來說，免費策展名額可以用來建立品牌公信力，付費展示則應搭配明確曝光與數據回報。</strong></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">客群分析：廠商面 vs 觀眾群</div>
+    <div class="kpi-grid">
+      <div class="kpi p"><div class="kpi-label">Day of the Devs 累積觀看</div><div class="kpi-val">100M+</div><div class="kpi-sub">歷年 YouTube 累積</div></div>
+      <div class="kpi p"><div class="kpi-label">SGF 2025 ONL 峰值</div><div class="kpi-val">50M</div><div class="kpi-sub">觀看數，YoY +89%</div></div>
+      <div class="kpi g"><div class="kpi-label">地域限制</div><div class="kpi-val">無</div><div class="kpi-sub">純線上，全球觸及</div></div>
+      <div class="kpi g"><div class="kpi-label">IndieCade 年入選</div><div class="kpi-val">~40 款</div><div class="kpi-sub">評審選拔，極高精選度</div></div>
+    </div>
+    <div class="attr-grid">
+      <div class="attr-card">
+        <div class="attr-icon">🏢</div>
+        <h4>展商面（入選團隊）</h4>
+        <p>
+          <strong>Day of the Devs</strong><br>
+          每屆精選 15–25 款 indie 遊戲；評審標準注重創意和原創性；以 AA 以下獨立工作室為主（無大廠）；歷屆入選包含後來爆紅的《Outer Wilds》《Death's Door》<br><br>
+          <strong>Summer Game Fest</strong><br>
+          中型到 AA 廠商為主（2K、Devolver Digital、Annapurna Interactive）；純 indie 比例低於 Day of the Devs，更接近傳統發行商導向<br><br>
+          <strong>IndieCade</strong><br>
+          全球 indie 提交（數百到千份），選出約 40 款；強調實驗性、藝術性、邊界突破作品；傾向評審小圈子認可，而非商業成功<br><br>
+          <strong>INDIE Live Expo</strong><br>
+          日本 iwi Inc. 策展，以日本 indie 為主體，但 2022 年後積極納入台灣、韓國、歐洲作品<br><br>
+          <strong>入選的商業效益</strong><br>
+          Day of the Devs 入選被視為「indie 圈的公信力標章」，可帶動媒體主動報導、發行商主動接洽
+        </p>
+        <span class="impact h">入選 = 品牌效益，免費但競爭激烈</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🎮</div>
+        <h4>觀眾群（線上觀看者）</h4>
+        <p>
+          <strong>人口特徵</strong><br>
+          數位原生世代（18–30 歲）為主力；YouTube / Twitch 重度遊戲內容消費者；無需旅費，觀看門檻極低，因此能觸及更廣的休閒到重度玩家<br><br>
+          <strong>地域分布</strong><br>
+          全球（英語主導市場佔多數：美、英、澳、加、印度）；INDIE Live Expo 特別觸及日本、東亞觀眾<br><br>
+          <strong>消費行為</strong><br>
+          線上展覽觀眾的 wishlist 轉換率通常低於實體（無法即時試玩），但 Steam Festival 的數字例外——全球用戶同時看到，wishlist 量可超過實體展<br><br>
+          <strong>特殊優勢</strong><br>
+          YouTube 影片永久存在，長尾觀看效應顯著；3 個月後仍有人透過搜尋或推薦算法發現遊戲<br><br>
+          <strong>對 indie 的態度</strong><br>
+          線上展覽觀眾有更高比例的「日常 indie 遊戲愛好者」，因為他們主動追蹤這類發布活動
+        </p>
+        <span class="impact h">全球最廣的觸及，但互動深度最低</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+
+</div>
+
+</div>
+
+<!-- ═══ TAB 5: 對 G-EIGHT 的啟示 ═══ -->
+<div class="content active" id="t5">
+
+  <div class="section">
+    <div class="section-title">總結：G-EIGHT 在全球版圖中的位置</div>
+    <div class="chart-grid single">
+      <div class="cc">
+        <h3>純獨立遊戲展覽生態定位圖</h3>
+        <div class="cs">橫軸：商業化程度（左=非商業 / 右=高度商業化）｜縱軸：規模（下=小 / 上=大）</div>
+        <div class="cw tall"><canvas id="c_positioning"></canvas></div>
+      </div>
+    </div>
+    <div class="note green">G-EIGHT 目前在「商業化程度中等、規模中等」的位置——有很大的縱向（擴大規模）和橫向（提升商業化程度）成長空間，且兩者並不互斥。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">可借鑑的具體做法</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>策略</th><th>借鑑來源</th><th>具體做法</th><th>難度</th><th>潛在影響</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>深度 B2C 產品化</strong></td>
+            <td>PAX 玩家試玩密度<br>G-EIGHT mature / adult 差異化</td>
+            <td>設計 Mature / Adult Premium Day、長試玩預約、KOL / Creator Hour 與 Player Signal Report，讓展商買到高意圖玩家與可交付資料</td>
+            <td><span class="tag p">中</span></td>
+            <td><span class="tag g">極高：提升展商費、票種、贊助與續展率</span></td>
+          </tr>
+          <tr>
+            <td><strong>提升一般票價</strong></td>
+            <td>PAX $71<br>EGX £25–35</td>
+            <td>分階定價：早鳥 NT$400、一般 NT$500、現場 NT$600。3 日通票 NT$1,200–1,500。數據顯示核心玩家接受度高（VIP 24 分鐘售罄為佐證）</td>
+            <td><span class="tag g">低</span></td>
+            <td><span class="tag g">高：門票收入 +50–100%</span></td>
+          </tr>
+          <tr>
+            <td><strong>爭取政府夥伴</strong></td>
+            <td>Koelnmesse（市有）<br>KYOTO CMEX（京都府）<br>IGEA + 澳洲州政府</td>
+            <td>向文化部、文策院（TAICCA）、數位部提案共同主辦，取得場館補助、國際行銷預算、補貼海外展商進場費用</td>
+            <td><span class="tag p">中高</span></td>
+            <td><span class="tag g">高：降低成本 + 國際合法性</span></td>
+          </tr>
+          <tr>
+            <td><strong>建立線上發布展</strong></td>
+            <td>Day of the Devs 模式<br>INDIE Live Expo</td>
+            <td>在展前 1–2 週舉辦「G-EIGHT 新作直播發布展」，配合 YouTube/Twitch，聚焦台灣 indie 新作首曝，吸引海外媒體報導</td>
+            <td><span class="tag g">低中</span></td>
+            <td><span class="tag g">高：幾乎零成本擴大全球曝光</span></td>
+          </tr>
+          <tr>
+            <td><strong>建立國際展商補助機制</strong></td>
+            <td>Gamescom Indie Arena Booth<br>各國政府免費名額</td>
+            <td>與文策院或數位部合作，每年補助 5–10 個名額給東南亞、日韓海外展商，以換取更多海外媒體報導台灣展覽</td>
+            <td><span class="tag p">中</span></td>
+            <td><span class="tag p">中高：加速國際化</span></td>
+          </tr>
+          <tr>
+            <td><strong>引入評審 / 獎項機制</strong></td>
+            <td>IndieCade 評審制<br>EGX Rezzed 策展</td>
+            <td>設立「G-EIGHT 年度獨立遊戲大獎」，邀請媒體、發行商與平台方評審，入圍即為公關事件，提升媒體報導誘因</td>
+            <td><span class="tag g">低</span></td>
+            <td><span class="tag p">中：提升品牌公信力</span></td>
+          </tr>
+          <tr>
+            <td><strong>跨界合作擴大客群</strong></td>
+            <td>EGX × MCM Comic Con</td>
+            <td>與台灣本地大型動漫展（FF 富士電視台同好會展）或電競賽事同期 / 同場舉辦，擴大觀眾基礎，但需維護獨立遊戲展的核心定位</td>
+            <td><span class="tag p">中</span></td>
+            <td><span class="tag p">中：擴大觀眾但需管理定位風險</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">收入提升路徑模擬</div>
+    <div class="chart-grid">
+      <div class="cc">
+        <h3>各策略單項潛在收入增量（估）</h3>
+        <div class="cs">基準：目前 ~NT$1,000 萬</div>
+        <div class="cw"><canvas id="c_uplift"></canvas></div>
+      </div>
+      <div class="cc">
+        <h3>策略組合下的收入預測</h3>
+        <div class="cs">假設各策略逐步落地（3 年期）</div>
+        <div class="cw"><canvas id="c_forecast"></canvas></div>
+      </div>
+    </div>
+    <div class="note green">最高 ROI 的單一措施仍是<strong>「提升票價」</strong>（操作最簡單，風險最低）。但最符合 G-EIGHT 定位的成長槓桿，是<strong>「深度 B2C 產品化」</strong>：Mature / Adult Premium Day、長試玩、KOL 時段與玩家資料報告。Business Day 應保留為遠期 Industry Lite，而不是現階段主軸。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">各展覽對 G-EIGHT 業務的操作建議</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>展覽</th><th>主要目標</th><th>關鍵行動</th><th>對招商的直接意涵</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>🇩🇪 Gamescom</strong></td>
+            <td>B2B — 接觸歐洲發行商、投資人</td>
+            <td>MeetToMatch 預約；申請 Indie Arena Booth；同步 Steam Festival</td>
+            <td>歐洲廠商在此集中 → 最佳時機接洽有意進亞洲的歐洲 indie 工作室，話術切入點：「你在 Gamescom 的 B2B 接觸，G-EIGHT 可以幫你延伸到台灣 / 東南亞市場」</td>
+          </tr>
+          <tr>
+            <td><strong>🇺🇸 PAX</strong></td>
+            <td>B2C — 玩家反饋 + 北美媒體曝光</td>
+            <td>申請 PAX Rising；Demo 設計「5 分鐘 wow moment」；Stamp Rally 帶流量</td>
+            <td>PAX Rising 入選廠商 = 重視玩家口碑的 indie 工作室 → 正是 G-EIGHT「由玩家、為玩家」定位最對味的族群，可在展後主動接觸</td>
+          </tr>
+          <tr>
+            <td><strong>🇬🇧 EGX</strong></td>
+            <td>英國 / 歐洲市場入口</td>
+            <td>申請 Leftfield Collection；搭配倫敦 B2B 行程</td>
+            <td>已有英語版且目標歐洲市場的廠商在此出沒 → 對 G-EIGHT 招商的優先級低於 Gamescom，但可作為補充接觸歐洲中小型工作室的渠道</td>
+          </tr>
+          <tr>
+            <td><strong>🌐 線上展覽</strong></td>
+            <td>全球曝光 + 日本受眾（INDIE Live Expo）</td>
+            <td>申請 Day of the Devs；同步 Steam Festival；製作高品質 Trailer</td>
+            <td>線上展入選廠商對數位/全球曝光有需求 → G-EIGHT 可作為「實體曝光補充」提案切入，強調台灣本地玩家社群的真實互動價值</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">台灣獨有優勢 — G-EIGHT 的護城河</div>
+    <div class="attr-grid">
+      <div class="attr-card">
+        <div class="attr-icon">🌏</div>
+        <h4>亞洲純獨立遊戲展的稀缺性</h4>
+        <p>目前亞洲只有 BitSummit（日本）是同等規模的純獨立遊戲展。G-EIGHT 是<strong>整個東南亞與台灣地區唯一的同類展覽</strong>，這個稀缺性是強大的招募籌碼——對海外展商、贊助商、媒體而言都有唯一性價值。</p>
+        <span class="impact h">稀缺性 = 定價權</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🎌</div>
+        <h4>作為亞洲獨立遊戲橋樑</h4>
+        <p>台灣地緣位置獨特——接近日本、韓國、東南亞市場，又對西方團隊相對友善。G-EIGHT 有潛力成為「東南亞 indie 展商接觸日韓市場」的平台，或「日韓 indie 遊戲進入東南亞」的橋樑。</p>
+        <span class="impact h">區域樞紐定位</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">❤️</div>
+        <h4>極高的玩家忠誠度</h4>
+        <p>VIP 24 分鐘售罄是 BitSummit 也沒有的指標。G-EIGHT 的玩家社群黏著度，在全球同類展覽中可能是最高的。這是商業化的基礎——忠誠的客群願意為更好的體驗付更多錢。</p>
+        <span class="impact h">商業化的最佳基礎</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══ TAB 6: BitSummit ═══ -->
+<div class="content" id="t6">
+
+  <div class="expo-header">
+    <div class="expo-flag">🇯🇵</div>
+    <div class="expo-info">
+      <h2>BitSummit — 日本最大純獨立遊戲展</h2>
+      <div class="expo-meta">📍 京都 Miyako Messe（KICC）· 每年 6 月 · 主辦：JIGA · 支持：京都府 + KYOTO CMEX</div>
+      <div class="expo-tags">
+        <span class="tag o">純獨立遊戲展</span>
+        <span class="tag b">Business Day B2B</span>
+        <span class="tag g">對 G-EIGHT 最具參考價值</span>
+        <span class="tag p">政府支持</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">成長歷程：200 人到 68,000 人花了 13 年</div>
+    <div class="chart-grid single">
+      <div class="cc">
+        <h3>BitSummit 歷年入場人次</h3>
+        <div class="cs">從 2013 年的 200 人社群聚會，靠策展品質口碑自然成長</div>
+        <div class="cw tall"><canvas id="c_bit_growth"></canvas></div>
+      </div>
+    </div>
+    <div class="note green">BitSummit 從未靠大規模廣告推動增長——每一年的增長幾乎都來自<strong>口碑</strong>：「那些遊戲真的不錯」。這是策展品質驅動增長的最純粹案例，也是 G-EIGHT 目前最值得參考的路徑。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">策展哲學：同業評審，免費申請，品質是唯一門檻</div>
+    <div class="highlight">
+      <h3>為什麼「開發者評審開發者」是最有效的公信力機制</h3>
+      <p>BitSummit 的選拔評審名單完全公開，由<strong>遊戲開發者 + 遊戲媒體人 + 業界人士</strong>組成，且申請完全免費。門檻不是錢，而是品質。這讓入選本身成為一個比任何付費展台都更有說服力的業界信號——開發者在簡歷和 Steam 頁面標注「BitSummit Selection」，因為這真的代表什麼。</p>
+    </div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>策展維度</th><th>BitSummit 的做法</th><th>G-EIGHT 可參考的方向</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>評審構成</td>
+            <td>開發者 + 媒體人 + 業界人士，名單公開</td>
+            <td>公開評審名單，邀請至少 1 名海外評審提高國際信度</td>
+          </tr>
+          <tr>
+            <td>申請門檻</td>
+            <td>免費申請，品質是唯一門檻</td>
+            <td>若有申請費應說明用途（如「用於評審薪酬」），讓費用透明化</td>
+          </tr>
+          <tr>
+            <td>遊戲類型多元性</td>
+            <td>不限類型，但評審考量整體名單的多樣性</td>
+            <td>設計類型多樣性目標（如至少 X% mature / X% 台灣製 / X% 實驗性）</td>
+          </tr>
+          <tr>
+            <td>入選後的服務</td>
+            <td>媒體導覽、官方宣傳素材、B2B 通行證</td>
+            <td>建立「G-EIGHT Selection 服務包」：官方素材 + 社群發文 + 玩家資料報告</td>
+          </tr>
+          <tr>
+            <td>獎項系統</td>
+            <td>多個獎項類別，玩家也可參與投票</td>
+            <td>擴展獎項類別，增加「玩家票選」提高玩家投入感</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">財務結構：低票價是故意的，贊助才是主力</div>
+    <div class="chart-grid">
+      <div class="cc">
+        <h3>BitSummit 收入結構（推算）</h3>
+        <div class="cs">¥2,000 玩家票刻意壓低；企業贊助（Nintendo / Sony / Capcom 等）是最大收入來源</div>
+        <div class="cw"><canvas id="c_bit_model"></canvas></div>
+      </div>
+      <div class="cc">
+        <h3>三個財務槓桿的邏輯</h3>
+        <div class="cs">為什麼這個模型對 G-EIGHT 有直接參考價值</div>
+        <div class="cw" style="height:auto;padding:4px 0">
+          <div style="background:rgba(255,138,101,0.08);border:1px solid rgba(255,138,101,0.2);border-radius:10px;padding:14px;margin-bottom:10px">
+            <div style="font-size:12px;color:var(--o);font-weight:600;margin-bottom:4px">① 低票價 → 最大化人次 → 提高贊助吸引力</div>
+            <p style="font-size:12px;color:var(--muted)">¥2,000 讓 68,000 人進場，這個人次讓 Nintendo / Sony 願意支付高額贊助費。票務是引流工具，不是主要收入。</p>
+          </div>
+          <div style="background:rgba(255,213,79,0.08);border:1px solid rgba(255,213,79,0.2);border-radius:10px;padding:14px;margin-bottom:10px">
+            <div style="font-size:12px;color:var(--y);font-weight:600;margin-bottom:4px">② Business Day 10 倍票價 = 自然篩選買方</div>
+            <p style="font-size:12px;color:var(--muted)">¥20,000 只有真的有業務目的的人才會付。這讓業界日的質量遠高於大型展的業界通行證。G-EIGHT 現在的問題是台灣買方密度不夠，而不是票價設計問題。</p>
+          </div>
+          <div style="background:rgba(179,136,255,0.08);border:1px solid rgba(179,136,255,0.2);border-radius:10px;padding:14px">
+            <div style="font-size:12px;color:var(--p);font-weight:600;margin-bottom:4px">③ 政府補貼展商費 → 吸引更好的遊戲</div>
+            <p style="font-size:12px;color:var(--muted)">京都府補貼讓展商費只需 ¥33,000（NT$7,260），遠低於 Gamescom 的 €3,337。便宜的展商費讓更好的遊戲願意來，更好的遊戲帶來更多玩家和贊助。台灣的 TAICCA 可以扮演同樣的角色。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:rgba(255,138,101,0.06);border:1px solid rgba(255,138,101,0.25);border-radius:12px;padding:20px 24px;margin-top:8px;display:flex;align-items:center;gap:16px">
+    <div style="font-size:2rem;flex-shrink:0">📄</div>
+    <div>
+      <div style="font-size:13px;font-weight:600;color:#eeddcc;margin-bottom:6px">BitSummit 完整深度研究</div>
+      <div style="font-size:12px;color:#8888aa;margin-bottom:12px">Business Day 詳細機制、MeetToMatch 媒合分析、G-EIGHT 完整差距對照，請見專屬報告。</div>
+      <a href="05_BitSummit研究.html" target="_blank" style="display:inline-block;background:rgba(255,138,101,0.15);border:1px solid rgba(255,138,101,0.4);color:#ff8a65;text-decoration:none;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;transition:all .2s" onmouseover="this.style.background='rgba(255,138,101,0.25)'" onmouseout="this.style.background='rgba(255,138,101,0.15)'">→ 開啟 BitSummit 深度研究 &amp; G-EIGHT 比較</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 7: 亞洲展覽生態 ═══ -->
+<div class="content" id="t7">
+
+  <div class="section">
+    <div class="section-title">亞洲獨立遊戲展生態：2025 年全景</div>
+    <div class="highlight">
+      <h3>亞洲展覽版圖正在快速重整</h3>
+      <p>2025 年是亞洲遊戲展覽格局的轉折點：Gamescom Asia 從新加坡遷移至曼谷，人次從 41K 暴增至 206K（+402%）；台北電玩展 Indie House 以 171 個展出團隊、25 國規模成為「亞洲最大獨立遊戲展示」；越南超越中國成為全球最大手機遊戲出口國。<strong>東南亞已不只是玩家市場，它正在成為內容供給與跨國展商市場。</strong></p>
+    </div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>展覽</th><th>國家</th><th>最新人次</th><th>Indie 專注度</th><th>B2B 機制</th><th>商業模式重心</th></tr></thead>
+        <tbody>
+          <tr><td>BitSummit</td><td>🇯🇵</td><td>68,208（2026）</td><td>⭐⭐⭐⭐⭐ 純 indie</td><td>✅ Business Day + MeetToMatch</td><td>贊助 B2B 50% + B2C 25%</td></tr>
+          <tr><td>台北電玩展 Indie House</td><td>🇹🇼</td><td>370,000 整體（2025）</td><td>⭐⭐⭐ 含綜合展</td><td>✅ B2B Zone，43 國 1,800+ 人</td><td>綜合展，B2C 主導</td></tr>
+          <tr><td>TGS Indie Area</td><td>🇯🇵</td><td>274,739 整體（2024）</td><td>⭐⭐ 80 免費名額</td><td>⭐ 弱（無正式 B2B 日）</td><td>B2C 主導</td></tr>
+          <tr><td>Gamescom Asia × TGS</td><td>🇹🇭</td><td>206,159（2025）</td><td>⭐⭐ 綜合為主</td><td>✅ Business Area，5,590 業界</td><td>Koelnmesse 主導，B2C+B2B</td></tr>
+          <tr><td>Level Up KL</td><td>🇲🇾</td><td>2,500+（2024）</td><td>⭐⭐⭐⭐ 團隊 / B2B 導向</td><td>✅ Business Connection Program</td><td>B2B 主導，政府（MDEC）資助</td></tr>
+          <tr><td>IGDX</td><td>🇮🇩</td><td>1,600+ B2B 會議（2024）</td><td>⭐⭐⭐ 內容團隊聚焦</td><td>✅ 核心機制，US$25M+ 媒合</td><td>純 B2B，政府主導</td></tr>
+          <tr><td>PGDX</td><td>🇵🇭</td><td>25,000（2024）</td><td>⭐⭐⭐ 本地 indie 為主</td><td>⭐ 弱</td><td>B2C + 團隊教育</td></tr>
+          <tr><td>Vietnam GameVerse</td><td>🇻🇳</td><td>40,000+（2024）</td><td>⭐⭐ 綜合</td><td>⭐ 弱</td><td>B2C，科技廠商主導</td></tr>
+          <tr><td>G-EIGHT</td><td>🇹🇼</td><td>~25,000（估）</td><td>⭐⭐⭐⭐⭐ 純 indie</td><td>❌ 無</td><td>B2C 票務主導</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Gamescom Asia：新加坡撤退 → 曼谷爆炸（有數據）</div>
+    <div class="kpi-grid">
+      <div class="kpi b"><div class="kpi-label">2025 曼谷版人次</div><div class="kpi-val">206,159</div><div class="kpi-sub">首屆 Gamescom Asia × Thailand Game Show</div></div>
+      <div class="kpi b"><div class="kpi-label">2024 新加坡版人次</div><div class="kpi-val">41,013</div><div class="kpi-sub">+20% YoY，遭遇市場天花板</div></div>
+      <div class="kpi r"><div class="kpi-label">人次暴增幅度</div><div class="kpi-val">+402%</div><div class="kpi-sub">曼谷首屆 vs 新加坡末屆</div></div>
+      <div class="kpi o"><div class="kpi-label">2025 業界人士</div><div class="kpi-val">5,590</div><div class="kpi-sub">來自 81 國</div></div>
+      <div class="kpi o"><div class="kpi-label">展商 / 館數</div><div class="kpi-val">294</div><div class="kpi-sub">展商 + 國家館</div></div>
+      <div class="kpi g"><div class="kpi-label">展覽面積擴張</div><div class="kpi-val">+40%</div><div class="kpi-sub">vs 前一年兩展合計</div></div>
+    </div>
+    <div class="chart-grid">
+      <div class="cc">
+        <h3>Gamescom Asia 歷年人次</h3>
+        <div class="cs">新加坡 2021–2024 vs 曼谷 2025</div>
+        <div class="cw"><canvas id="c_gca_growth"></canvas></div>
+      </div>
+      <div class="cc">
+        <h3>東南亞手機遊戲市場（2025 估）</h3>
+        <div class="cs">USD 十億，各國規模</div>
+        <div class="cw"><canvas id="c_sea_market"></canvas></div>
+      </div>
+    </div>
+    <div class="attr-grid" style="margin-top:20px">
+      <div class="attr-card">
+        <div class="attr-icon">🤔</div>
+        <h4>為什麼要從新加坡遷出？</h4>
+        <p>新加坡市場本身太小：人口 520 萬，且遊戲滲透率已飽和，41,013 人次是在地市場的實際天花板。<br><br>
+           泰國的理由：<strong>東南亞最大手機遊戲收入市場</strong>（2024 Jan–Aug 行動遊戲收入居 SEA 之首 US$400M+）+ Thailand Game Show 有數十年既有品牌 + 曼谷都市圈 1,500 萬人 + 較低的場地和旅費成本。<br><br>
+           結果驗證：206K 人次 = 泰國策略成功的即時信號。</p>
+        <span class="impact h">市場規模驅動的地理選擇，有數據</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">📊</div>
+        <h4>+402% 的真實意涵（B2B 角度）</h4>
+        <p>206K 人次中，業界人士 5,590 人（2.7%）——比例和 Gamescom 歐洲版（34K/357K = 9.5%）差距大。這意味著 206K 中<strong>絕大多數是消費者</strong>，B2B 密度遠不如想像中高。<br><br>
+           <strong>關鍵問題：</strong>這 5,590 業界人士來自 81 國，代表多元性；但絕對數量與 Gamescom 的 34,000 相比差距 6 倍。對 G-EIGHT 而言，曼谷案例的重點不是規模本身，而是如何把區域展做成跨國業界入口。</p>
+        <span class="impact m">B2C 成功，B2B 密度仍遜於科隆</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">⚠️</div>
+        <h4>成效存疑的地方</h4>
+        <p>206K 人次中有多少是原有 Thailand Game Show 的忠實觀眾，有多少是「因 Gamescom 品牌而新增」，目前無法拆分。<br><br>
+           2026 年（10月29日–11月1日，曼谷）是真正的驗證時點——若沒有「首屆新鮮感」仍能維持甚至增長，才能確認曼谷是正確選擇。<br><br>
+           <strong>對展覽商：</strong>展覽「大」不等於「商業價值高」，評估應以業界人士密度、媒合機制品質與展商續展率為主。</p>
+        <span class="impact m">需觀察 2026 年第二屆數據</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">台北電玩展 Indie House：離 G-EIGHT 最近的對標</div>
+    <div class="kpi-grid">
+      <div class="kpi g"><div class="kpi-label">2025 整體人次</div><div class="kpi-val">370,000</div><div class="kpi-sub">4天，歷史最高</div></div>
+      <div class="kpi g"><div class="kpi-label">Indie House 展出團隊</div><div class="kpi-val">171 家</div><div class="kpi-sub">來自 25 國，200+ 款遊戲</div></div>
+      <div class="kpi g"><div class="kpi-label">B2B Zone 業界人士</div><div class="kpi-val">1,800+</div><div class="kpi-sub">來自 43 國，近 2,000 場會議</div></div>
+      <div class="kpi y"><div class="kpi-label">展覽公司數</div><div class="kpi-val">346 家</div><div class="kpi-sub">來自 30 國</div></div>
+    </div>
+    <div class="tbl-wrap" style="margin-top:16px">
+      <table class="dt">
+        <thead><tr><th>維度</th><th>台北電玩展 Indie House</th><th>G-EIGHT</th><th>差距與機會</th></tr></thead>
+        <tbody>
+          <tr><td>性質</td><td>綜合展內的 indie 展區</td><td>純獨立遊戲展</td><td>G-EIGHT indie 專注度更高，定位差異明確</td></tr>
+          <tr><td>月份</td><td>1月</td><td>12月</td><td>台灣市場一年有兩次 indie 節點，互補</td></tr>
+          <tr><td>Indie 展商數</td><td>171 家（25 國）</td><td>156 家（2025）</td><td>規模相近，G-EIGHT 應積極追求國際比例</td></tr>
+          <tr><td>B2B 機制</td><td>B2B Zone（1,800+ 人，43 國）</td><td>無</td><td>G-EIGHT 最需要補強的缺口</td></tr>
+          <tr><td>政府支持</td><td>數位部補助「獨立遊戲開發產品加值獎」17 組</td><td>無正式補助機制</td><td>文策院介入機會</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note green">台北電玩展 Indie House 和 G-EIGHT 是互補關係，不是競爭關係。電玩展提供<strong>1月的國際曝光 + B2B 管道</strong>，G-EIGHT 提供<strong>12月的純 indie 文化場域</strong>。兩個展覽的展商重疊，代表台灣 indie 展商的年度行事曆中，兩者都有不可取代的角色。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">東南亞遊戲市場攻勢：誰在進、怎麼進、成效如何</div>
+    <div class="kpi-grid">
+      <div class="kpi p"><div class="kpi-label">SEA 遊戲市場（2025）</div><div class="kpi-val">US$6.4B</div><div class="kpi-sub">2024 US$5.9B → 成長 8.5%</div></div>
+      <div class="kpi p"><div class="kpi-label">SEA CAGR（2024–2027）</div><div class="kpi-val">3.7%</div><div class="kpi-sub">高於全球平均 3.2%</div></div>
+      <div class="kpi p"><div class="kpi-label">行動遊戲佔比</div><div class="kpi-val">73%</div><div class="kpi-sub">手機主導，桌機較弱</div></div>
+      <div class="kpi r"><div class="kpi-label">越南成長率（2025）</div><div class="kpi-val">+36.4%</div><div class="kpi-sub">超越中國成全球最大手遊出口國</div></div>
+      <div class="kpi r"><div class="kpi-label">越南 2024 收入</div><div class="kpi-val">US$315M</div><div class="kpi-sub">2025 預計 US$430M</div></div>
+      <div class="kpi r"><div class="kpi-label">印尼市佔</div><div class="kpi-val">29.45%</div><div class="kpi-sub">SEA 最大單一市場（2025）</div></div>
+    </div>
+    <div class="chart-grid">
+      <div class="cc">
+        <h3>各國成長速度比較</h3>
+        <div class="cs">2024–2025 年成長率，越南領先</div>
+        <div class="cw"><canvas id="c_sea_growth"></canvas></div>
+      </div>
+      <div class="cc">
+        <h3>大型玩家進攻 SEA 的方式</h3>
+        <div class="cs">三種路徑：投資 / 合作 / 活動佈局</div>
+        <div class="cw"><canvas id="c_sea_invest"></canvas></div>
+      </div>
+    </div>
+    <div class="tbl-wrap" style="margin-top:20px">
+      <table class="dt">
+        <thead><tr><th>公司</th><th>進攻行動</th><th>目標</th><th>成效評估</th></tr></thead>
+        <tbody>
+          <tr><td>Tencent</td><td>在雅加達設立創作者園區（動態捕捉設備免費提供給印尼 indie 工作室）</td><td>🇮🇩 印尼</td><td>以資源換早期 IP 接觸；印尼是 SEA 最大市場（29%），戰略價值高</td></tr>
+          <tr><td>Tencent + Google</td><td>共同贊助 IGDX Gameseed 2025（第二年連續贊助）</td><td>🇮🇩 印尼</td><td>深度生態系建構，不只投廣告而是培育內容團隊</td></tr>
+          <tr><td>NCSOFT × VNG</td><td>成立 NCV Games 合資公司，發行 Lineage 2M 至 SEA 6 國</td><td>🇻🇳 越南為核心</td><td>利用 VNG 的 Zalo 本地支付網絡，繞過應用商店費率</td></tr>
+          <tr><td>Koelnmesse (Gamescom)</td><td>與 Thailand Game Show 合辦，正式遷出新加坡</td><td>🇹🇭 泰國 + SEA</td><td>206K 人次驗證曼谷策略；Gamescom 品牌首次在亞洲深度落地</td></tr>
+          <tr><td>Microsoft Xbox</td><td>與台北電玩展 Indie House 策略合作（2025 設計合作夥伴）</td><td>🇹🇼 台灣 + 亞洲</td><td>用 indie 展作為亞太區低成本品牌觸點，ROI 高於大型廣告</td></tr>
+          <tr><td>PlayStation Studios</td><td>出席 Level Up KL 2024，與馬來西亞工作室建立關係</td><td>🇲🇾 馬來西亞</td><td>東南亞外包和 co-dev 成本比歐美低 60–70%，尋找合作夥伴</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note purple"><strong>成效整體評估：</strong>Tencent / Google 的內容生態系投資成效最長遠但最難量化。Gamescom Asia 的曼谷遷移是已驗證的規模成功。NCSOFT × VNG 的合資模式是直接市場滲透的典型。<strong>共同特徵：</strong>這些玩家都在投資「內容團隊基礎設施」而不只是打廣告——因為他們知道 SEA 的下一個十年需要的是優質內容創作者，而不是更多玩家。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">對 G-EIGHT 的戰略意涵</div>
+    <div class="attr-grid">
+      <div class="attr-card">
+        <div class="attr-icon">🎯</div>
+        <h4>G-EIGHT 的地緣優勢</h4>
+        <p>台灣在日本和東南亞之間——這是一個獨特的地理位置。<br><br>
+           若 G-EIGHT 成功建立業界日機制，它有潛力成為<strong>「日本展商探索東南亞市場、東南亞展商接觸日本發行商的跨域媒合點」</strong>——這個定位目前沒有任何現有展覽佔據。<br><br>
+           BitSummit 是日本焦點；Gamescom Asia 是東南亞大眾市場；G-EIGHT 可以是<strong>精品 indie 的亞洲中樞</strong>。</p>
+        <span class="impact h">可能的區域橋接角色</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🌊</div>
+        <h4>東南亞 indie 崛起 = G-EIGHT 的招募機會</h4>
+        <p>IGDX（印尼）、PGDX（菲律賓）、Vietnam GameVerse 的出現顯示：<strong>SEA 內容團隊有強烈的展覽與媒合需求，但缺乏成熟的國際 indie 平台</strong>。<br><br>
+           G-EIGHT 若在 2026–2027 年開始積極邀請 SEA indie 展商參展，有機會建立「亞洲版 BitSummit」的地位，而不只是「台灣的 BitSummit」。<br><br>
+           越南（+36.4% 成長率）、印尼（SEA 最大市場 29%）的工作室正急需國際曝光。</p>
+        <span class="impact h">SEA 是 G-EIGHT 的未開發展商來源</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🚫</div>
+        <h4>Gamescom Asia 的競爭威脅</h4>
+        <p>曼谷 Gamescom Asia（206K 人次，5,590 業界人士，81 國）若持續壯大，有可能吸走<br>
+           （1）原本會在 G-EIGHT 的國際展商預算<br>
+           （2）台灣政府的「國際展覽補助」配額<br>
+           （3）媒體和發行商的「亞洲展覽」排期注意力<br><br>
+           <strong>防護策略：</strong>Gamescom Asia 是綜合型商業展；G-EIGHT 是純 indie 文化展。保持差異化定位，則兩者不是零和競爭，而是不同目的的選擇。</p>
+        <span class="impact m">差異化是唯一防護</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 8: 展覽商決策框架 ═══ -->
+<div class="content" id="t8">
+
+  <div class="section">
+    <div class="section-title">這份研究對展覽商的用途</div>
+    <div class="highlight">
+      <h3>不是告訴開發者去哪裡參展，而是反推 G-EIGHT 該補什麼產品</h3>
+      <p>以展覽商角度看，歐美與亞洲展會研究的用途不是模仿每個展的 B2B 架構，而是拆解「展商為什麼願意付錢取得某一群玩家」。G-EIGHT 現階段最該 focus 的不是 Business Day，而是把深度 B2C 產品化：高意圖玩家、mature / adult 內容、長時間試玩、現場購買、社群擴散與展後玩家資料回報。</p>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi g"><div class="kpi-label">定位決策</div><div class="kpi-val">1</div><div class="kpi-sub">G-EIGHT 是玩家展、業界展，還是混合展</div></div>
+      <div class="kpi b"><div class="kpi-label">收入決策</div><div class="kpi-val">2</div><div class="kpi-sub">門票、展商費、深度 B2C 票種、贊助的比例</div></div>
+      <div class="kpi y"><div class="kpi-label">招商決策</div><div class="kpi-val">3</div><div class="kpi-sub">先招海外展商、平台、發行商或服務商</div></div>
+      <div class="kpi o"><div class="kpi-label">深度 B2C 決策</div><div class="kpi-val">4</div><div class="kpi-sub">是否設計成人日、長試玩、導覽、玩家資料回報</div></div>
+      <div class="kpi p"><div class="kpi-label">內容決策</div><div class="kpi-val">5</div><div class="kpi-sub">專區、評審獎、Demo station、代展方案</div></div>
+      <div class="kpi r"><div class="kpi-label">數據決策</div><div class="kpi-val">6</div><div class="kpi-sub">展後提供什麼 ROI report 說服續展</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">展覽商應先回答的三個問題</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>問題</th><th>如果答案不清楚，會發生什麼</th><th>本研究能提供的判斷</th><th>G-EIGHT 下一步</th></tr></thead>
+        <tbody>
+          <tr><td><strong>誰是付費客戶？</strong></td><td>如果只講一般人潮，展商會拿 G-EIGHT 跟任何消費展比較</td><td>PAX 的價值來自玩家試玩密度，Day of the Devs 的價值來自被策展與被看見</td><td>把展商、成人 / mature 展商、發行商、贊助商分成不同深度 B2C 產品包</td></tr>
+          <tr><td><strong>展商買到什麼結果？</strong></td><td>招商只能講「很多人」，無法講玩家是否真的玩、買、追蹤、討論</td><td>深度 B2C 的核心是高互動玩家，而不是最大人次</td><td>建立試玩時長、QR、wishlist、現場銷售、玩家問卷、KOL 內容的回報格式</td></tr>
+          <tr><td><strong>G-EIGHT 與其他展的差異是什麼？</strong></td><td>海外廠商會把 G-EIGHT 視為可有可無的小型區域展</td><td>台灣核心玩家、成人 / mature game 容納度、年末檔期是可放大的差異</td><td>把「台灣高意圖玩家測試 + 亞洲 mature showcase + 深度試玩回報」做成主張</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">G-EIGHT 可複製機制優先級</div>
+    <div class="chart-grid">
+      <div class="cc">
+        <h3>主辦方價值槓桿比較</h3>
+        <div class="cs">10 分為最高，評估對收入、招商、品牌、執行難度的綜合影響</div>
+        <div class="cw tall"><canvas id="c_dev_market"></canvas></div>
+      </div>
+      <div class="cc">
+        <h3>投入難度 vs 預期收益</h3>
+        <div class="cs">分數越高代表該項目越值得優先做</div>
+        <div class="cw tall"><canvas id="c_dev_cost"></canvas></div>
+      </div>
+    </div>
+    <div class="tbl-wrap" style="margin-top:20px">
+      <table class="dt">
+        <thead><tr><th>參考展覽</th><th>可複製機制</th><th>對 G-EIGHT 的用途</th><th>優先級</th><th>風險</th></tr></thead>
+        <tbody>
+          <tr><td>G-EIGHT 自身差異</td><td>Mature / Adult Premium Day</td><td>把成人向、mature、核心玩家內容做成高價值 B2C 產品</td><td><span class="tag g">最高</span></td><td>需處理年齡分流、內容規範、動線與品牌風險</td></tr>
+          <tr><td>PAX</td><td>玩家試玩密度 + Indie showcase 品牌</td><td>強化「展商能拿到真實玩家反饋」的招商說法</td><td><span class="tag g">最高</span></td><td>若缺數據追蹤，只剩人潮敘事</td></tr>
+          <tr><td>Day of the Devs</td><td>策展名單 + 媒體時刻</td><td>建立 G-EIGHT Selection，讓展商取得曝光事件</td><td><span class="tag b">高</span></td><td>評審與策展公信力需要時間累積</td></tr>
+          <tr><td>BitSummit</td><td>業界機制與國際展商管理</td><td>只借用小型 Industry Lite，不把 B2B 當主軸</td><td><span class="tag y">中</span></td><td>現階段買方密度不足時不宜重押</td></tr>
+          <tr><td>Gamescom</td><td>國際展商 + 政府 / 場館背書</td><td>長期學習資料包與政府合作，不適合短期硬複製</td><td><span class="tag y">中</span></td><td>規模差距大，成本結構不同</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">G-EIGHT 目前最該補的六個缺口</div>
+    <div class="attr-grid">
+      <div class="attr-card"><div class="attr-icon">18+</div><h4>Mature / Adult Premium Day</h4><p>把成人向與 mature 內容從「展區」升級成「特殊票種 / 特殊時段」。重點是高意圖玩家、完整展示、現場購買、KOL 試玩與更真實的受眾回饋。</p><span class="impact h">最符合 G-EIGHT 差異化</span></div>
+      <div class="attr-card"><div class="attr-icon">PLAY</div><h4>深度試玩設計</h4><p>保留部分長試玩、預約制 demo、創作者導覽與玩家投票，不只追求排隊人數，而是追蹤玩家停留時間、完成率、購買 / wishlist 意圖。</p><span class="impact h">直接提升展商可感知價值</span></div>
+      <div class="attr-card"><div class="attr-icon">ROI</div><h4>展商成效報告</h4><p>每家展商應能拿到試玩次數、平均試玩時長、QR 掃描、現場照片、KOL 接觸、玩家問卷、購買 / wishlist 意圖摘要。</p><span class="impact h">直接影響續展率</span></div>
+      <div class="attr-card"><div class="attr-icon">CUR</div><h4>主題策展與導覽</h4><p>建立 mature、敘事、女性向、派對、台灣原創等導覽路線。展商買到的不是攤位位置，而是被放進對的玩家路線。</p><span class="impact m">把人流變成可設計產品</span></div>
+      <div class="attr-card"><div class="attr-icon">INTL</div><h4>海外首次參展包</h4><p>給海外小型團隊低門檻方案：共享攤位、demo station、中文支援、現場人員代展、玩家回饋報告。降低第一次嘗試台灣市場的心理成本。</p><span class="impact h">最適合早期國際招商</span></div>
+      <div class="attr-card"><div class="attr-icon">LITE</div><h4>Industry Lite</h4><p>保留少量媒體、平台、發行商邀請與導覽，但定位為深度 B2C 的加值服務，不把展會主軸轉成 B2B。</p><span class="impact m">避免策略跑偏</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">90 天可執行版本</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>時間</th><th>要完成的事</th><th>產出物</th><th>衡量指標</th></tr></thead>
+        <tbody>
+          <tr><td>第 1-2 週</td><td>定義深度 B2C 客戶：一般 indie、mature / adult、海外 first-timer、贊助商</td><td>客戶分層表 + 每層價值主張</td><td>每層至少 10 家目標名單</td></tr>
+          <tr><td>第 3-4 週</td><td>設計 Mature / Adult Premium Day</td><td>票種、時段、年齡驗證、內容規範、動線、展商權益</td><td>完成一頁式招商說明</td></tr>
+          <tr><td>第 5-6 週</td><td>建立深度 B2C ROI report 模板</td><td>試玩時長 / QR / 購買意圖 / wishlist / KOL / 玩家問卷格式</td><td>能在展後 7 天內寄出報告</td></tr>
+          <tr><td>第 7-8 週</td><td>推出海外 first-timer package</td><td>共享攤位、代展、中文支援、玩家回饋報告報價單</td><td>拿到 5 家海外廠商通話</td></tr>
+          <tr><td>第 9-12 週</td><td>建立主題導覽與玩家投票制度</td><td>導覽路線、KOL 報名、玩家票選、媒體素材包</td><td>至少 3 家媒體 / KOL 願意參與</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note green"><strong>判斷：</strong>G-EIGHT 現階段最有用的策略不是急著變成 B2B 展，而是把「深度 B2C」變成展覽產品。每個章節最後都應回答：這能否讓展商接觸更準確的玩家、取得更完整的玩家反饋、創造更高的續展理由。</div>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 9: 深度 B2C 招商 / 發行商視角 ═══ -->
+<div class="content" id="t9">
+
+  <div class="section">
+    <div class="section-title">深度 B2C 招商主軸</div>
+    <div class="highlight">
+      <h3>G-EIGHT 的招商優勢不是「業界媒合」，而是「高意圖玩家場域」</h3>
+      <p>對展商與發行商來說，G-EIGHT 的核心價值不應該包裝成小型 Business Day，而是包裝成「台灣少數能讓 indie、mature、adult、核心玩家內容被認真試玩與討論的場」。這種深度 B2C 可以提供一般消費展拿不到的東西：真實玩家反應、成人向內容接受度、現場購買意圖、wishlist / QR 行為、KOL 擴散與社群熱度。</p>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi b"><div class="kpi-label">高意圖玩家</div><div class="kpi-val">Core</div><div class="kpi-sub">願意排隊、試玩、購買、追蹤、討論</div></div>
+      <div class="kpi g"><div class="kpi-label">Mature / Adult</div><div class="kpi-val">18+</div><div class="kpi-sub">一般展難以完整承載的差異化內容</div></div>
+      <div class="kpi y"><div class="kpi-label">深度試玩</div><div class="kpi-val">Play</div><div class="kpi-sub">不只看 trailer，而是取得可用玩家反饋</div></div>
+      <div class="kpi o"><div class="kpi-label">玩家資料</div><div class="kpi-val">Data</div><div class="kpi-sub">QR、問卷、購買意圖、wishlist 行為</div></div>
+      <div class="kpi p"><div class="kpi-label">社群擴散</div><div class="kpi-val">Buzz</div><div class="kpi-sub">KOL、coser、創作者與玩家二創素材</div></div>
+      <div class="kpi r"><div class="kpi-label">低門檻測試</div><div class="kpi-val">Test</div><div class="kpi-sub">海外廠商不用投入大型展成本即可測台灣</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">不同招商對象，我們的優勢要怎麼講</div>
+    <div class="chart-grid">
+      <div class="cc"><h3>招商對象最重視的深度 B2C 價值</h3><div class="cs">10 分為最高，代表該對象對此價值的敏感度</div><div class="cw tall"><canvas id="c_pub_radar"></canvas></div></div>
+      <div class="cc"><h3>G-EIGHT 應優先包裝的產品</h3><div class="cs">綜合招商說服力與短期可執行性</div><div class="cw tall"><canvas id="c_pub_types"></canvas></div></div>
+    </div>
+    <div class="tbl-wrap" style="margin-top:20px">
+      <table class="dt">
+        <thead><tr><th>對象</th><th>他們真正想驗證什麼</th><th>G-EIGHT 的優勢</th><th>招商話術重點</th></tr></thead>
+        <tbody>
+          <tr><td><span class="tag b">海外 adult / mature 展商</span></td><td>台灣玩家是否願意公開試玩、購買、追蹤成人向或 mature 作品</td><td>可設計 18+ 專場、深度試玩、年齡分流、KOL 導覽與玩家問卷</td><td>G-EIGHT 不是只給你一個攤位，而是給你一個能安全測試台灣 mature 玩家反應的場景</td></tr>
+          <tr><td><span class="tag g">一般海外 indie 展商</span></td><td>台灣核心玩家是否理解玩法、是否願意加 wishlist、是否有在地化需求</td><td>純 indie 場域、人潮雜訊低、玩家願意花時間試玩與回饋</td><td>比大型綜合展更容易拿到「玩家真的玩完 demo 後怎麼想」的資料</td></tr>
+          <tr><td><span class="tag y">發行商</span></td><td>作品或 catalog 在台灣 / 華語玩家中的真實接受度</td><td>可一次測多款 catalog、取得類型偏好、購買意圖、成人內容接受度</td><td>你不一定需要來 scout 團隊；你可以把 G-EIGHT 當成台灣高意圖玩家測試場</td></tr>
+          <tr><td><span class="tag o">平台方</span></td><td>哪些 indie / mature 類型在台灣有活動合作價值</td><td>玩家問卷、熱門 demo 排名、QR tracking、主題專區數據</td><td>G-EIGHT 可以提供平台活動前的玩家偏好訊號，而不是只有展覽曝光</td></tr>
+          <tr><td><span class="tag p">媒體 / KOL</span></td><td>有沒有好拍、好寫、好直播、能引發討論的內容</td><td>主題導覽、成人日、精選名單、創作者試玩時段</td><td>主辦方提供已策展的內容路線，降低媒體與 KOL 找題材的成本</td></tr>
+          <tr><td><span class="tag r">贊助商</span></td><td>是否能接觸高黏著、願意消費的核心玩家</td><td>深度 B2C 票種、玩家任務、集章、限定周邊、創作者內容</td><td>G-EIGHT 的價值不是最大人潮，而是高互動玩家與可設計的消費場景</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">深度 B2C 產品包應該怎麼切</div>
+    <div class="attr-grid">
+      <div class="attr-card"><div class="attr-icon">18+</div><h4>Mature / Adult Premium Day</h4><p>特殊票種或特殊時段，年齡驗證後進場。讓 adult / mature 展商能完整展示內容，並讓玩家在更放鬆的環境試玩、購買、交流。</p><span class="impact h">核心旗艦產品</span></div>
+      <div class="attr-card"><div class="attr-icon">PLAY</div><h4>Deep Play Session</h4><p>預約制或限定名額的長試玩，適合敘事、成人、策略、RPG 等需要時間理解的作品。展商得到的不只是人數，而是完成率與回饋。</p><span class="impact h">提高玩家反饋品質</span></div>
+      <div class="attr-card"><div class="attr-icon">DATA</div><h4>Player Signal Report</h4><p>展後整理試玩量、平均停留、QR 掃描、購買 / wishlist 意圖、玩家問卷、熱門 demo、KOL 內容連結。這是續展與海外招商的核心文件。</p><span class="impact h">把 B2C 變成可交付資料</span></div>
+      <div class="attr-card"><div class="attr-icon">TOUR</div><h4>Curated Player Tour</h4><p>為 mature、敘事、女性向、派對、台灣原創、海外 first-timer 做主題路線。玩家更容易找到內容，展商也更容易被對的人看到。</p><span class="impact m">讓人流變成可設計資產</span></div>
+      <div class="attr-card"><div class="attr-icon">KOL</div><h4>KOL / Creator Hour</h4><p>設計媒體與創作者提前試玩、導覽、拍攝與訪談時段。不是 B2B，而是為深度 B2C 創造更強的內容擴散。</p><span class="impact h">放大展後聲量</span></div>
+      <div class="attr-card"><div class="attr-icon">REP</div><h4>Representation Package</h4><p>針對不能來台的海外團隊，提供 demo station、現場人員介紹、玩家回饋整理、KOL 接觸與展後報告。</p><span class="impact h">擴大海外展商池</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">清晰戰略：先做深度 B2C，再做輕量 Industry</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>階段</th><th>主軸</th><th>要做的事</th><th>不要做</th></tr></thead>
+        <tbody>
+          <tr><td><span class="tag g">Phase 1</span></td><td>把 Mature / Adult Premium Day 定義清楚</td><td>票種、時段、年齡分流、內容規範、展商權益、KOL 導覽、展後報告</td><td>不要一開始就包成大型成人展，避免品牌與營運風險過高</td></tr>
+          <tr><td><span class="tag b">Phase 2</span></td><td>把深度試玩做成展商服務</td><td>長試玩預約、玩家問卷、QR tracking、現場購買 / wishlist 意圖收集</td><td>不要只統計總人次，因為總人次對展商續展幫助有限</td></tr>
+          <tr><td><span class="tag y">Phase 3</span></td><td>把玩家資料變成招商證據</td><td>Player Signal Report、mature 玩家偏好、熱門類型、KOL 內容、展商案例</td><td>不要只用主觀敘事說「玩家很熱情」</td></tr>
+          <tr><td><span class="tag o">Phase 4</span></td><td>推出海外 first-timer / representation package</td><td>共享攤位、代展、中文支援、玩家回饋報告、KOL 接觸</td><td>不要要求海外廠商第一次就承擔完整攤位與差旅成本</td></tr>
+          <tr><td><span class="tag p">Phase 5</span></td><td>補上 Industry Lite</td><td>只邀請少量發行商、平台、媒體來看深度 B2C 結果</td><td>不要把展會主軸轉成 B2B，也不要承諾大量商務媒合</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note orange"><strong>判斷：</strong>發行商視角在這裡的用途，不是把 G-EIGHT 變成發行商媒合展，而是說服發行商與海外展商：G-EIGHT 可以替他們測到台灣核心玩家與 mature 玩家反應。這是 G-EIGHT 比一般綜合展更清楚、更可防守的優勢。</div>
+  </div>
+
+</div>
+<!-- ═══ TAB 10: 參考資料 ═══ -->
+<div class="content" id="t10">
+
+  <div class="section">
+    <div class="section-title">官方資料</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>來源</th><th>內容</th><th>連結</th></tr></thead>
+        <tbody>
+          <tr><td>Gamescom 官方</td><td>Facts &amp; Figures 2025、展商費用、Indie Area 說明</td><td><a href="https://www.gamescom.global/en/info/exhibitors/exhibit/facts-figures" style="color:var(--b)">gamescom.global/facts-figures</a></td></tr>
+          <tr><td>Indie Arena Booth</td><td>費用結構、申請流程、免費名額</td><td><a href="https://indiearenabooth.de/submission" style="color:var(--b)">indiearenabooth.de/submission</a></td></tr>
+          <tr><td>Gamescom 展位費用說明</td><td>每平方米費用、強制附加費</td><td><a href="https://www.eideticmarketing.com/2025/05/03/gamescom-booth-cost-faq-for-2025-exhibitors/" style="color:var(--b)">Eidetic Marketing FAQ</a></td></tr>
+          <tr><td>BitSummit 官方</td><td>展商申請規則、票價、B2B 說明</td><td><a href="https://bitsummit.org/en/submission-faq-eng/" style="color:var(--b)">bitsummit.org/submission-faq</a></td></tr>
+          <tr><td>BitSummit 票務</td><td>公眾日 / 業界日票價</td><td><a href="https://bitsummit.org/en/ticket-2/" style="color:var(--b)">bitsummit.org/ticket</a></td></tr>
+          <tr><td>PAX West 官方</td><td>場地、票務、PAX Rising 說明</td><td><a href="https://west.paxsite.com/" style="color:var(--b)">west.paxsite.com</a></td></tr>
+          <tr><td>PAX Rising Showcase</td><td>申請資格、選拔方式</td><td><a href="https://west.paxsite.com/en-us/features/pax-rising-showcase.html" style="color:var(--b)">PAX Rising 頁面</a></td></tr>
+          <tr><td>gamescom dev (devcom)</td><td>開發者大會票務 / 規模</td><td><a href="https://dev.gamescom.global/about-gamescom-dev/" style="color:var(--b)">dev.gamescom.global</a></td></tr>
+          <tr><td>MeetToMatch Cologne</td><td>B2B 媒合平台，11,000+ 會議數據</td><td><a href="https://www.meettomatch.com/cologne/" style="color:var(--b)">meettomatch.com/cologne</a></td></tr>
+          <tr><td>Day of the Devs</td><td>展覽說明、申請入口</td><td><a href="https://www.dayofthedevs.org/" style="color:var(--b)">dayofthedevs.org</a></td></tr>
+          <tr><td>EGX 官方</td><td>倫敦展會資訊</td><td><a href="https://www.egx.net/" style="color:var(--b)">egx.net</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">人次 / 規模數據來源</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>來源</th><th>主要數據</th><th>連結</th></tr></thead>
+        <tbody>
+          <tr><td>VGC — BitSummit 2024 人次紀錄</td><td>BitSummit 2024：38,333 人，+60% YoY</td><td><a href="https://www.videogameschronicle.com/news/bitsummit-2024-claims-record-attendance-up-more-than-60-on-last-year/" style="color:var(--b)">VGC 報導</a></td></tr>
+          <tr><td>Delimiter Online — BitSummit 2026</td><td>BitSummit 2026：68,208 人，+17% YoY</td><td><a href="https://delimiter.online/blog/bitsummit-attendance-record/" style="color:var(--b)">Delimiter Online</a></td></tr>
+          <tr><td>GamingBolt — Gamescom 2025</td><td>Gamescom 2025：357,000 人，+6.5% YoY</td><td><a href="https://gamingbolt.com/gamescom-2025-set-an-attendance-record-with-357000-visitors-6-5-percent-growth-over-2024" style="color:var(--b)">GamingBolt</a></td></tr>
+          <tr><td>Notebookcheck — Gamescom ONL</td><td>ONL 72M 觀看，357,000 現場</td><td><a href="https://www.notebookcheck.net/Gamescom-2025-recorded-357-000-attendees-and-a-mammoth-72-million-viewers-on-Opening-Night-Live.1097370.0.html" style="color:var(--b)">Notebookcheck</a></td></tr>
+          <tr><td>Lynnwood Times — PAX West 2025</td><td>PAX West 2025：~120,000 人</td><td><a href="https://lynnwoodtimes.com/2025/09/04/pax-west-2025/" style="color:var(--b)">Lynnwood Times</a></td></tr>
+          <tr><td>gamesmarket — Gamescom 業界人次</td><td>業界人次 34,000（歷史最高）</td><td><a href="https://www.gamesmarket.global/strong-results-gamescom-2025-closes-with-357000-visitors-and-a-new-trade-visitor-record-3e2eeab882c4db5698c4864078e334cc/" style="color:var(--b)">gamesmarket</a></td></tr>
+          <tr><td>TechBomb — devcom 2025</td><td>devcom 2025：5,400 人，改名 gamescom dev</td><td><a href="https://techbomb.ca/gaming/devcom-2025-wrap-up-record-attendance-gamescom-dev/" style="color:var(--b)">TechBomb</a></td></tr>
+          <tr><td>MICE Times — BitSummit PUNCH 2026</td><td>BitSummit 2026 報名/展商資訊</td><td><a href="https://micetimes.jp/en/bitsummit-punch-2026-news-2/" style="color:var(--b)">MICE Times</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">展商效益 / B2C 策略研究來源</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>來源</th><th>主要洞察</th><th>連結</th></tr></thead>
+        <tbody>
+          <tr><td>Caldera Interactive — Gamescom 2024 案例</td><td>733 demo、462 stamps、~1,000 wishlists 實測數據</td><td><a href="https://calderainteractive.com/blog/gamescom-wishlist-case-study/" style="color:var(--b)">Is Gamescom Worth It?</a></td></tr>
+          <tr><td>GameDiscoverCo — Steam Wishlist 轉換率</td><td>首週轉換率 0.10–0.17×，2024–2025 數據</td><td><a href="https://newsletter.gamediscover.co/p/the-state-of-steam-wishlist-conversions" style="color:var(--b)">GameDiscoverCo Newsletter</a></td></tr>
+          <tr><td>Game Developer — PAX Rising 數據</td><td>Session 數據、Telemetry 迭代、76→149 場</td><td><a href="https://www.gamedeveloper.com/business/pax-rising---our-data-experience-and-gratitude" style="color:var(--b)">PAX Rising Data Report</a></td></tr>
+          <tr><td>Game Developer — PAX10 疫情數據</td><td>線上展覽 ROI 分析</td><td><a href="https://www.gamedeveloper.com/marketing/pax10-during-the-pandemic---our-data-and-experience" style="color:var(--b)">PAX10 Pandemic Data</a></td></tr>
+          <tr><td>Alex Itsios Blog — Gamescom 2024 心得</td><td>indie 展商第一手參展體驗</td><td><a href="https://www.alexitsios.com/2024/09/what-gamescom-taught-me-this-year-as.html" style="color:var(--b)">What Gamescom Taught Me</a></td></tr>
+          <tr><td>GG Talent Group — Indie Devs at Gamescom</td><td>indie 展商在 Gamescom 的策略</td><td><a href="https://www.ggtalentgroup.com/post/the-indie-game-devs-of-gamescom" style="color:var(--b)">GG Talent Group</a></td></tr>
+          <tr><td>How To Market A Game — Festivals</td><td>哪些遊戲展值得參加，成本效益分析</td><td><a href="https://howtomarketagame.com/festivals/" style="color:var(--b)">How To Market A Game</a></td></tr>
+          <tr><td>Game Developer — PAX East Indie 建議</td><td>「全力投入」策略，B2C 優先原則</td><td><a href="https://www.gamedeveloper.com/business/-go-all-in-to-succeed-as-an-indie-dev-at-pax-east-2019" style="color:var(--b)">Go All In at PAX East</a></td></tr>
+          <tr><td>Gamalytic — Steam Wishlist/Sales Ratio</td><td>Wishlist → 銷售轉換的統計分析</td><td><a href="https://gamalytic.com/blog/exploring-steam-wishlist-sale-ratio" style="color:var(--b)">Gamalytic Analysis</a></td></tr>
+          <tr><td>IGEA — Game On Australia at Gamescom</td><td>澳洲政府補助參展機制</td><td><a href="https://igea.net/2025/07/australia-showcases-game-development-excellence-on-the-global-stage-with-launch-of-game-on-australia/" style="color:var(--b)">IGEA Australia</a></td></tr>
+          <tr><td>Eidetic Marketing — Gamescom B2C 策略</td><td>MECHA BREAK 沉浸式展台案例</td><td><a href="https://www.eideticmarketing.com/enigma-portfolio/2025-gamescom-agency-mecha-break/" style="color:var(--b)">MECHA BREAK Case Study</a></td></tr>
+          <tr><td>VGC — BitSummit 2024 Sonokuni</td><td>展覽獎項後獲得 Nintendo Switch 發行</td><td><a href="https://www.videogameschronicle.com/news/sonokuni-vgcs-bitsummit-2024-game-of-the-show-is-coming-to-nintendo-switch/" style="color:var(--b)">VGC — Sonokuni</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">G-EIGHT 相關資料來源</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>來源</th><th>主要數據</th><th>連結</th></tr></thead>
+        <tbody>
+          <tr><td>G-EIGHT 官方</td><td>歷屆資訊、展商頁面</td><td><a href="https://geight.io/" style="color:var(--g)">geight.io</a></td></tr>
+          <tr><td>T客邦 — G-EIGHT 2025 報導</td><td>展商名單、規模、票價資訊</td><td><a href="https://www.techbang.com/posts/126807-g-eight-2025-indie-game-showcase" style="color:var(--g)">T客邦 G-EIGHT 2025</a></td></tr>
+          <tr><td>T客邦 — G-EIGHT 2025 票務</td><td>票種、票價、聯名組合</td><td><a href="https://www.techbang.com/posts/126263-g-eight-2025-indie-game-show-tickets" style="color:var(--g)">T客邦票務報導</a></td></tr>
+          <tr><td>巴哈姆特 GNN — 第四屆報導</td><td>展商名單、展出遊戲資訊</td><td><a href="https://gnn.gamer.com.tw/detail.php?sn=296629" style="color:var(--g)">巴哈姆特 GNN</a></td></tr>
+          <tr><td>G-EIGHT 官方第三屆回顧</td><td>第三屆數據與國際化成果</td><td><a href="https://geight.io/en/the-third-edition-of-g-eight/" style="color:var(--g)">G-EIGHT 官方文章</a></td></tr>
+          <tr><td>KKTIX 2025 售票頁面</td><td>票種結構、票價</td><td><a href="https://capsule1111.kktix.cc/events/2025g-eight" style="color:var(--g)">KKTIX 售票頁</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">⚠️ 數據缺口說明：G-EIGHT 官方未公開財務數字、入場人次精確數字（2025年）、展商費用結構。本研究中的 G-EIGHT 相關數字均為依公開資料推算的估計值，不代表實際營運數據。</div>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 11: BIC 釜山獨立連線展 ═══ -->
+<div class="content" id="t11">
+
+  <div class="expo-header">
+    <div class="expo-flag">🇰🇷</div>
+    <div class="expo-info">
+      <h2>BIC — 釜山獨立連線展（Busan Indie Connect）</h2>
+      <div class="expo-meta">📍 BEXCO 及多場地，釜山，韓國 ｜ 📅 每年 8–9 月（3 天）｜ 🏛 主辦：BIC 組委會 ｜ 支持：釜山廣域市 + KOCCA（韓國內容振興院）</div>
+      <div class="expo-tags">
+        <span class="tag g">純獨立遊戲展</span>
+        <span class="tag b">政府機構雙重支持</span>
+        <span class="tag p">業界 B2B 媒合機制</span>
+        <span class="tag o">亞洲 indie 重要節點</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">關鍵數據</div>
+    <div class="kpi-grid">
+      <div class="kpi g"><div class="kpi-label">創立年份</div><div class="kpi-val">2015</div><div class="kpi-sub">累積 10 年展會運作</div></div>
+      <div class="kpi g"><div class="kpi-label">展出遊戲</div><div class="kpi-val">100–200+</div><div class="kpi-sub">每屆（國內 + 國際，推算）</div></div>
+      <div class="kpi b"><div class="kpi-label">國際參與</div><div class="kpi-val">30+ 國</div><div class="kpi-sub">亞洲 indie 展中國際化最強之一</div></div>
+      <div class="kpi p"><div class="kpi-label">政府支持</div><div class="kpi-val">✅ 雙軌</div><div class="kpi-sub">KOCCA（中央）+ 釜山市（地方）</div></div>
+      <div class="kpi y"><div class="kpi-label">B2B 機制</div><div class="kpi-val">✅ 正式媒合</div><div class="kpi-sub">開發者 × 發行商 / 平台 配對</div></div>
+      <div class="kpi o"><div class="kpi-label">公眾入場費</div><div class="kpi-val">免費</div><div class="kpi-sub">政府補貼吸收，最大化人次</div></div>
+    </div>
+    <div class="note">⚠️ BIC 部分數字為公開資料推算值，請以 BIC 官方公告為準。KOCCA = 한국콘텐츠진흥원（Korea Creative Content Agency）。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">BIC 在亞洲 indie 版圖的定位</div>
+    <div class="chart-grid">
+      <div class="cc">
+        <h3>亞洲三大純 indie 展核心維度比較</h3>
+        <div class="cs">BIC（韓）· BitSummit（日）· G-EIGHT（台）｜10 分制評分</div>
+        <div class="cw"><canvas id="c_bic_compare"></canvas></div>
+      </div>
+      <div class="cc">
+        <h3>BIC 的三大特殊性</h3>
+        <div class="cs">為什麼 BIC 是 G-EIGHT 最值得研究的參照點</div>
+        <div class="cw" style="height:auto;padding:4px 0">
+          <div style="background:rgba(239,83,80,0.07);border:1px solid rgba(239,83,80,0.2);border-radius:10px;padding:14px;margin-bottom:10px">
+            <div style="font-size:12px;color:var(--r);font-weight:600;margin-bottom:4px">① 韓國 indie 孵化場</div>
+            <p style="font-size:12px;color:var(--muted)">韓國是全球最大的 PC / esports 市場之一，但 indie 文化相對起步晚。BIC 同時扮演「韓國 indie 走出去」和「世界 indie 進入韓國」的雙向橋梁，這個雙向角色讓 BIC 比 BitSummit 更具國際多樣性。</p>
+          </div>
+          <div style="background:rgba(100,255,218,0.07);border:1px solid rgba(100,255,218,0.2);border-radius:10px;padding:14px;margin-bottom:10px">
+            <div style="font-size:12px;color:var(--g);font-weight:600;margin-bottom:4px">② KOCCA 制度性支持：最穩定的政府 indie 資金</div>
+            <p style="font-size:12px;color:var(--muted)">KOCCA（韓國內容振興院）是韓國政府支持文化內容的核心機構，BIC 是 KOCCA 支持 indie 遊戲的旗艦外顯機制。這讓 BIC 有穩定的年度資金基礎，免費入場因此成立——不依賴票務維持運營。</p>
+          </div>
+          <div style="background:rgba(66,165,245,0.07);border:1px solid rgba(66,165,245,0.2);border-radius:10px;padding:14px">
+            <div style="font-size:12px;color:var(--b);font-weight:600;margin-bottom:4px">③ B2B 媒合嵌在展覽中：亞洲最活躍的 indie × 發行商接觸點</div>
+            <p style="font-size:12px;color:var(--muted)">BIC 的媒合機制讓韓國本地發行商（Neowiz、Pearl Abyss 等）直接接觸獨立開發者，也吸引日本、東南亞的發行商前來 scouting。媒合嵌在展覽中而非獨立 Business Day，大幅降低了業界人士的出席門檻。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">策展哲學：地理多元性是選拔核心</div>
+    <div class="highlight">
+      <h3>BIC 的策展核心：「讓亞洲 indie 被世界看見，讓世界 indie 被亞洲玩家發現」</h3>
+      <p>BIC 的選拔目標不只是品質把關，還包含明確的地理多元性——韓國本地遊戲與國際遊戲同台展出，互相刺激與比較。這讓 BIC 的名單形成「韓國本地 indie × 亞洲 indie × 歐美 indie」三層結構，多樣性顯著高於 BitSummit（後者仍以日本和鄰近亞洲為主）。對開發者而言，在 BIC 入選代表「被亞洲業界認可」，是進入韓國市場的重要信號。</p>
+    </div>
+    <div class="attr-grid">
+      <div class="attr-card">
+        <div class="attr-icon">📋</div>
+        <h4>公開申請 + 評審委員制</h4>
+        <p>BIC 採公開申請制，評審委員由產業人士、媒體記者、開發者組成。選拔考量遊戲品質、創新性、類型多樣性，同時考量韓國本地遊戲與國際遊戲的比例平衡。對國際開發者而言，BIC 提供了一個比 BitSummit 更易申請、業界深度更高的亞洲入場選項。</p>
+        <span class="impact h">亞洲入場門檻最平衡</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🏆</div>
+        <h4>People's Choice Award：玩家直接參與</h4>
+        <p>BIC 的獎項包含評審獎與玩家票選兩軌。玩家現場試玩後直接投票，決定「最喜愛的遊戲」。這個設計提高玩家投入感，給開發者一個「被亞洲玩家認可」的市場信號，也為媒體提供可報導的競爭敘事，三方共贏。</p>
+        <span class="impact m">玩家票選 = 三方共贏設計</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🌏</div>
+        <h4>把國際化列為策展核心目標</h4>
+        <p>BIC 明確把「讓世界 indie 來到亞洲」作為策展目標之一。近年來自歐美的 indie 遊戲參展比例持續提升。這個策略的結果：BIC 在歐美 indie 開發者社群的知名度，高於其他亞洲 indie 展，進而吸引更多高品質的國際投件，形成正向循環。</p>
+        <span class="impact h">比 BitSummit 更國際化的 indie 生態</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🎓</div>
+        <h4>開發者講座 + 社群節慶感</h4>
+        <p>BIC 設有開發者向的講座、Panel、工作坊，讓展覽不只是「遊戲展示」，也是開發者社群的學習節點。這讓 BIC 對開發者的吸引力超出純玩家展，形成「展覽 + 社群 + 教育」三位一體，定位接近「開發者節慶（Dev Festival）」。</p>
+        <span class="impact m">展覽 × 社群 × 教育三位一體</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">財務結構：政府補貼主導 + 免費入場模型</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>財務維度</th><th>BIC 的做法</th><th>與 BitSummit 比較</th><th>G-EIGHT 的啟示</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>入場費</td>
+            <td>免費（公眾日）</td>
+            <td>BitSummit ¥2,000（≈ NT$440）；BIC 選擇免費，人次最大化</td>
+            <td>G-EIGHT 可保留票價，但設計「開發者日免費」或「學生優惠日」降低特定族群門檻</td>
+          </tr>
+          <tr>
+            <td>政府資金</td>
+            <td>KOCCA（中央）+ 釜山市（地方）雙軌補貼</td>
+            <td>BitSummit 以京都府單一補貼為主；BIC 雙軌更穩定</td>
+            <td>台灣對應：TAICCA（中央）+ 台北市文化局（地方）= G-EIGHT 的 BIC 對應，應積極申請雙軌補貼</td>
+          </tr>
+          <tr>
+            <td>展商費</td>
+            <td>低或免費（政府補貼吸收大部分成本）</td>
+            <td>BitSummit ¥33,000（≈ NT$7,200）；BIC 展商負擔更低</td>
+            <td>降低展商費需要政府補貼作為緩衝；這是向 TAICCA 申請合作的核心論點</td>
+          </tr>
+          <tr>
+            <td>企業贊助</td>
+            <td>韓國本地遊戲大廠（Neowiz、Pearl Abyss 等）+ 平台商</td>
+            <td>BitSummit 贊助以日本大廠為主；BIC 以韓國大廠為核心，不依賴全球大廠</td>
+            <td>G-EIGHT 應優先開發台灣本地遊戲廠商（Gamania、IGS、遊戲橘子）贊助，決策鏈更短更容易談成</td>
+          </tr>
+          <tr>
+            <td>B2B 機制</td>
+            <td>媒合嵌在展覽中，不另設獨立業界日，降低業界人士出席門檻</td>
+            <td>BitSummit 有正式 Business Day；BIC 模式更靈活，對買方更友善</td>
+            <td>G-EIGHT 可從「邀請制媒合場（每天 2 小時）」開始，嵌在展覽動線中，無需完整 Business Day</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note orange"><strong>BIC 財務模型核心：</strong>免費入場 + 政府補貼 + 韓國本地大廠贊助，讓 BIC 可以把全部精力放在策展品質和開發者服務上，而不需要靠票務收入維持運營。這是「政府 × 產業 × 展覽」三方協作模型的亞洲典範，也是 G-EIGHT 最值得追求的長期財務架構。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">BIC 對 G-EIGHT 的直接啟示</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>BIC 做了什麼</th><th>為什麼對 G-EIGHT 特別相關</th><th>G-EIGHT 可以怎麼做</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>KOCCA + 釜山市雙重補貼，確保年度財務穩定</td>
+            <td>G-EIGHT 目前財務依賴票務，缺乏政府補貼緩衝</td>
+            <td>同時向 TAICCA（中央）+ 台北市文化局（地方）申請補貼，建立雙軌資金基礎——BIC 模式的台灣版</td>
+          </tr>
+          <tr>
+            <td>免費入場 → 最大化人次 → 提高贊助吸引力</td>
+            <td>G-EIGHT 票務收入是當前主力，改為免費前需先確認贊助可填補</td>
+            <td>短期：保留票價但將「開發者日」設為免費；長期：贊助收入達 40%+ 後再考慮全面免費入場</td>
+          </tr>
+          <tr>
+            <td>People's Choice Award 讓玩家投票決定最佳遊戲</td>
+            <td>G-EIGHT 的玩家參與機制目前較被動，觀眾試玩後缺乏反饋閉環</td>
+            <td>立即可做：設計「G-EIGHT 玩家票選」，試玩後現場投票，展後公佈結果並媒體宣傳——低成本高投入感</td>
+          </tr>
+          <tr>
+            <td>B2B 媒合嵌在展覽中，不另設高價業界日</td>
+            <td>G-EIGHT 買方（發行商/平台）密度不足以支撐完整 Business Day 門票模式</td>
+            <td>參考 BIC：設「邀請制媒合場」每天 2 小時，邀請發行商和平台代表免費出席，嵌在展覽動線中</td>
+          </tr>
+          <tr>
+            <td>本地大廠（Neowiz 等）作為贊助核心，而非只靠全球大廠</td>
+            <td>G-EIGHT 的贊助開發可能過度聚焦 Sony / Nintendo 等全球大廠，忽略台灣本地廠商</td>
+            <td>優先開發台灣遊戲廠商（Gamania、IGS）和在台分公司（遊戲橘子、傳說企業）——決策鏈更短，第一個贊助案例更容易談成</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note green"><strong>最重要的啟示：</strong>BIC 代表「政府 × 產業 × 民間展覽」三方協作建立 indie 生態的韓國模式。G-EIGHT 目前是「民間自力運作」，BIC 是「制度性支持下的民間展覽」——差距不在理念或策展能力，而在政府關係的建立。<strong>G-EIGHT 的下一步，應把申請 TAICCA 和台北市文化局合作關係，視為與提升策展品質同等優先的策略任務。</strong></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  深度研究報告 · 2026-06-10· 資料已附來源連結，請參考「參考資料」分頁
+</div>
+
+<script>
+const G='#64ffda',O='#ff8a65',P='#b388ff',Y='#ffd54f',B='#42a5f5',R='#ef5350',PINK='#e91e63';
+if (window.Chart) {
+  Chart.defaults.color='#666680';
+  Chart.defaults.borderColor='#2a2a3a';
+  Chart.defaults.font.family="'Segoe UI','PingFang TC','Microsoft JhengHei',sans-serif";
+}
+
+let ch={};
+function mk(id,cfg){
+  if(!window.Chart) return;
+  const el=document.getElementById(id);
+  if(!el) return;
+  if(ch[id]) ch[id].destroy();
+  ch[id]=new Chart(el,cfg);
+}
+
+function init(n){
+  if(n===0){
+    mk('c_total_att',{type:'bar',data:{
+      labels:['Gamescom\n(德)','PAX West\n(美)','PAX East\n(美)','EGX\n(英)','BitSummit\n(日)','G-EIGHT\n(台)','Day of Devs\n(美,現場)'],
+      datasets:[{label:'入場人次',data:[357000,120000,100000,77500,68208,25000,5000],
+        backgroundColor:['rgba(66,165,245,0.4)','rgba(255,213,79,0.35)','rgba(255,213,79,0.25)','rgba(233,30,99,0.3)','rgba(255,138,101,0.4)','rgba(100,255,218,0.4)','rgba(179,136,255,0.3)'],
+        borderColor:[B,Y,'#f9a825',PINK,O,G,P],borderWidth:2,borderRadius:6}]
+    },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.parsed.y.toLocaleString()} 人`}}},
+      scales:{y:{beginAtZero:true,ticks:{callback:v=>v>=10000?(v/10000).toFixed(0)+'萬':v},grid:{color:'#1e1e2e'}},x:{grid:{display:false}}}}});
+
+    mk('c_ticket',{type:'bar',data:{
+      labels:['PAX West\n($71)','EGX London\n(£30)','Gamescom\n(€25 avg)','BitSummit\n(¥2000)','G-EIGHT\n(NT$325)'],
+      datasets:[{label:'NT$ 換算',data:[2270,1230,875,440,325],
+        backgroundColor:['rgba(255,213,79,0.4)','rgba(233,30,99,0.3)','rgba(66,165,245,0.35)','rgba(255,138,101,0.35)','rgba(100,255,218,0.4)'],
+        borderColor:[Y,PINK,B,O,G],borderWidth:2,borderRadius:6}]
+    },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` NT$${c.parsed.y}`}}},
+      scales:{y:{beginAtZero:true,ticks:{callback:v=>'NT$'+v},grid:{color:'#1e1e2e'}},x:{grid:{display:false}}}}});
+
+    mk('c_biz_ticket',{type:'bar',data:{
+      labels:['BitSummit\nBusiness Day','Gamescom\nWildcard(Wed)','Gamescom\nBusiness 5-Day','G-EIGHT\n（無）'],
+      datasets:[{label:'NT$ 換算',data:[4400,2240,2235,0],
+        backgroundColor:['rgba(255,138,101,0.5)','rgba(66,165,245,0.35)','rgba(66,165,245,0.25)','rgba(100,100,130,0.2)'],
+        borderColor:[O,B,'#1565c0','#333'],borderWidth:2,borderRadius:6}]
+    },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` NT$${c.parsed.y}`}}},
+      scales:{y:{beginAtZero:true,ticks:{callback:v=>'NT$'+v},grid:{color:'#1e1e2e'}},x:{grid:{display:false}}}}});
+
+    mk('c_radar_all',{type:'radar',data:{
+      labels:['人次規模','票價水位','業界機制','國際展商','政府支持','數位觸及','Indie 專注','成長動能','展商友善'],
+      datasets:[
+        {label:'Gamescom',data:[10,7,9,10,10,10,5,7,6],borderColor:B,backgroundColor:'rgba(66,165,245,0.08)',pointBackgroundColor:B,borderWidth:2},
+        {label:'PAX West',data:[9,9,4,8,2,7,5,6,5],borderColor:Y,backgroundColor:'rgba(255,213,79,0.06)',pointBackgroundColor:Y,borderWidth:2},
+        {label:'BitSummit',data:[7,6,10,9,9,8,10,8,9],borderColor:O,backgroundColor:'rgba(255,138,101,0.06)',pointBackgroundColor:O,borderWidth:2},
+        {label:'G-EIGHT',data:[3,3,0,2,1,3,10,9,8],borderColor:G,backgroundColor:'rgba(100,255,218,0.08)',pointBackgroundColor:G,borderWidth:2}
+      ]
+    },options:{responsive:true,maintainAspectRatio:false,
+      scales:{r:{beginAtZero:true,max:10,ticks:{stepSize:2,font:{size:9}},grid:{color:'#2a2a3a'},pointLabels:{font:{size:11},color:'#aaaacc'},angleLines:{color:'#2a2a3a'}}},
+      plugins:{legend:{position:'bottom',labels:{padding:16}}}}});
+  }
+
+  if(n===1){
+    mk('c_onl_growth',{type:'bar',data:{
+      labels:['峰值同時在線','平均同時在線','總觸及（億）'],
+      datasets:[
+        {label:'2024',data:[1250000,1080000,3100],backgroundColor:'rgba(66,165,245,0.25)',borderColor:B,borderWidth:2,borderRadius:4},
+        {label:'2025',data:[2000000,1800000,6300],backgroundColor:'rgba(66,165,245,0.5)',borderColor:B,borderWidth:2,borderRadius:4}
+      ]
+    },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},
+      scales:{y:{beginAtZero:true,ticks:{callback:v=>v>=1000000?(v/1000000).toFixed(1)+'M':v>=100?(v/100)+'M':v},grid:{color:'#1e1e2e'}},x:{grid:{display:false}}}}});
+
+    mk('c_onl_breakdown',{type:'doughnut',data:{
+      labels:['直播觀看','VOD / 後續觀看','其他數位觸及'],
+      datasets:[{data:[4600,15000,44400],backgroundColor:['rgba(66,165,245,0.7)','rgba(66,165,245,0.4)','rgba(66,165,245,0.2)'],borderColor:[B,'#1565c0','#0d47a1'],borderWidth:2}]
+    },options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'bottom',labels:{padding:12}},tooltip:{callbacks:{label:c=>` ${c.parsed}M`}}}}});
+  }
+
+  if(n===2){
+    mk('c_pax_rev',{type:'doughnut',data:{
+      labels:['票務收入（West）','展商費用（大廠）','PAX Rising 費用','周邊/贊助'],
+      datasets:[{data:[272,150,16,50],backgroundColor:['rgba(255,213,79,0.7)','rgba(255,213,79,0.4)','rgba(255,213,79,0.2)','rgba(255,167,38,0.4)'],borderColor:[Y,'#f9a825','#ff8f00','#ffa726'],borderWidth:2}]
+    },options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'bottom',labels:{padding:12}},tooltip:{callbacks:{label:c=>` NT$${c.parsed}M`}}}}});
+
+    mk('c_pax_events',{type:'bar',data:{
+      labels:['PAX West','PAX East','PAX Aus','PAX Unplugged'],
+      datasets:[{label:'人次',data:[120000,100000,55000,35000],backgroundColor:['rgba(255,213,79,0.5)','rgba(255,213,79,0.4)','rgba(255,213,79,0.3)','rgba(255,213,79,0.2)'],borderColor:[Y,Y,Y,Y],borderWidth:2,borderRadius:6}]
+    },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.parsed.y.toLocaleString()} 人（估）`}}},
+      scales:{y:{beginAtZero:true,ticks:{callback:v=>v>=10000?(v/10000).toFixed(0)+'萬':v},grid:{color:'#1e1e2e'}},x:{grid:{display:false}}}}});
+  }
+
+  if(n===3){
+    mk('c_egx_ticket',{type:'bar',data:{
+      labels:['G-EIGHT\nNT$325','BitSummit\n¥2000','EGX London\n£30'],
+      datasets:[{label:'NT$ 換算',data:[325,440,1230],backgroundColor:['rgba(100,255,218,0.4)','rgba(255,138,101,0.35)','rgba(233,30,99,0.35)'],borderColor:[G,O,PINK],borderWidth:2,borderRadius:6}]
+    },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` NT$${c.parsed.y}`}}},
+      scales:{y:{beginAtZero:true,ticks:{callback:v=>'NT$'+v},grid:{color:'#1e1e2e'}},x:{grid:{display:false}}}}});
+
+    mk('c_egx_rev',{type:'doughnut',data:{
+      labels:['票務收入','展商費用','MCM Comic Con 協同','贊助'],
+      datasets:[{data:[45,25,20,10],backgroundColor:['rgba(233,30,99,0.6)','rgba(233,30,99,0.35)','rgba(233,30,99,0.2)','rgba(233,30,99,0.1)'],borderColor:[PINK,'#880e4f','#c2185b','#d81b60'],borderWidth:2}]
+    },options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'bottom',labels:{padding:12}},tooltip:{callbacks:{label:c=>` ${c.parsed}%`}}}}});
+  }
+
+  if(n===5){
+    mk('c_positioning',{type:'bubble',data:{
+      datasets:[
+        {label:'Gamescom',data:[{x:9,y:9.5,r:20}],backgroundColor:'rgba(66,165,245,0.4)',borderColor:B,borderWidth:2},
+        {label:'PAX West',data:[{x:8,y:8,r:16}],backgroundColor:'rgba(255,213,79,0.4)',borderColor:Y,borderWidth:2},
+        {label:'EGX',data:[{x:7,y:6.5,r:13}],backgroundColor:'rgba(233,30,99,0.35)',borderColor:PINK,borderWidth:2},
+        {label:'BitSummit',data:[{x:6,y:7,r:12}],backgroundColor:'rgba(255,138,101,0.4)',borderColor:O,borderWidth:2},
+        {label:'G-EIGHT',data:[{x:4,y:3.5,r:8}],backgroundColor:'rgba(100,255,218,0.5)',borderColor:G,borderWidth:3},
+        {label:'Day of Devs',data:[{x:1,y:2,r:5}],backgroundColor:'rgba(179,136,255,0.4)',borderColor:P,borderWidth:2},
+        {label:'IndieCade',data:[{x:1,y:1,r:4}],backgroundColor:'rgba(179,136,255,0.3)',borderColor:P,borderWidth:2},
+      ]
+    },options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{padding:14}}},
+      scales:{
+        x:{beginAtZero:true,max:11,title:{display:true,text:'商業化程度 →',color:'#666680'},ticks:{callback:v=>['','非商業','','低','','中','','中高','','高','','極高'][v]||v},grid:{color:'#1e1e2e'}},
+        y:{beginAtZero:true,max:11,title:{display:true,text:'規模 →',color:'#666680'},ticks:{callback:v=>['','極小','','小','','中','','中大','','大','','超大'][v]||v},grid:{color:'#2a2a3a'}}
+      }}});
+
+    mk('c_uplift',{type:'bar',data:{
+      labels:['提升票價\nNT$300→500','Mature Premium\n(深度B2C票種)','更多贊助商','Player Signal\nReport / 展商加值','政府補助\n(場地/行銷)'],
+      datasets:[{label:'潛在年收入增量（萬）',data:[375,700,350,300,500],
+        backgroundColor:['rgba(100,255,218,0.35)','rgba(255,138,101,0.5)','rgba(179,136,255,0.35)','rgba(66,165,245,0.3)','rgba(255,213,79,0.35)'],
+        borderColor:[G,O,P,B,Y],borderWidth:2,borderRadius:6}]
+    },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` NT$${c.parsed.y}萬`}}},
+      scales:{y:{beginAtZero:true,ticks:{callback:v=>'NT$'+v+'萬'},grid:{color:'#1e1e2e'}},x:{grid:{display:false}}}}});
+
+    mk('c_forecast',{type:'line',data:{
+      labels:['現況\n(2025)','Year 1\n(票價+贊助)','Year 2\n(+深度B2C產品)','Year 3\n(+政府+國際化)'],
+      datasets:[
+        {label:'保守估計',data:[1000,1700,2600,4000],borderColor:G,backgroundColor:'rgba(100,255,218,0.08)',pointBackgroundColor:G,tension:.4,fill:true},
+        {label:'樂觀估計',data:[1000,2000,3500,5800],borderColor:Y,backgroundColor:'rgba(255,213,79,0.05)',pointBackgroundColor:Y,tension:.4,fill:false,borderDash:[5,3]},
+      ]
+    },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},
+      scales:{y:{beginAtZero:true,ticks:{callback:v=>'NT$'+v+'萬'},grid:{color:'#1e1e2e'}},x:{grid:{display:false}}}}});
+  }
+
+  if(n===6){
+    mk('c_bit_growth',{type:'bar',data:{
+      labels:['2013','2014','2017','2019','2022','2023','2024','2025','2026'],
+      datasets:[{label:'入場人次',data:[200,800,3000,8000,22000,25000,38333,58000,68208],
+        backgroundColor:['rgba(255,138,101,0.2)','rgba(255,138,101,0.25)','rgba(255,138,101,0.3)','rgba(255,138,101,0.35)','rgba(255,138,101,0.45)','rgba(255,138,101,0.5)','rgba(255,138,101,0.65)','rgba(255,138,101,0.8)','rgba(255,138,101,1)'],
+        borderColor:O,borderWidth:2,borderRadius:6}]
+    },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.parsed.y.toLocaleString()} 人`}}},
+      scales:{y:{beginAtZero:true,ticks:{callback:v=>v>=10000?(v/10000).toFixed(0)+'萬':v},grid:{color:'#1e1e2e'}},x:{grid:{display:false}}}}});
+
+    mk('c_bit_model',{type:'doughnut',data:{
+      labels:['企業贊助套餐','公眾日票務','展商費（一般）','Business Day 票','現場販售'],
+      datasets:[{data:[50,25,10,10,5],
+        backgroundColor:['rgba(255,138,101,0.8)','rgba(100,255,218,0.6)','rgba(66,165,245,0.5)','rgba(255,213,79,0.7)','rgba(179,136,255,0.5)'],
+        borderColor:[O,G,B,Y,P],borderWidth:2}]
+    },options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+      plugins:{legend:{position:'bottom',labels:{padding:12}},tooltip:{callbacks:{label:c=>` ${c.parsed}%`}}}}});
+  }
+
+  if(n===7){
+    mk('c_gca_growth',{type:'bar',data:{
+      labels:['2021\n新加坡','2022\n新加坡','2023\n新加坡','2024\n新加坡','2025\n曼谷'],
+      datasets:[{label:'入場人次',data:[15000,24000,34000,41013,206159],
+        backgroundColor:['rgba(66,165,245,0.25)','rgba(66,165,245,0.35)','rgba(66,165,245,0.45)','rgba(66,165,245,0.55)','rgba(255,138,101,0.7)'],
+        borderColor:[B,B,B,B,O],borderWidth:2,borderRadius:6}]
+    },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:c=>` ${c.parsed.y.toLocaleString()} 人`}},
+      annotation:{annotations:{line1:{type:'line',xMin:3.5,xMax:3.5,borderColor:'#555',borderWidth:1,borderDash:[4,4]}}}},
+      scales:{y:{beginAtZero:true,ticks:{callback:v=>v>=10000?(v/10000).toFixed(0)+'萬':v},grid:{color:'#1e1e2e'}},x:{grid:{display:false}}}}});
+
+    mk('c_sea_market',{type:'doughnut',data:{
+      labels:['印尼 29.5%','泰國 16%','菲律賓 15%','越南 12%','馬來西亞 10%','其他 SEA 17.5%'],
+      datasets:[{data:[29.5,16,15,12,10,17.5],
+        backgroundColor:['rgba(255,138,101,0.7)','rgba(66,165,245,0.6)','rgba(179,136,255,0.6)','rgba(100,255,218,0.6)','rgba(255,213,79,0.6)','rgba(150,150,180,0.4)'],
+        borderColor:[O,B,P,G,Y,'#555'],borderWidth:2}]
+    },options:{responsive:true,maintainAspectRatio:false,cutout:'55%',
+      plugins:{legend:{position:'bottom',labels:{padding:10,font:{size:11}}},tooltip:{callbacks:{label:c=>` ${c.parsed}%（2025 估）`}}}}});
+
+    mk('c_sea_growth',{type:'bar',data:{
+      labels:['越南\n+36.4%','泰國\n(最大市場)','印尼\n29.5% 佔比','菲律賓\n預測最高額','馬來西亞\nRM130M+ 商機'],
+      datasets:[{label:'年成長率 / 重要指標',data:[36.4,18,15,12,10],
+        backgroundColor:['rgba(239,83,80,0.7)','rgba(66,165,245,0.6)','rgba(255,138,101,0.6)','rgba(179,136,255,0.6)','rgba(255,213,79,0.6)'],
+        borderColor:[R,B,O,P,Y],borderWidth:2,borderRadius:6}]
+    },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.parsed.y}%（2024–2025）`}}},
+      scales:{y:{beginAtZero:true,ticks:{callback:v=>v+'%'},grid:{color:'#1e1e2e'}},x:{grid:{display:false}}}}});
+
+    mk('c_sea_invest',{type:'radar',data:{
+      labels:['內容團隊培育','平台合作','展覽佈局','合資公司','本地支付整合'],
+      datasets:[
+        {label:'Tencent',data:[9,7,6,5,3],borderColor:'rgba(255,138,101,1)',backgroundColor:'rgba(255,138,101,0.1)',pointBackgroundColor:O,borderWidth:2},
+        {label:'Gamescom',data:[2,3,10,1,1],borderColor:'rgba(66,165,245,1)',backgroundColor:'rgba(66,165,245,0.1)',pointBackgroundColor:B,borderWidth:2},
+        {label:'NCSOFT',data:[3,4,2,10,8],borderColor:'rgba(100,255,218,1)',backgroundColor:'rgba(100,255,218,0.1)',pointBackgroundColor:G,borderWidth:2},
+      ]
+    },options:{responsive:true,maintainAspectRatio:false,
+      scales:{r:{beginAtZero:true,max:10,ticks:{stepSize:2,font:{size:9}},grid:{color:'#2a2a3a'},pointLabels:{font:{size:11},color:'#aaaacc'},angleLines:{color:'#2a2a3a'}}},
+      plugins:{legend:{position:'bottom',labels:{padding:14}}}}});
+  }
+
+  if(n===8){
+    mk('c_dev_market',{type:'bar',data:{
+      labels:['Mature Premium Day','深度試玩','Player Signal Report','主題策展 / 導覽','海外首次參展包','Industry Lite'],
+      datasets:[
+        {label:'收入影響',data:[9,8,8,7,7,4],backgroundColor:'rgba(100,255,218,0.65)',borderColor:G,borderWidth:2,borderRadius:4},
+        {label:'招商影響',data:[10,9,10,8,9,5],backgroundColor:'rgba(66,165,245,0.65)',borderColor:B,borderWidth:2,borderRadius:4},
+        {label:'短期可執行性',data:[6,7,8,8,8,7],backgroundColor:'rgba(255,213,79,0.65)',borderColor:Y,borderWidth:2,borderRadius:4},
+      ]
+    },options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{padding:12}},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y}/10`}}},
+      scales:{y:{beginAtZero:true,max:10,grid:{color:'#1e1e2e'},ticks:{callback:v=>v+'/10'}},x:{grid:{display:false}}}}});
+
+    mk('c_dev_cost',{type:'bar',data:{
+      labels:['Player Signal Report','Mature Premium Day','Deep Play Session','KOL / Creator Hour','海外 first-timer','Industry Lite'],
+      datasets:[{label:'預期收益',data:[9,9,8,8,8,5],backgroundColor:'rgba(100,255,218,0.55)',borderColor:G,borderWidth:2,borderRadius:4},
+                {label:'執行難度',data:[4,7,6,5,5,5],backgroundColor:'rgba(255,138,101,0.65)',borderColor:O,borderWidth:2,borderRadius:4},
+                {label:'優先級',data:[10,9,8,8,8,5],backgroundColor:'rgba(255,213,79,0.65)',borderColor:Y,borderWidth:2,borderRadius:4}]
+    },options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{padding:12}},
+        tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y}/10`}}},
+      scales:{y:{beginAtZero:true,max:10,grid:{color:'#1e1e2e'},ticks:{callback:v=>v+'/10'}},x:{grid:{display:false}}}}});
+  }
+
+  if(n===9){
+    mk('c_pub_radar',{type:'radar',data:{
+      labels:['高意圖玩家','Mature 接受度','深度試玩','購買 / Wishlist 意圖','KOL 擴散','展後玩家資料'],
+      datasets:[
+        {label:'海外 mature 展商',data:[9,10,8,9,8,9],borderColor:'rgba(100,255,218,1)',backgroundColor:'rgba(100,255,218,0.1)',pointBackgroundColor:G,borderWidth:2},
+        {label:'一般 indie 展商',data:[8,4,9,9,7,9],borderColor:'rgba(66,165,245,1)',backgroundColor:'rgba(66,165,245,0.1)',pointBackgroundColor:B,borderWidth:2},
+        {label:'發行商 / 平台',data:[8,8,7,10,6,10],borderColor:'rgba(255,213,79,1)',backgroundColor:'rgba(255,213,79,0.1)',pointBackgroundColor:Y,borderWidth:2},
+        {label:'贊助商 / KOL',data:[9,6,6,7,10,7],borderColor:'rgba(179,136,255,1)',backgroundColor:'rgba(179,136,255,0.1)',pointBackgroundColor:P,borderWidth:2},
+      ]
+    },options:{responsive:true,maintainAspectRatio:false,
+      scales:{r:{beginAtZero:true,max:10,ticks:{stepSize:2,font:{size:9}},grid:{color:'#2a2a3a'},pointLabels:{font:{size:11},color:'#aaaacc'},angleLines:{color:'#2a2a3a'}}},
+      plugins:{legend:{position:'bottom',labels:{padding:12}}}}});
+
+    mk('c_pub_types',{type:'bar',data:{
+      labels:['Mature\nPremium','Deep Play\nSession','Player\nSignal','Curated\nTour','KOL\nHour','Rep\nPackage'],
+      datasets:[
+        {label:'商業價值',data:[9,8,9,7,8,8],backgroundColor:'rgba(100,255,218,0.65)',borderColor:G,borderWidth:2,borderRadius:4},
+        {label:'可執行性',data:[6,7,8,9,8,7],backgroundColor:'rgba(66,165,245,0.65)',borderColor:B,borderWidth:2,borderRadius:4},
+        {label:'招商說服力',data:[10,8,10,8,9,8],backgroundColor:'rgba(255,213,79,0.65)',borderColor:Y,borderWidth:2,borderRadius:4},
+      ]
+    },options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{padding:12}}},
+      scales:{y:{beginAtZero:true,max:10,grid:{color:'#1e1e2e'},ticks:{callback:v=>v+'/10'}},x:{grid:{display:false}}}}});
+  }
+
+  if(n===11){
+    mk('c_bic_compare',{type:'radar',data:{
+      labels:['人次規模','政府支持','國際性','業界機制','策展嚴格度','展商友善','玩家社群','成長動能'],
+      datasets:[
+        {label:'BIC（釜山）',data:[5,9,7,8,7,9,6,7],borderColor:R,backgroundColor:'rgba(239,83,80,0.07)',pointBackgroundColor:R,borderWidth:2},
+        {label:'BitSummit（京都）',data:[7,9,8,10,9,9,9,8],borderColor:O,backgroundColor:'rgba(255,138,101,0.07)',pointBackgroundColor:O,borderWidth:2},
+        {label:'G-EIGHT（台灣）',data:[3,1,2,1,5,8,10,9],borderColor:G,backgroundColor:'rgba(100,255,218,0.06)',pointBackgroundColor:G,borderWidth:2,borderDash:[5,3]},
+      ]
+    },options:{responsive:true,maintainAspectRatio:false,
+      scales:{r:{beginAtZero:true,max:10,ticks:{stepSize:2,font:{size:9}},grid:{color:'#2a2a3a'},pointLabels:{font:{size:11},color:'#aaaacc'},angleLines:{color:'#2a2a3a'}}},
+      plugins:{legend:{position:'bottom',labels:{padding:14}}}}});
+  }
+
+}
+
+let done=new Set();
+init(5);
+done.add(5);
+const tabs=document.querySelectorAll('.tab');
+const contents=document.querySelectorAll('.content');
+function sw(btn,n){
+  const pane=document.getElementById('t'+n);
+  if(!pane) return;
+  document.querySelectorAll('.tab,.menu-item').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.more-menu').forEach(m=>m.removeAttribute('open'));
+  contents.forEach(c=>c.classList.remove('active'));
+  pane.classList.add('active');
+  if(!done.has(n)){done.add(n);init(n)}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function placeMoreMenus(){
+  document.querySelectorAll('.more-menu[open]').forEach(menu=>{
+    const summary=menu.querySelector('summary');
+    const panel=menu.querySelector('.more-panel');
+    if(!summary||!panel) return;
+    const rect=summary.getBoundingClientRect();
+    const width=panel.offsetWidth||210;
+    const left=Math.max(12,Math.min(rect.right-width,window.innerWidth-width-12));
+    panel.style.left=left+'px';
+    panel.style.top=(rect.bottom+6)+'px';
+  });
+}
+document.querySelectorAll('.more-menu').forEach(menu=>{
+  menu.addEventListener('toggle',placeMoreMenus);
+});
+window.addEventListener('resize',placeMoreMenus);
+window.addEventListener('scroll',placeMoreMenus,{passive:true});
+</script>
+</body>
+</html>
+

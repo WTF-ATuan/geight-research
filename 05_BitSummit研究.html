@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BitSummit 深度研究 &amp; G-EIGHT 比較</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f13;--bg2:#1a1a24;--bg3:#13131e;
+  --border:#2a2a3a;--border2:#1e1e2e;
+  --g:#64ffda;--g2:rgba(100,255,218,0.12);
+  --o:#ff8a65;--o2:rgba(255,138,101,0.12);
+  --p:#b388ff;--p2:rgba(179,136,255,0.12);
+  --b:#4fc3f7;--b2:rgba(79,195,247,0.12);
+  --y:#ffd54f;--y2:rgba(255,213,79,0.12);
+  --r:#ef5350;
+  --text:#e8e8f0;--muted:#8888aa;--dim:#555570;
+}
+body{font-family:'Segoe UI','PingFang TC','Microsoft JhengHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+
+/* HEADER */
+.header{
+  background:linear-gradient(135deg,#2a0a1a 0%,#0d1f3c 50%,#1a1a0a 100%);
+  padding:28px 32px 0;border-bottom:1px solid var(--border);
+  position:sticky;top:42px;z-index:100;
+}
+.header-top{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.logo{font-size:1.4rem;font-weight:800;background:linear-gradient(90deg,#fff,var(--o),var(--y));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo-sub{font-size:1rem;color:var(--muted);margin-left:4px}
+.header-meta{font-size:11px;color:var(--dim);margin-left:auto}
+
+/* GLOBAL NAV */
+.utility-nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 24px;background:rgba(15,15,19,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.utility-nav a{flex:0 0 auto;color:var(--muted);text-decoration:none;font-size:12px;padding:5px 10px;border:1px solid transparent;border-radius:8px}
+.utility-nav a:hover{color:var(--text);background:rgba(255,255,255,.04);border-color:var(--border)}
+.utility-nav .home{color:var(--o);border-color:rgba(255,138,101,.35);background:rgba(255,138,101,.08)}
+@media(max-width:700px){.header{top:40px}.utility-nav{padding:8px 14px}}
+
+/* TABS */
+.tabs{display:flex;align-items:stretch;gap:6px;padding-bottom:16px;position:relative}
+.tab{
+  flex:1 1 0;min-width:0;min-height:36px;padding:8px 10px;font-size:12px;font-weight:600;
+  color:var(--muted);border:1px solid var(--border);background:rgba(15,15,22,.45);cursor:pointer;
+  border-radius:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.25;text-align:center;
+  transition:all .2s;
+}
+.tab:hover{color:var(--text);background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,.16)}
+.tab.active{color:var(--text);border-color:rgba(255,138,101,.55);background:rgba(255,138,101,0.1);box-shadow:inset 0 0 0 1px rgba(255,138,101,.18)}
+.more-menu{position:relative;flex:0 0 auto}
+.more-menu summary{list-style:none;min-height:36px;padding:8px 12px;font-size:12px;font-weight:600;color:var(--muted);border:1px solid var(--border);background:rgba(15,15,22,.55);border-radius:8px;cursor:pointer}
+.more-menu summary::-webkit-details-marker{display:none}
+.more-menu[open] summary,.more-menu summary:hover{color:var(--text);background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.16)}
+.more-panel{position:fixed;z-index:500;min-width:190px;padding:6px;background:#14141d;border:1px solid var(--border);border-radius:10px;box-shadow:0 12px 28px rgba(0,0,0,.35)}
+.menu-item{display:block;width:100%;padding:9px 10px;border:0;border-radius:7px;background:transparent;color:var(--muted);font-size:12px;text-align:left;cursor:pointer}
+.menu-item:hover,.menu-item.active{color:var(--text);background:rgba(255,138,101,.1)}
+@media(max-width:700px){.tab{font-size:11px;padding:8px 6px}.more-menu summary{font-size:11px;padding:8px 9px}}
+
+/* CONTENT */
+.pane{display:none;max-width:1100px;margin:0 auto;padding:36px 24px 80px}
+.pane.active{display:block}
+
+/* SECTION */
+.section{margin-bottom:44px}
+.section-title{
+  font-size:.8rem;font-weight:700;color:var(--o);
+  letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:16px;display:flex;align-items:center;gap:10px;
+}
+.section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,#5a3020,transparent)}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:20px}
+.kpi{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.kpi.g::before{background:linear-gradient(90deg,var(--g),#1de9b6)}
+.kpi.o::before{background:linear-gradient(90deg,#ff6b6b,#ffa726)}
+.kpi.p::before{background:linear-gradient(90deg,var(--p),#7c4dff)}
+.kpi.b::before{background:linear-gradient(90deg,var(--b),#0288d1)}
+.kpi.y::before{background:linear-gradient(90deg,var(--y),#ff8f00)}
+.kpi-label{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.kpi-val{font-size:1.7rem;font-weight:700;line-height:1.1}
+.kpi.g .kpi-val{color:var(--g)}.kpi.o .kpi-val{color:var(--o)}.kpi.p .kpi-val{color:var(--p)}
+.kpi.b .kpi-val{color:var(--b)}.kpi.y .kpi-val{color:var(--y)}
+.kpi-sub{font-size:11px;color:var(--dim);margin-top:5px}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--bg3);color:var(--muted);font-weight:600;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
+th.col-g{color:var(--g)} th.col-o{color:var(--o)}
+td{padding:10px 14px;border-bottom:1px solid var(--border2);color:var(--text)}
+td.col-g{color:#c8fff0} td.col-o{color:#ffe8d0} td.col-dim{color:var(--muted);font-size:12px}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,0.02)}
+.tbl-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:18px}
+
+/* BADGE */
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.5px}
+.badge-g{background:var(--g2);color:var(--g)}.badge-o{background:var(--o2);color:var(--o)}
+.badge-p{background:var(--p2);color:var(--p)}.badge-b{background:var(--b2);color:var(--b)}
+.badge-y{background:var(--y2);color:var(--y)}.badge-r{background:rgba(239,83,80,.12);color:var(--r)}
+
+/* CHART */
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.chart-grid.single{grid-template-columns:1fr}
+@media(max-width:700px){.chart-grid{grid-template-columns:1fr}}
+.cc{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:22px}
+.cc h3{font-size:13px;font-weight:600;color:#ccccdd;margin-bottom:3px}
+.cs{font-size:11px;color:var(--dim);margin-bottom:16px}
+.cw{position:relative;height:260px}
+.cw.tall{height:320px}
+
+/* GAP BARS */
+.gap-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px}
+.gap-row{margin-bottom:18px}
+.gap-row:last-child{margin-bottom:0}
+.gap-lbl{display:flex;justify-content:space-between;font-size:13px;margin-bottom:7px}
+.gap-lbl .nm{color:var(--muted)} .gap-lbl .vl{color:var(--text);font-weight:600}
+.gap-bg{background:#0f0f18;border-radius:6px;height:12px;overflow:hidden}
+.gap-fill{height:100%;border-radius:6px}
+.fill-g{background:linear-gradient(90deg,#1de9b6,var(--g))}
+.fill-o{background:linear-gradient(90deg,#ff6b6b,#ffa726)}
+
+/* ATTR CARDS */
+.attr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.attr-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px}
+.attr-icon{font-size:22px;margin-bottom:8px}
+.attr-card h4{font-size:13px;font-weight:600;color:#ddddee;margin-bottom:8px}
+.attr-card p{font-size:12px;color:var(--muted);line-height:1.8}
+.impact{display:inline-block;margin-top:10px;font-size:10px;font-weight:700;letter-spacing:.5px;padding:3px 10px;border-radius:8px}
+.impact.h{background:var(--g2);color:var(--g)}
+.impact.m{background:var(--y2);color:var(--y)}
+
+/* HIGHLIGHT */
+.highlight{background:linear-gradient(135deg,rgba(255,138,101,0.06),rgba(255,213,79,0.04));border:1px solid rgba(255,138,101,0.25);border-radius:12px;padding:20px;margin-bottom:20px}
+.highlight h3{font-size:14px;font-weight:600;margin-bottom:8px;color:#eeddcc}
+.highlight p{font-size:13px;color:var(--muted);line-height:1.8}
+
+/* NOTE */
+.note-box{background:var(--bg3);border-left:3px solid var(--o);border-radius:0 8px 8px 0;padding:12px 16px;font-size:12px;color:var(--muted);margin-top:16px}
+.note-box strong{color:var(--o)}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border2);margin:28px 0}
+
+/* CONCLUSION */
+.conclusion{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:28px}
+.conclusion p{font-size:14px;line-height:1.9;margin-bottom:14px}
+.conclusion p:last-child{margin-bottom:0}
+</style>
+</head>
+<body>
+
+<nav class="utility-nav" aria-label="研究導覽">
+  <a class="home" href="../00_總覽.html">← 研究總覽</a>
+  <a href="05_BitSummit研究.html">BitSummit</a>
+  <a href="06_歐美獨立遊戲展深度研究.html">歐美展比較</a>
+  <a href="07_成人遊戲海外市場地圖與招商研究.html">Adult / Mature</a>
+</nav>
+
+<div class="header">
+  <div class="header-top">
+    <div class="logo">🇯🇵 BitSummit <span class="logo-sub">深度研究 &amp; G-EIGHT 比較</span></div>
+    <div class="header-meta">2026-06-10 更新 · 數據為公開資料估算</div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="show('compare',this)">快速對比</button>
+    <button class="tab" onclick="show('scale',this)">規模成長</button>
+    <button class="tab" onclick="show('model',this)">商業模式</button>
+    <button class="tab" onclick="show('bizday',this)">Business Day</button>
+    <button class="tab" onclick="show('m2m',this)">Meet to Match</button>
+    <details class="more-menu">
+      <summary>更多 ▾</summary>
+      <div class="more-panel">
+        <button class="menu-item" onclick="show('gap',this)">差距分析</button>
+        <button class="menu-item" onclick="show('tw',this)">台灣開發者策略</button>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ═══════════ TAB 1 快速對比 ═══════════ -->
+<div class="pane active" id="pane-compare">
+
+  <div class="section">
+    <div class="section-title">關鍵數字快覽</div>
+    <div style="font-size:12px;color:var(--dim);margin-bottom:12px">G-EIGHT 第四屆（2025）&nbsp;|&nbsp; BitSummit PUNCH（2026）</div>
+    <div class="kpi-grid">
+      <div class="kpi g"><div class="kpi-label">G-EIGHT 入場人次（估）</div><div class="kpi-val">~25,000</div><div class="kpi-sub">2024 年 20,000+，年增 ~30%</div></div>
+      <div class="kpi o"><div class="kpi-label">BitSummit 入場人次</div><div class="kpi-val">68,208</div><div class="kpi-sub">2026 年歷史新高，年增 17%</div></div>
+      <div class="kpi g"><div class="kpi-label">G-EIGHT 總營收（估）</div><div class="kpi-val">NT$1,000萬</div><div class="kpi-sub">門票 + 展商 + 贊助</div></div>
+      <div class="kpi o"><div class="kpi-label">BitSummit 總營收（估）</div><div class="kpi-val">NT$9,000萬+</div><div class="kpi-sub">Business Day 佔約 60%</div></div>
+      <div class="kpi p"><div class="kpi-label">兩者差距倍數</div><div class="kpi-val">≈ 9×</div><div class="kpi-sub">主因：Business Day 機制</div></div>
+      <div class="kpi g"><div class="kpi-label">G-EIGHT VIP 售罄時間</div><div class="kpi-val">24 分鐘</div><div class="kpi-sub">NT$8,888 限量 8 組</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">直接比較</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>指標</th><th class="col-g">G-EIGHT（2025）</th><th class="col-o">BitSummit（2026）</th></tr></thead>
+        <tbody>
+          <tr><td class="col-dim">入場人次</td><td class="col-g">~25,000（估）<br><span class="badge badge-r">約 BitSummit 37%</span></td><td class="col-o">68,208 <span class="badge badge-g">歷史新高</span></td></tr>
+          <tr><td class="col-dim">一般票單日票價</td><td class="col-g">NT$300–350</td><td class="col-o">¥2,000 ≈ NT$440 <span class="badge badge-o">貴 ~30%</span></td></tr>
+          <tr><td class="col-dim">Business Day</td><td class="col-g">❌ 無 <span class="badge badge-r">最大差距來源</span></td><td class="col-o">¥20,000 × ~14,000 人<br><span class="badge badge-o">單日 ≈ NT$6,160 萬</span></td></tr>
+          <tr><td class="col-dim">展商數</td><td class="col-g">156 家（126 indie + 30 廠商）</td><td class="col-o">496 家（125 一般 + 78 企業）<span class="badge badge-o">約 3 倍</span></td></tr>
+          <tr><td class="col-dim">海外展商比例</td><td class="col-g">6 家（~4%）</td><td class="col-o">40%（來自 39+ 國）<span class="badge badge-r">差距巨大</span></td></tr>
+          <tr><td class="col-dim">政府機構支持</td><td class="col-g">無（純民間）<span class="badge badge-r">成本劣勢</span></td><td class="col-o">京都府 + KYOTO CMEX 共同主辦</td></tr>
+          <tr><td class="col-dim">VIP 高端方案</td><td class="col-g">NT$8,888（限 8 組）<br><span class="badge badge-g">24 分鐘售罄</span></td><td class="col-o">無對應公開方案</td></tr>
+          <tr><td class="col-dim">展出遊戲數</td><td class="col-g">250+ 款</td><td class="col-o">600+ 款</td></tr>
+          <tr><td class="col-dim">展商申請競爭</td><td class="col-g">開放申請</td><td class="col-o">~550 申請 / 125 名額<br><span class="badge badge-o">錄取率 ~23%</span></td></tr>
+          <tr><td class="col-dim">屆次 / 年資</td><td class="col-g">第 4 屆（2022 起）</td><td class="col-o">第 14 屆（2013 起）<span class="badge badge-r">年資差 10 年</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">規模差距視覺化</div>
+    <div class="gap-wrap">
+      <div class="gap-row">
+        <div class="gap-lbl"><span class="nm">G-EIGHT 入場人次</span><span class="vl">~25,000 人</span></div>
+        <div class="gap-bg"><div class="gap-fill fill-g" style="width:36.7%"></div></div>
+      </div>
+      <div class="gap-row">
+        <div class="gap-lbl"><span class="nm">BitSummit 入場人次</span><span class="vl">68,208 人</span></div>
+        <div class="gap-bg"><div class="gap-fill fill-o" style="width:100%"></div></div>
+      </div>
+      <div class="gap-row" style="margin-top:24px">
+        <div class="gap-lbl"><span class="nm">G-EIGHT 總營收（估）</span><span class="vl">NT$1,000 萬</span></div>
+        <div class="gap-bg"><div class="gap-fill fill-g" style="width:11.1%"></div></div>
+      </div>
+      <div class="gap-row">
+        <div class="gap-lbl"><span class="nm">BitSummit 總營收（估）</span><span class="vl">NT$9,000 萬</span></div>
+        <div class="gap-bg"><div class="gap-fill fill-o" style="width:100%"></div></div>
+      </div>
+      <div class="gap-row" style="margin-top:24px">
+        <div class="gap-lbl"><span class="nm">G-EIGHT 展商數</span><span class="vl">156 家</span></div>
+        <div class="gap-bg"><div class="gap-fill fill-g" style="width:31.5%"></div></div>
+      </div>
+      <div class="gap-row">
+        <div class="gap-lbl"><span class="nm">BitSummit 展商數</span><span class="vl">496 家</span></div>
+        <div class="gap-bg"><div class="gap-fill fill-o" style="width:100%"></div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB 2 規模成長 ═══════════ -->
+<div class="pane" id="pane-scale">
+
+  <div class="section">
+    <div class="section-title">BitSummit 規模數據：13 年 341 倍成長</div>
+    <div class="kpi-grid">
+      <div class="kpi o"><div class="kpi-label">2026 PUNCH 人次</div><div class="kpi-val">68,208</div><div class="kpi-sub">歷史最高，YoY +17%</div></div>
+      <div class="kpi o"><div class="kpi-label">2024 人次突破</div><div class="kpi-val">38,333</div><div class="kpi-sub">YoY +60%，轉折點</div></div>
+      <div class="kpi o"><div class="kpi-label">2013 首屆規模</div><div class="kpi-val">200 人</div><div class="kpi-sub">地下玩家聚會起點</div></div>
+      <div class="kpi b"><div class="kpi-label">2026 展商總數</div><div class="kpi-val">496 家</div><div class="kpi-sub">125 一般 + 78 企業展商</div></div>
+      <div class="kpi b"><div class="kpi-label">國際展商占比</div><div class="kpi-val">40%</div><div class="kpi-sub">歷史最高，來自 39+ 國</div></div>
+      <div class="kpi b"><div class="kpi-label">展商申請競爭</div><div class="kpi-val">~550 申請</div><div class="kpi-sub">約 125 名額，錄取率 ~23%</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">人次成長趨勢</div>
+    <div class="chart-grid">
+      <div class="cc">
+        <h3>BitSummit 歷年人次（2013–2026）</h3>
+        <div class="cs">疫情後 2022 年復展；2024 年起爆炸性成長</div>
+        <div class="cw tall"><canvas id="c_bit_growth"></canvas></div>
+      </div>
+      <div class="cc">
+        <h3>G-EIGHT 歷屆人次（2022–2025）</h3>
+        <div class="cs">連續成長，年均 +30%</div>
+        <div class="cw tall"><canvas id="c_geight_growth"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">歷年數據表</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>年份</th><th>屆次</th><th>人次</th><th>備註</th></tr></thead>
+        <tbody>
+          <tr><td>2013</td><td>第 1 屆</td><td>200</td><td>地下玩家聚會，京都</td></tr>
+          <tr><td>2014</td><td>第 2 屆</td><td>800</td><td>—</td></tr>
+          <tr><td>2017</td><td>第 5 屆</td><td>3,000</td><td>—</td></tr>
+          <tr><td>2019</td><td>第 7 屆</td><td>8,000</td><td>—</td></tr>
+          <tr><td>2020–2021</td><td>停辦</td><td>—</td><td>COVID-19</td></tr>
+          <tr><td>2022</td><td>復展</td><td>22,000</td><td>復展即大幅成長</td></tr>
+          <tr><td>2023</td><td>第 11 屆</td><td>25,000</td><td>—</td></tr>
+          <tr><td>2024</td><td>第 12 屆</td><td>38,333</td><td><span class="badge badge-o">YoY +60% 轉折點</span></td></tr>
+          <tr><td>2025</td><td>第 13 屆</td><td>58,000</td><td>—</td></tr>
+          <tr><td>2026</td><td>第 14 屆 PUNCH</td><td>68,208</td><td><span class="badge badge-o">歷史新高 +17%</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB 3 商業模式 ═══════════ -->
+<div class="pane" id="pane-model">
+
+  <div class="section">
+    <div class="section-title">B2C vs B2B 雙層收入結構（BitSummit）</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>收入來源</th><th>性質</th><th>估算占比</th><th>具體推算</th><th>角色</th></tr></thead>
+        <tbody>
+          <tr><td>企業贊助套餐（Platinum / Gold / Silver）</td><td><span class="badge badge-b">B2B</span></td><td>~50%</td><td>含主舞台時段、Dev Mixer 席次、展商聯絡資料庫存取</td><td>最大單項收入</td></tr>
+          <tr><td>Business Day 票務（¥20,000）</td><td><span class="badge badge-b">B2B</span></td><td>~10%</td><td>¥20,000 × 估 500–800 張 = ¥10–16M ≈ NT$220–352 萬</td><td>高單價 B2B 認證機制</td></tr>
+          <tr><td>展商費（一般展商）</td><td><span class="badge badge-b">B2B</span></td><td>~10%</td><td>125 展商 × 估均費 ¥300K = ¥37.5M ≈ NT$825 萬</td><td>展商費較低，保留吸引力</td></tr>
+          <tr><td>公眾日票務（¥2,000）</td><td><span class="badge badge-g">B2C</span></td><td>~25%</td><td>¥2,000 × ~68,000（部分免費）= ¥136M ≈ NT$3,000 萬</td><td>B2C 是規模錨點，吸引贊助商</td></tr>
+          <tr><td>周邊 / 現場販售 / 授權</td><td><span class="badge badge-g">B2C</span></td><td>~5%</td><td>現場周邊銷售，次要來源</td><td>補充</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box"><strong>關鍵洞察：</strong>B2B 收入（贊助 + Business Day + 展商費）佔總收入約 <strong>65–70%</strong>，但 B2C 規模（68K 人次）是吸引高價贊助的前提——沒有 B2C 規模，B2B 贊助商不付錢。<strong>「B2C 規模撬動 B2B 收入」的飛輪效應，正是 G-EIGHT 需要複製的核心邏輯。</strong></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">收入結構比較</div>
+    <div class="chart-grid">
+      <div class="cc">
+        <h3>G-EIGHT 2025 收入拆解（估）</h3>
+        <div class="cs">總計約 NT$1,000 萬</div>
+        <div class="cw"><canvas id="c_g8_pie"></canvas></div>
+      </div>
+      <div class="cc">
+        <h3>BitSummit 2026 收入拆解（估）</h3>
+        <div class="cs">總計約 NT$9,000 萬</div>
+        <div class="cw"><canvas id="c_bit_pie"></canvas></div>
+      </div>
+    </div>
+    <div class="note-box">以上為依公開票價 × 估算人次推算的估計值，兩展均未公開財務數字。匯率以 1 JPY ≈ 0.22 TWD 換算。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">G-EIGHT 收入提升路徑模擬</div>
+    <div class="chart-grid">
+      <div class="cc">
+        <h3>若引入 Business Day + 調整票價</h3>
+        <div class="cs">保守 vs 樂觀兩情境，NT$ 萬</div>
+        <div class="cw"><canvas id="c_g8_sim"></canvas></div>
+      </div>
+      <div class="cc">
+        <h3>商業模式雷達比較</h3>
+        <div class="cs">10 分制主觀評分，供方向性參考</div>
+        <div class="cw"><canvas id="c_radar"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB 4 Business Day ═══════════ -->
+<div class="pane" id="pane-bizday">
+
+  <div class="section">
+    <div class="section-title">Business Day：亞洲唯一純 Indie 展的 B2B 核心</div>
+    <div class="highlight">
+      <h3>為什麼 Business Day 是 BitSummit 的護城河？</h3>
+      <p>BitSummit 是目前<strong>亞洲唯一擁有正式 Business Day 機制的純獨立遊戲展</strong>。Business Day 票（¥20,000）持有者在公眾日前提前進場，透過 MeetToMatch 系統完成結構化 1v1 媒合。日本發行商（Pocketpair、Marvelous、Spike Chunsoft）、平台 BD（Nintendo Japan、Sony Japan）、台灣/韓國/歐洲發行商均在此日集中接洽。<strong>G-EIGHT 目前完全缺乏這個機制，是最大的收入和影響力缺口。</strong></p>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi o"><div class="kpi-label">Business Day 票價</div><div class="kpi-val">¥20,000</div><div class="kpi-sub">≈ NT$4,400，公眾票 10 倍</div></div>
+      <div class="kpi o"><div class="kpi-label">單日估算收入</div><div class="kpi-val">NT$6,160萬</div><div class="kpi-sub">G-EIGHT 全年收入的 6 倍</div></div>
+      <div class="kpi y"><div class="kpi-label">Cassette Boy → Pocketpair</div><div class="kpi-val">2024</div><div class="kpi-sub">Vermillion Gate 最高獎 → 發行合約</div></div>
+      <div class="kpi y"><div class="kpi-label">Sonokuni → Nintendo Switch</div><div class="kpi-val">2024</div><div class="kpi-sub">VGC「展場最佳」後公告 Switch 版</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Business Day 機制設計</div>
+    <div class="attr-grid">
+      <div class="attr-card">
+        <div class="attr-icon">💼</div>
+        <h4>MeetToMatch 媒合系統</h4>
+        <p>Business Day 票持有者在展前 2–4 週透過 MeetToMatch 平台，篩選並預約對方。展當日的每場會議已有上下文，效率遠高於展場隨機接觸。日本發行商、索尼/任天堂 BD、海外 publisher 均在這一天集中出現。</p>
+        <span class="impact h">結構化媒合是關鍵競爭優勢</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🏆</div>
+        <h4>評審獎項系統：媒體曝光乘數</h4>
+        <p>每年頒發 8 個評審獎項（藝術、聲音、設計、革新等）。評審公信力 → 媒體報導（VGC/Famitsu）→ 發行商主動接洽 → 合約。Cassette Boy 2024 年獲 Vermillion Gate 後，Pocketpair 主動簽發行合約。這條路徑比 cold outreach 短 6–12 個月。<br><br><strong>對 G-EIGHT 意涵：</strong>G-EIGHT 尚未建立評審獎項制度，這是最低成本、最高影響的可複製機制。</p>
+        <span class="impact h">獎項是最高 ROI 的媒體觸媒</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🏛️</div>
+        <h4>政府機構共同主辦</h4>
+        <p>京都府 + KYOTO CMEX 入局，帶來：① 場館費用分擔 ② 國際行銷預算 ③ 補貼海外展商進場成本 ④ 官方身份讓國際媒體更願意報導。多國政府（Screen Queensland 澳洲、英國、法國）已有資助計畫支持本國開發者參展 BitSummit。</p>
+        <span class="impact h">政府背書是國際化的加速器</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🌍</div>
+        <h4>國際化進程（40%）</h4>
+        <p>2026 年國際展商比例達 40%（歷史最高），來自 39+ 國。BitSummit 已從「日本本地 indie 展」轉型為「亞洲 indie 國際展」。台灣工作室近年均有代表。Screen Queensland 等各國政府已將它列為重要市場拓展節點。</p>
+        <span class="impact h">亞洲最佳國際發行接洽節點</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">G-EIGHT 引入 Business Day 的可行性</div>
+    <div class="tbl-wrap" style="padding:16px 20px">
+      <table>
+        <thead><tr><th>面向</th><th>評估</th><th>說明</th></tr></thead>
+        <tbody>
+          <tr><td>收入潛力</td><td><span class="badge badge-g">極高</span></td><td>NT$3,000–8,000 萬（依規模和票價）；即使只有 1,000 名業界人士 × NT$3,000 = NT$300 萬</td></tr>
+          <tr><td>前提條件</td><td><span class="badge badge-y">中等難度</span></td><td>需要先有足夠的 B2C 人次（吸引發行商願來）+ 媒合平台建置</td></tr>
+          <tr><td>最快路徑</td><td><span class="badge badge-b">借力</span></td><td>合作台北電玩展 B2B Zone 的既有廠商網絡；或與文策院、TCA 合辦業界日</td></tr>
+          <tr><td>短期替代方案</td><td><span class="badge badge-p">立即可做</span></td><td>設立「展商媒合場次」（免費版 Business Day），積累業界人士資料庫，為正式 Business Day 鋪路</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB 5 Meet to Match ═══════════ -->
+<div class="pane" id="pane-m2m">
+
+  <div class="section">
+    <div class="section-title">Meet to Match（M2M）— B2B 媒合的核心基礎設施</div>
+    <div class="highlight">
+      <h3>M2M 不是附屬功能，是 BitSummit 的結構性競爭優勢</h3>
+      <p>BitSummit 自 2022 年起與 MeetToMatch 平台合作，將 B2B 媒合從「展場隨機接觸」升級為「結構化配對系統」。這套機制是 Business Day 的技術骨幹，也是 BitSummit 在亞洲 indie 展中建立護城河的核心工具。近年評價普遍極高，被業界人士視為「值得專程來京都的理由」之一。</p>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi o"><div class="kpi-label">導入時間</div><div class="kpi-val">2022 年</div><div class="kpi-sub">約 4 年持續深化</div></div>
+      <div class="kpi o"><div class="kpi-label">適用對象</div><div class="kpi-val">3 類</div><div class="kpi-sub">開發者・發行商・媒體</div></div>
+      <div class="kpi b"><div class="kpi-label">展前配對期</div><div class="kpi-val">2–4 週</div><div class="kpi-sub">活動前即可鎖定會議對象</div></div>
+      <div class="kpi y"><div class="kpi-label">2026 年升級</div><div class="kpi-val">Pitch Night</div><div class="kpi-sub">封閉式高階洽談夜，M2M 的延伸形態</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">運作機制全覽</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>功能層</th><th>具體內容</th><th>價值</th></tr></thead>
+        <tbody>
+          <tr><td>線上配對平台</td><td>購 Business Day 票後即可使用；填寫公司資料、專業強項，系統進行媒合推薦</td><td><span class="badge badge-o">展前 2–4 週就能鎖定目標</span></td></tr>
+          <tr><td>多管道聯絡</td><td>Email、即時聊天、社群媒體、電話全支援</td><td><span class="badge badge-b">不依賴單一通訊方式</span></td></tr>
+          <tr><td>實體商務洽談室</td><td>會場地下層專屬空間，需提前預約；有隱私性與正式感</td><td><span class="badge badge-o">深度談判的物理空間保障</span></td></tr>
+          <tr><td>線上出席選項</td><td>無法親赴京都者可進行遠端商務會議</td><td><span class="badge badge-b">擴大國際 B2B 觸達範圍</span></td></tr>
+          <tr><td>引導系統（Nudging）</td><td>系統主動提示完善個人資料、安排行程、追蹤媒合進度</td><td><span class="badge badge-g">降低使用者操作摩擦</span></td></tr>
+          <tr><td>現場口譯支援</td><td>專業口譯員常駐展場，協助語言障礙的洽談</td><td><span class="badge badge-b">服務 40% 國際展商的實際需求</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">各方評價：正面 vs 待改進</div>
+    <div class="attr-grid">
+      <div class="attr-card">
+        <div class="attr-icon">✅</div>
+        <h4>結構化媒合效率顯著提升</h4>
+        <p>對比傳統展場的隨機接觸，M2M 讓開發者在展前就確立優先會議對象，到場當天每場談話都有前置上下文。業界人士普遍反映「比自己 cold outreach 的轉化率高很多」。</p>
+        <span class="impact h">評分：極正面</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">✅</div>
+        <h4>全程支援體驗完整</h4>
+        <p>從發現展商內容、預約會議、到展後追蹤，M2M 提供端對端支援。引導系統（Nudging）主動推送待辦事項，讓不熟悉 B2B 流程的開發者也能有效運用。</p>
+        <span class="impact h">評分：極正面</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">✅</div>
+        <h4>直接觸及決策者本人</h4>
+        <p>BitSummit 的獨立遊戲文化使開發者本人常駐展位（而非公關代表），M2M 媒合到的對象通常就是「做這款遊戲的人」，媒合品質遠高於大型商業展覽。</p>
+        <span class="impact h">評分：極正面</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">⚠️</div>
+        <h4>小型團隊的結構性困境</h4>
+        <p>1–2 人的小工作室無法同時顧攤位又去赴約，導致部分 B2B 預約白白流失。展方坦承：「M2M 效益很大，但使用方式仍有改進空間。」</p>
+        <span class="impact m">已知弱點・待優化</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">⚠️</div>
+        <h4>使用者教育仍不足</h4>
+        <p>部分參展者知道 M2M 存在，卻不清楚如何操作或在哪裡查看媒合建議。平台功能齊全，但學習成本對非科技背景的開發者仍是門檻。</p>
+        <span class="impact m">已知弱點・待優化</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">📈</div>
+        <h4>成效佐證：贊助商連年倍增</h4>
+        <p>M2M 導入後，贊助商從 29 家（2023）→ 44 家（2024）→ 58 家（2025），三年幾乎翻倍。B2B 媒合的高評價直接轉化為展方吸引更多企業夥伴的能力。</p>
+        <span class="impact h">可量化佐證</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">成功媒合案例</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>作品</th><th>媒合成果</th><th>路徑摘要</th></tr></thead>
+        <tbody>
+          <tr><td><strong>天穗之咲稻姬</strong><br><span style="color:var(--dim);font-size:12px">Sakuna: Of Rice and Ruin</span></td><td><span class="badge badge-o">個人開發 → 國際發行 → 全球大作</span></td><td>個人開發者在 BitSummit 展台接觸發行商，後成為 2020 年 indie 銷量冠軍</td></tr>
+          <tr><td><strong>都市傳說解體中心</strong><br><span style="color:var(--dim);font-size:12px">Urban Myth Dissolution Center</span></td><td><span class="badge badge-o">獨立展出 → 發行合作 → 媒體話題</span></td><td>BitSummit 展後媒合成功，成為近年最具話題的日本 indie 作品之一</td></tr>
+          <tr><td><strong>Cassette Boy</strong></td><td><span class="badge badge-y">Vermillion Gate 獎 → Pocketpair 發行合約</span></td><td>2024 年獲評審大獎後，Pocketpair 主動接洽，數月內完成合約</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box"><strong>共同規律：</strong>M2M 最高效路徑 ＝ 先獲評審獎項（媒體曝光）→ M2M 系統接洽確認 → 展後快速收斂合約。傳統 cold outreach 平均需 6–12 個月；這條路徑通常壓縮至 2–4 個月。</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-title">G-EIGHT 可借鑑的方向與方法</div>
+    <div class="highlight">
+      <h3>核心洞察：M2M 的成功不在「技術平台」，在「設計意圖」</h3>
+      <p>BitSummit 的 M2M 之所以評價極高，根本原因是<strong>整個展會架構都為 B2B 服務</strong>——Business Day 票價、實體洽談室、口譯人員、評審獎項，都是圍繞「讓媒合成功」這個核心設計的。G-EIGHT 若想借鑑，重點不是「接入什麼平台」，而是「是否願意將 B2B 視為一級目標」。</p>
+    </div>
+    <div class="attr-grid">
+      <div class="attr-card">
+        <div class="attr-icon">🎯</div>
+        <h4>Phase 1（立即可做）：設立展商媒合場次</h4>
+        <p>在現有展會框架內，劃出 2–3 小時的「業界媒合時段」，讓展商與業界人士（發行商、媒體、投資人）進行 20 分鐘快速會議。不需額外平台，用 Google Form + 人工安排即可起步。這是 BitSummit 2013–2015 年的早期做法。</p>
+        <span class="impact h">成本：低 ／ 驗證媒合需求</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🔧</div>
+        <h4>Phase 2（第 5–6 屆）：接入 MeetToMatch 平台</h4>
+        <p>直接採用 MeetToMatch（BitSummit 的現有合作商），不需自己開發。重點是<strong>展前 2–4 週</strong>開放預約，讓業界人士在來場前就規劃好行程，大幅提高展日 B2B 密度。平台費用相對可控，且有既有的業界人士資料庫可對接。</p>
+        <span class="impact h">成本：中 ／ 直接複製最佳實踐</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🛡️</div>
+        <h4>解決 BitSummit 已知痛點：小團隊無法離攤</h4>
+        <p>BitSummit 坦承這是未解決的問題。G-EIGHT 可以提前設計「展商代理制」——指派一位工作人員在媒合時段暫代展台，讓開發者安心去赴約。這是低成本的差異化設計，可在宣傳時作為對展商的加分承諾。</p>
+        <span class="impact h">超越 BitSummit 的機會點</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🎤</div>
+        <h4>導入 Pitch Night（BitSummit 2026 才首創）</h4>
+        <p>BitSummit 直到 2026 年才推出官方 Pitch Night。G-EIGHT 可以比它更早在台灣市場落地這個格式，配合台北的產業生態（TGS、文策院網絡），填補台灣 indie 展完全沒有 Pitch Night 的空白，形成先行者優勢。</p>
+        <span class="impact h">台灣市場首創機會</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">📚</div>
+        <h4>提前解決使用者教育問題</h4>
+        <p>BitSummit 已知弱點：「知道有 M2M 但不會用」。G-EIGHT 在規模小時正是建立使用習慣的好時機——推出一頁式說明、預約流程影片、甚至辦一場線上說明會，讓每位展商確實用到媒合工具，轉化率自然高於 BitSummit。</p>
+        <span class="impact m">低成本、高轉化的細節優化</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🌏</div>
+        <h4>差異化定位：台灣 × 東南亞市場入口</h4>
+        <p>BitSummit 已牢固佔據「日本 indie 展」定位。G-EIGHT 的 B2B 媒合可主打「台灣 + 東南亞市場入口」——吸引想進這個圈的日本、韓國、歐洲發行商。不正面競爭，而是成為 BitSummit 的「互補節點」，形成不同季節、不同市場定向的雙展生態。</p>
+        <span class="impact h">不競爭・做差異化定位</span>
+      </div>
+    </div>
+
+    <div style="margin-top:28px">
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>借鑑項目</th><th>BitSummit 的做法</th><th>G-EIGHT 的執行方式</th><th>優先序</th></tr></thead>
+          <tbody>
+            <tr><td>展前線上媒合</td><td>MeetToMatch，展前 2–4 週開放</td><td>Phase 1 用 Google Form；Phase 2 接 MeetToMatch</td><td><span class="badge badge-g">立即</span></td></tr>
+            <tr><td>實體洽談空間</td><td>會場地下層商務洽談室</td><td>展場劃出「業界媒合區」，設隔斷桌位即可</td><td><span class="badge badge-g">立即</span></td></tr>
+            <tr><td>小團隊支援</td><td>無（已知弱點）</td><td>G-EIGHT 工作人員暫代展台，開發者安心赴約</td><td><span class="badge badge-b">第 5 屆前</span></td></tr>
+            <tr><td>Pitch Night</td><td>2026 年才首創</td><td>G-EIGHT 率先在台灣落地，與文策院、TCA 共辦</td><td><span class="badge badge-p">中期</span></td></tr>
+            <tr><td>使用者教育</td><td>不足（已知弱點）</td><td>說明影片 + 線上說明會 + 一頁式流程圖提前佈局</td><td><span class="badge badge-g">立即</span></td></tr>
+            <tr><td>差異化定位</td><td>日本市場入口</td><td>台灣 × 東南亞市場入口，吸引不同來源的發行商</td><td><span class="badge badge-b">中長期</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB 6 差距分析 ═══════════ -->
+<div class="pane" id="pane-gap">
+
+  <div class="section">
+    <div class="section-title">BitSummit 成功做對了什麼</div>
+    <div class="attr-grid">
+      <div class="attr-card">
+        <div class="attr-icon">💼</div>
+        <h4>Business Day 設計</h4>
+        <p>¥20,000 的業界日入場券，針對媒體、發行商、平台方、投資人。這一天的收入（NT$6,000萬+）相當於 G-EIGHT 全年營收的 6 倍。關鍵不在「票貴」，在於<strong style="color:#ddddee">買這張票的人需要這個場合</strong>，稀缺性創造溢價。</p>
+        <span class="impact h">影響力：極高</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🏛️</div>
+        <h4>政府機構共同主辦</h4>
+        <p>京都府 + KYOTO CMEX 入局，帶來場館費用分擔、國際行銷預算、補貼海外展商進場成本，以及官方身份讓國際媒體更願意報導。</p>
+        <span class="impact h">影響力：極高</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🌍</div>
+        <h4>國際媒體正回饋循環</h4>
+        <p>GamesRadar+、VGC 等大型媒體每年報導 → 外國開發者願來展 → 多元度提升 → 更多玩家想來 → 更多媒體報導。40% 海外展商是 14 年積累的成果。</p>
+        <span class="impact h">影響力：高</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">📈</div>
+        <h4>票價定在「有感但合理」水位</h4>
+        <p>¥2,000（≈NT$440）比 G-EIGHT 的 NT$300 貴約 45%，但對核心玩家感知不大。G-EIGHT 票價可能訂得過低，讓消費者的 Willingness to Pay 沒有被完整捕捉。</p>
+        <span class="impact m">影響力：中</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">⏳</div>
+        <h4>14 年品牌累積</h4>
+        <p>從 2013 年辦至今，每屆積累的展商人脈、媒體信任、玩家習慣都是時間護城河。G-EIGHT 才第 4 屆，但成長速度已相當亮眼（年均 +30%）。</p>
+        <span class="impact m">影響力：中（時間差）</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🎮</div>
+        <h4>內容豐富度（600+ 款）</h4>
+        <p>超過 600 款可試玩遊戲讓觀眾有充分理由花更多錢、待更久、明年再回來。內容豐富度與票價接受度正相關。</p>
+        <span class="impact m">影響力：中</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-title">G-EIGHT 已做對的事</div>
+    <div class="attr-grid">
+      <div class="attr-card">
+        <div class="attr-icon">❤️</div>
+        <h4>「由玩家、為玩家」品牌定位</h4>
+        <p>與 TGS 等商業導向大展做出清晰區隔，建立核心忠誠社群。玩家感受到歸屬感，形成強力口碑傳播。</p>
+        <span class="impact h">效果：打下社群基礎</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">⚡</div>
+        <h4>終身 VIP 24 分鐘售罄</h4>
+        <p>NT$8,888 限量 8 組的終身 VIP，24 分鐘售罄。這是一個強力市場訊號：高端消費意願存在，且遠高於現行票價水位。BitSummit 也沒有這個指標。</p>
+        <span class="impact h">效果：驗證高端定價空間</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">📍</div>
+        <h4>固定場館策略</h4>
+        <p>連續四屆在花博爭艷館，建立地點記憶與觀眾習慣，降低認知摩擦，也讓場館談判更有效率。</p>
+        <span class="impact m">效果：降低觀眾決策成本</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🚀</div>
+        <h4>年均 30%+ 人次成長</h4>
+        <p>連續三屆穩定成長，沒有過度擴張。展商數 140 → 156，遊戲數 180 → 250，節奏健康，信任逐步建立。</p>
+        <span class="impact m">效果：可持續的成長基礎</span>
+      </div>
+      <div class="attr-card">
+        <div class="attr-icon">🌏</div>
+        <h4>第四屆引入 6 家海外廠商</h4>
+        <p>日本、韓國、印尼、新加坡首次參展，驗證台灣玩家對海外獨立遊戲的接受度。國際化路徑已開啟。</p>
+        <span class="impact m">效果：打開國際化路徑</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">核心結論</div>
+    <div class="conclusion">
+      <p style="color:#ccccdd">G-EIGHT 與 BitSummit 的 <strong style="color:var(--p)">~9 倍收入差距</strong>，並不是簡單的「規模」或「票價」問題。</p>
+      <p style="color:var(--muted)">BitSummit <strong style="color:var(--o)">Business Day 那一天</strong>的收入（約 NT$6,000 萬），就已超過 G-EIGHT 全年總收入的 6 倍。這個機制讓業界人士為「進入這個場域的資格」付出高度溢價，是整個商業模式的核心引擎。</p>
+      <p style="color:var(--muted)">第二大差距來自<strong style="color:var(--o)">政府機構共同主辦</strong>——降低成本結構、增加國際合法性、吸引更多海外展商形成正循環。</p>
+      <p style="color:var(--muted)">G-EIGHT 目前成長軌跡健康，VIP 售罄等訊號顯示消費者願意付更多。<strong>引入 Business Day 機制 + 爭取政府夥伴（文策院、數位部）</strong>，是縮短差距的最直接路徑。</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB 6 台灣開發者策略 ═══════════ -->
+<div class="pane" id="pane-tw">
+
+  <div class="section">
+    <div class="section-title">優勢（數據支撐）</div>
+    <div class="attr-card" style="margin-bottom:14px">
+      <div class="attr-icon">✅</div>
+      <h4>BitSummit 對台灣開發者的優勢</h4>
+      <p>
+        · <strong>亞洲唯一正式 Business Day 純 indie 展</strong>：日本發行商、Sony/Nintendo BD 年度聚集，沒有其他亞洲展能複製<br>
+        · 40% 國際展商比例（2026 歷史高）→ 一次接觸 39 國業界人士<br>
+        · 評審獎項直接帶動發行合約：Cassette Boy（Pocketpair）、Sonokuni（Switch）均在展後數月內完成交易<br>
+        · 費用比 Gamescom 低：公眾日 ¥2,000（≈NT$440）vs Gamescom €15–40（≈NT$525–1,400）<br>
+        · 台灣與日本 indie 口味高度重疊（像素藝術、RPG、敘事類受歡迎）<br>
+        · 多國政府已有旅費補助計畫（Screen Queensland 等），文策院應跟進<br>
+        · 13 年成長 341 倍（200→68,208）→ 動能仍強，早進入早卡位
+      </p>
+      <span class="impact h">進日本市場的最快管道</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">劣勢（數據支撐）</div>
+    <div class="attr-card" style="margin-bottom:14px">
+      <div class="attr-icon">⚠️</div>
+      <h4>需注意的挑戰</h4>
+      <p>
+        · <strong>規模仍遠低於歐美：</strong>68,208 人（BitSummit 2026）vs 357,000 人（Gamescom 2025）——差距 5 倍。B2B 媒合機會的絕對數量較少<br>
+        · 媒體覆蓋以日本為主：VGC、Famitsu、4Gamer 為主力，英文國際媒體分配有限，全球曝光效果受限<br>
+        · 語言障礙實質：展場溝通以日文為主，台灣開發者若無日文能力，進行發行商洽談的效率折半<br>
+        · 申請競爭激烈：~550 申請 / ~125 名額，23% 錄取率，且偏好日本及已有知名度的作品<br>
+        · 日本特殊口味：部分西化風格 indie（FPS、Roguelite 西方美術）在日本市場接受度較歐美低<br>
+        · 旅費成本：機票 + 京都住宿（6月旺季）+ 展位費，一人一攤估 NT$12–20 萬
+      </p>
+      <span class="impact m">語言 + 申請競爭是主要障礙</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">台灣開發者最佳策略</div>
+    <div class="attr-card">
+      <div class="attr-icon">💡</div>
+      <h4>行動建議（有優先順序）</h4>
+      <p>
+        · <strong>首要目標：Business Day</strong>——進場就是為了接觸日本發行商、Sony/Nintendo BD<br>
+        · 用 MeetToMatch 系統在展前 2–4 週鎖定高優先度會議對象，不要靠展場隨機接觸<br>
+        · 準備<strong>日文版 One-Pager + Demo 說明</strong>（語言敏感度決定洽談效率）<br>
+        · 向文策院申請參展旅費補助（Screen Queensland 等他國政府已有，台灣政策應跟進）<br>
+        · 把「評審獎項」作為核心策略：就算不拿大獎，入圍本身也是媒體觸發點<br>
+        · <strong>BitSummit（日本）+ Gamescom（歐洲）= 兩個不同市場、不同年度的拓展計畫，不應比較，應並行規劃</strong>
+      </p>
+      <span class="impact h">日本市場最高效率的年度節點</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-title">從 G-EIGHT 角度：對招商的意涵</div>
+    <div class="tbl-wrap" style="padding:16px 20px">
+      <table>
+        <thead><tr><th>現象</th><th>對 G-EIGHT 招商的意涵</th></tr></thead>
+        <tbody>
+          <tr><td>BitSummit 6月舉辦，G-EIGHT 12月</td><td>BitSummit 參展廠商 → 有亞洲市場意圖 → 6 月後接洽正好趁熱</td></tr>
+          <tr><td>40% 海外展商中台灣有一定比例</td><td>這些廠商已知台灣市場，是最容易說服的第一批歐美廠商</td></tr>
+          <tr><td>BitSummit 評審獎得主有高媒體曝光</td><td>得獎後主動聯絡 → 話術：「你在 BitSummit 的成績讓台灣玩家注意到了」</td></tr>
+          <tr><td>BitSummit 展商費低（留存邏輯）</td><td>G-EIGHT 同樣應提供「低門檻首次參展方案」打破嘗試成本</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const G='#64ffda', O='#ff8a65', P='#b388ff', B='#4fc3f7', Y='#ffd54f';
+if (window.Chart) {
+  Chart.defaults.color='#666680';
+  Chart.defaults.borderColor='#2a2a3a';
+  Chart.defaults.font.family="'Segoe UI','PingFang TC','Microsoft JhengHei',sans-serif";
+}
+
+function show(id, btn){
+  const pane = document.getElementById('pane-'+id);
+  if (!pane) return;
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab,.menu-item').forEach(t=>t.classList.remove('active'));
+  pane.classList.add('active');
+  btn.classList.add('active');
+  document.querySelectorAll('.more-menu').forEach(m=>m.removeAttribute('open'));
+  initCharts(id);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function placeMoreMenus(){
+  document.querySelectorAll('.more-menu[open]').forEach(menu=>{
+    const summary=menu.querySelector('summary');
+    const panel=menu.querySelector('.more-panel');
+    if(!summary||!panel) return;
+    const rect=summary.getBoundingClientRect();
+    const width=panel.offsetWidth||190;
+    const left=Math.max(12,Math.min(rect.right-width,window.innerWidth-width-12));
+    panel.style.left=left+'px';
+    panel.style.top=(rect.bottom+6)+'px';
+  });
+}
+document.querySelectorAll('.more-menu').forEach(menu=>{
+  menu.addEventListener('toggle',placeMoreMenus);
+});
+window.addEventListener('resize',placeMoreMenus);
+window.addEventListener('scroll',placeMoreMenus,{passive:true});
+
+const drawn = new Set();
+function initCharts(id){
+  if(!window.Chart) return;
+  if(drawn.has(id)) return;
+  drawn.add(id);
+
+  if(id==='scale'){
+    new Chart(document.getElementById('c_bit_growth'),{type:'bar',data:{
+      labels:['2013','2014','2017','2019','2022','2023','2024','2025','2026'],
+      datasets:[{label:'入場人次',data:[200,800,3000,8000,22000,25000,38333,58000,68208],
+        backgroundColor:['rgba(255,138,101,0.2)','rgba(255,138,101,0.25)','rgba(255,138,101,0.3)','rgba(255,138,101,0.35)','rgba(255,138,101,0.45)','rgba(255,138,101,0.5)','rgba(255,138,101,0.65)','rgba(255,138,101,0.8)','rgba(255,138,101,1)'],
+        borderColor:O,borderWidth:2,borderRadius:6}]
+    },options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.parsed.y.toLocaleString()} 人`}}},
+      scales:{y:{beginAtZero:true,ticks:{callback:v=>v>=10000?(v/10000).toFixed(0)+'萬':v},grid:{color:'#1e1e2e'}},x:{grid:{display:false}}}}});
+
+    new Chart(document.getElementById('c_geight_growth'),{type:'bar',data:{
+      labels:['2022\n第一屆','2023\n第二屆','2024\n第三屆','2025\n第四屆（估）'],
+      datasets:[{label:'入場人次',data:[15000,null,20000,25000],
+        backgroundColor:['rgba(100,255,218,0.2)','#1a1a24','rgba(100,255,218,0.3)','rgba(100,255,218,0.45)'],
+        borderColor:[G,'#333340',G,G],borderWidth:2,borderRadius:6}]
+    },options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.parsed.y?.toLocaleString()??'未公布'} 人`}}},
+      scales:{y:{beginAtZero:true,ticks:{callback:v=>(v/10000).toFixed(0)+'萬'},grid:{color:'#1e1e2e'}},x:{grid:{display:false}}}}});
+  }
+
+  if(id==='model'){
+    new Chart(document.getElementById('c_g8_pie'),{type:'doughnut',data:{
+      labels:['門票收入','展商費用','贊助商','限量商品'],
+      datasets:[{data:[775,100,75,50],
+        backgroundColor:['rgba(100,255,218,0.7)','rgba(100,255,218,0.4)','rgba(100,255,218,0.2)','rgba(100,255,218,0.1)'],
+        borderColor:['#64ffda','#1de9b6','#00bfa5','#004d40'],borderWidth:2}]
+    },options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+      plugins:{legend:{position:'bottom',labels:{padding:14,font:{size:11}}},
+        tooltip:{callbacks:{label:c=>` NT$${c.parsed} 萬（估）`}}}}});
+
+    new Chart(document.getElementById('c_bit_pie'),{type:'doughnut',data:{
+      labels:['企業贊助套餐','Business Day 票','展商費（一般）','公眾日票務','現場販售'],
+      datasets:[{data:[50,10,10,25,5],
+        backgroundColor:['rgba(255,138,101,0.8)','rgba(255,213,79,0.7)','rgba(66,165,245,0.5)','rgba(100,255,218,0.6)','rgba(179,136,255,0.5)'],
+        borderColor:[O,Y,B,G,P],borderWidth:2}]
+    },options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+      plugins:{legend:{position:'bottom',labels:{padding:10,font:{size:11}}},
+        tooltip:{callbacks:{label:c=>` ${c.parsed}%（估）`}}}}});
+
+    new Chart(document.getElementById('c_g8_sim'),{type:'line',data:{
+      labels:['現況（2025）','加 Business Day（Year 1）','加票價調整','3 年後目標'],
+      datasets:[
+        {label:'保守估計',data:[1000,1700,3200,4500],borderColor:G,backgroundColor:'rgba(100,255,218,0.08)',pointBackgroundColor:G,tension:.4,fill:true},
+        {label:'樂觀估計',data:[1000,2000,4500,7000],borderColor:Y,backgroundColor:'rgba(255,213,79,0.05)',pointBackgroundColor:Y,tension:.4,fill:false,borderDash:[5,3]},
+      ]
+    },options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom'}},
+      scales:{y:{beginAtZero:true,ticks:{callback:v=>'NT$'+v+'萬'},grid:{color:'#1e1e2e'}},x:{grid:{display:false}}}}});
+
+    new Chart(document.getElementById('c_radar'),{type:'radar',data:{
+      labels:['觀眾規模','票價設計','Business Day','國際展商','品牌忠誠度','媒體曝光','政府支持','內容豐富度','成長動能'],
+      datasets:[
+        {label:'G-EIGHT',data:[4,5,0,2,7,4,1,5,7],borderColor:G,backgroundColor:'rgba(100,255,218,0.1)',pointBackgroundColor:G,borderWidth:2},
+        {label:'BitSummit',data:[8,7,10,9,8,9,9,9,7],borderColor:O,backgroundColor:'rgba(255,138,101,0.06)',pointBackgroundColor:O,borderWidth:2}
+      ]
+    },options:{responsive:true,maintainAspectRatio:false,
+      scales:{r:{beginAtZero:true,max:10,ticks:{stepSize:2,font:{size:10}},grid:{color:'#2a2a3a'},pointLabels:{font:{size:11},color:'#aaaacc'},angleLines:{color:'#2a2a3a'}}},
+      plugins:{legend:{position:'bottom',labels:{padding:20}}}}});
+  }
+}
+
+// 初始化第一個 tab（快速對比，無圖表不需要）
+</script>
+</body>
+</html>

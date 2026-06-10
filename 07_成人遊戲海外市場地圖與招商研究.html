@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adult / Mature Game 歐美市場地圖與代展招商研究</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f13;--bg2:#1a1a24;--bg3:#13131e;--bg4:#111119;
+  --border:#2a2a3a;--border2:#1e1e2e;
+  --g:#64ffda;--o:#ff8a65;--p:#b388ff;--y:#ffd54f;--b:#42a5f5;--r:#ef5350;
+  --text:#e8e8f0;--muted:#8888aa;--dim:#555570;
+}
+body{font-family:'Segoe UI','PingFang TC','Microsoft JhengHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.65}
+.hero{background:linear-gradient(135deg,#2a0b1f 0%,#1a1233 45%,#0d2521 100%);padding:52px 40px 0;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:-40% -20%;background:radial-gradient(ellipse at 25% 45%,rgba(255,138,101,.09),transparent 48%),radial-gradient(ellipse at 70% 45%,rgba(179,136,255,.09),transparent 48%);pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-tag{display:inline-block;background:rgba(255,138,101,.16);border:1px solid rgba(255,138,101,.35);color:var(--o);font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:4px 14px;border-radius:20px;margin-bottom:16px}
+.hero h1{font-size:2rem;font-weight:800;background:linear-gradient(90deg,#fff,var(--o),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+.hero p{color:var(--muted);font-size:13px;margin-bottom:28px;max-width:980px}
+.utility-nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 24px;background:rgba(15,15,19,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.utility-nav a{flex:0 0 auto;color:var(--muted);text-decoration:none;font-size:12px;padding:5px 10px;border:1px solid transparent;border-radius:8px}
+.utility-nav a:hover{color:var(--text);background:rgba(255,255,255,.04);border-color:var(--border)}
+.utility-nav .home{color:var(--o);border-color:rgba(255,138,101,.35);background:rgba(255,138,101,.08)}
+@media(max-width:760px){.utility-nav{padding:8px 14px}}
+.tabs{display:flex;align-items:stretch;gap:6px;padding-bottom:18px;position:relative}
+.tab{flex:1 1 0;min-width:0;min-height:36px;padding:8px 10px;font-size:12px;font-weight:600;color:var(--muted);border:1px solid var(--border);background:rgba(15,15,22,.45);cursor:pointer;border-radius:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.25;text-align:center;transition:all .18s}
+.tab:hover{color:var(--text);background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.16)}
+.tab.active{color:var(--text);border-color:rgba(255,138,101,.55);background:rgba(255,138,101,.1);box-shadow:inset 0 0 0 1px rgba(255,138,101,.18)}
+.more-menu{position:relative;flex:0 0 auto}
+.more-menu summary{list-style:none;min-height:36px;padding:8px 12px;font-size:12px;font-weight:600;color:var(--muted);border:1px solid var(--border);background:rgba(15,15,22,.55);border-radius:8px;cursor:pointer}
+.more-menu summary::-webkit-details-marker{display:none}
+.more-menu[open] summary,.more-menu summary:hover{color:var(--text);background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.16)}
+.more-panel{position:fixed;z-index:500;min-width:190px;padding:6px;background:#14141d;border:1px solid var(--border);border-radius:10px;box-shadow:0 12px 28px rgba(0,0,0,.35)}
+.menu-item{display:block;width:100%;padding:9px 10px;border:0;border-radius:7px;background:transparent;color:var(--muted);font-size:12px;text-align:left;cursor:pointer}
+.menu-item:hover,.menu-item.active{color:var(--text);background:rgba(255,138,101,.1)}
+@media(max-width:760px){.tab{font-size:11px;padding:8px 5px}.more-menu summary{font-size:11px;padding:8px 8px}}
+.content{display:none;max-width:1120px;margin:0 auto;padding:36px 24px 80px}
+.content.active{display:block}
+.section{margin-bottom:44px}
+.section-title{font-size:.92rem;font-weight:700;color:var(--o);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(255,138,101,.35),transparent)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:12px;margin-bottom:24px}
+.kpi{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--o)}
+.kpi.g::before{background:var(--g)}.kpi.p::before{background:var(--p)}.kpi.b::before{background:var(--b)}.kpi.y::before{background:var(--y)}
+.kpi-label{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px}
+.kpi-val{font-size:1.35rem;font-weight:800;line-height:1.1;color:var(--text)}
+.kpi.o .kpi-val{color:var(--o)}.kpi.g .kpi-val{color:var(--g)}.kpi.p .kpi-val{color:var(--p)}.kpi.b .kpi-val{color:var(--b)}.kpi.y .kpi-val{color:var(--y)}
+.kpi-sub{font-size:11px;color:var(--dim);margin-top:5px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px}
+.card h3,.card h4{font-size:14px;font-weight:700;color:#ddddee;margin-bottom:8px}
+.card p,.card li{font-size:12px;color:var(--muted);line-height:1.8}
+.card ul{padding-left:18px}
+.note{background:var(--bg3);border-left:3px solid var(--o);border-radius:0 8px 8px 0;padding:12px 14px;font-size:12px;color:var(--muted);margin:12px 0}
+.note.green{border-left-color:var(--g)}.note.blue{border-left-color:var(--b)}.note.purple{border-left-color:var(--p)}.note.yellow{border-left-color:var(--y)}
+.quote{background:linear-gradient(135deg,rgba(255,138,101,.08),rgba(179,136,255,.07));border:1px solid rgba(255,138,101,.22);border-radius:12px;padding:18px;margin-bottom:20px}
+.quote h3{font-size:14px;color:#ddddee;margin-bottom:8px}
+.quote p{font-size:13px;color:var(--muted)}
+.code{font-family:Consolas,'Courier New',monospace;background:#101018;border:1px solid var(--border);border-radius:8px;padding:12px 14px;color:#cfd0ff;font-size:12px;line-height:1.7;overflow:auto;margin:10px 0}
+.tbl-wrap{border-radius:10px;overflow:hidden;border:1px solid var(--border);background:var(--bg2);margin-bottom:16px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#1e1e2e;padding:9px 12px;text-align:left;color:var(--muted);font-size:10px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+td{padding:9px 12px;border-bottom:1px solid var(--border2);vertical-align:top;color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.018)}
+td:first-child{font-weight:600;color:#ddddee}
+.tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:8px;font-weight:700;white-space:nowrap}
+.tag.a{background:rgba(100,255,218,.12);color:var(--g)}.tag.b{background:rgba(66,165,245,.12);color:var(--b)}.tag.c{background:rgba(136,136,170,.12);color:var(--muted)}
+.tag.high{background:rgba(255,138,101,.14);color:var(--o)}.tag.mid{background:rgba(255,213,79,.13);color:var(--y)}.tag.low{background:rgba(179,136,255,.13);color:var(--p)}
+.pill-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}
+.flow-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px 13px;font-size:12px;color:#ccccdd}
+.flow-arrow{color:var(--dim)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.split{grid-template-columns:1fr}.hero{padding:40px 22px 0}.hero h1{font-size:1.55rem}.content{padding:28px 16px 64px}}
+.source a{color:var(--b);text-decoration:none}.source a:hover{text-decoration:underline}
+.footer{text-align:center;padding:28px;color:#44445f;font-size:12px;border-top:1px solid var(--border2)}
+</style>
+</head>
+<body>
+
+<nav class="utility-nav" aria-label="研究導覽">
+  <a class="home" href="../00_總覽.html">← 研究總覽</a>
+  <a href="05_BitSummit研究.html">BitSummit</a>
+  <a href="06_歐美獨立遊戲展深度研究.html">歐美展比較</a>
+  <a href="07_成人遊戲海外市場地圖與招商研究.html">Adult / Mature</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">深度研究報告 · 2026-06-09</div>
+    <h1>Adult / Mature Game 歐美市場地圖與代展招商研究</h1>
+    <p>聚焦歐美 Steam 成人遊戲發行商、VN localization publisher、adult indie / Patreon / itch 團隊，以及 G-EIGHT 可提供的 shared booth、demo station、showcase representation 代展服務。</p>
+    <div class="tabs">
+      <button class="tab active" onclick="sw(0,this)">總覽</button>
+      <button class="tab" onclick="sw(1,this)">歐美市場</button>
+      <button class="tab" onclick="sw(2,this)">平台地圖</button>
+      <button class="tab" onclick="sw(3,this)">BD 優先級</button>
+      <details class="more-menu">
+        <summary>更多 ▾</summary>
+        <div class="more-panel">
+          <button class="menu-item" onclick="sw(4,this)">招商資產</button>
+          <button class="menu-item" onclick="sw(5,this)">玩家反饋</button>
+          <button class="menu-item" onclick="sw(6,this)">資料來源</button>
+        </div>
+      </details>
+    </div>
+  </div>
+</div>
+
+<div class="content active" id="t0">
+  <div class="section">
+    <div class="section-title">核心判斷</div>
+    <div class="quote">
+      <h3>G-EIGHT 對歐美 adult / mature game 廠商的最大價值，是降低他們第一次進亞洲展會的成本與風險。</h3>
+      <p>台灣 adult game 廠商多數已是既有客戶，因此下一步應優先找歐美 Steam / VN / Patreon / itch 團隊，用 shared booth、demo station、showcase representation 代展服務切入。</p>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi o"><div class="kpi-label">主要圈層</div><div class="kpi-val">5</div><div class="kpi-sub">平台、Steam publisher、VN localization、F2P、creator</div></div>
+      <div class="kpi g"><div class="kpi-label">BD 首波對象</div><div class="kpi-val">5</div><div class="kpi-sub">Kagura、MangaGamer、JAST、NekoNyan、Denpasoft</div></div>
+      <div class="kpi b"><div class="kpi-label">下一步名單</div><div class="kpi-val">50-100</div><div class="kpi-sub">海外 adult / mature game 可聯絡公司</div></div>
+      <div class="kpi p"><div class="kpi-label">最佳產品</div><div class="kpi-val">代展</div><div class="kpi-sub">demo station / shared booth / post-event report</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">建議對外用語</div>
+    <div class="split">
+      <div class="card">
+        <h4>主名稱</h4>
+        <div class="code">Adult / Mature Indie Games Showcase</div>
+        <p>比「色情遊戲展區」更適合招商、媒體、合作方與場地方溝通。</p>
+      </div>
+      <div class="card">
+        <h4>描述句</h4>
+        <div class="code">18+ curated area for mature visual novels, romance games, adult RPGs, and narrative indie games.</div>
+        <p>把類型講清楚，避免只被理解成單一男性向成人內容。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">市場地圖總覽</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>圈層</th><th>代表對象</th><th>商業模式</th><th>對 G-EIGHT 的價值</th><th>BD 優先級</th></tr></thead>
+        <tbody>
+          <tr><td>歐美 Steam 成人遊戲發行商</td><td>Kagura Games、Critical Bliss、FAKKU Games、LewdLoco 類型</td><td>Steam premium、DLC、自有商店</td><td>最容易理解 wishlist、demo、QR tracking、post-event report</td><td><span class="tag high">最高</span></td></tr>
+          <tr><td>歐美 VN localization publisher</td><td>JAST USA、MangaGamer、NekoNyan、Denpasoft、Sekai Project</td><td>日系 VN 授權、翻譯、海外發行</td><td>適合 mature VN / romance / BL / yuri 代展與台灣玩家測試</td><td><span class="tag high">最高</span></td></tr>
+          <tr><td>歐美創作者 / Patreon / itch 團隊</td><td>solo dev、小型 dating sim、queer VN、adult RPG 團隊</td><td>Patreon、itch、Steam、自有站</td><td>預算較小但數量多，最適合低門檻代展包</td><td><span class="tag high">高</span></td></tr>
+          <tr><td>成人遊戲平台</td><td>Nutaku、EROLABS、DLsite、FANZA / DMM</td><td>平台抽成、F2P、premium、發行</td><td>可談贊助、專區合作、發行商媒合，但決策鏈較長</td><td><span class="tag mid">中高</span></td></tr>
+          <tr><td>亞洲 F2P / gacha / mobile 團隊</td><td>EROLABS 生態、日韓手遊型產品</td><td>F2P、IAP、預註冊、長線營運</td><td>可做參考與第二波招商，不是本階段主力</td><td><span class="tag mid">中</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note green">最短路徑：先打歐美 Steam 成人遊戲發行商與 VN localization publisher，主推「不用飛台灣也能測亞洲市場」的代展服務。</div>
+  </div>
+</div>
+
+<div class="content" id="t1">
+  <div class="section">
+    <div class="section-title">歐美市場判斷</div>
+    <div class="grid">
+      <div class="card">
+        <h3>歐美廠商的核心痛點</h3>
+        <div class="pill-row"><span class="tag high">飛亞洲成本高</span><span class="tag mid">平台政策不穩</span><span class="tag b">曝光受限</span></div>
+        <p>歐美 adult / mature game 團隊通常知道亞洲有需求，但第一次飛來台灣參展的成本太高，且 adult content 在 Steam、itch、Patreon、支付商與廣告平台上都面臨不確定性。</p>
+        <div class="note blue">G-EIGHT 的切角：不是要求對方直接買完整攤位，而是先提供低風險代展，讓他們用較低成本測試台灣 / APAC 玩家反應。</div>
+      </div>
+      <div class="card">
+        <h3>最適合先拓展的歐美對象</h3>
+        <div class="pill-row"><span class="tag high">Steam publisher</span><span class="tag high">VN publisher</span><span class="tag mid">Patreon / itch</span></div>
+        <p>第一優先是已有多款 Steam 作品、成熟 localization 流程、或自有社群的發行商。第二優先是小型 adult indie / Patreon / itch 團隊，這類對象較適合 demo station package。</p>
+        <div class="note green">優先訊號：已有英文版、已有 Steam 頁、支援繁中 / 簡中、曾參加 PAX / Anime Expo / Gamescom、或正在尋找 APAC 發行合作。</div>
+      </div>
+      <div class="card">
+        <h3>為什麼代展比賣攤位更容易成交</h3>
+        <div class="pill-row"><span class="tag high">降低門檻</span><span class="tag mid">保留選項</span><span class="tag b">可量化回報</span></div>
+        <p>對歐美廠商而言，完整參展需要機票、住宿、人力、設備與現場溝通成本。代展可以先提供 demo 展示、QR tracking、玩家回饋與展後報告，讓對方用一次小成本驗證市場。</p>
+        <div class="note purple">成交邏輯：Year 1 代展測試，Year 2 shared booth，Year 3 完整攤位或專區合作。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">歐美廠商決策邏輯</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>廠商問題</th><th>G-EIGHT 回答</th><th>可提供證據</th></tr></thead>
+        <tbody>
+          <tr><td>台灣玩家會對我的 adult / mature game 有興趣嗎？</td><td>用 18+ 展區 demo station 測試玩家反應</td><td>試玩人次、QR scan、wishlist click、問卷</td></tr>
+          <tr><td>我不想派人飛去台灣，還能參與嗎？</td><td>提供 showcase representation 代展</td><td>現場照片、玩家回饋、展後報告</td></tr>
+          <tr><td>成人內容能不能安全展示？</td><td>使用 18+ 分區、年齡驗證與展示規範</td><td>18+ 展區規範、展示版本審核</td></tr>
+          <tr><td>這和線上 Steam 推廣有什麼不同？</td><td>線下可提供高意圖玩家試玩與質化回饋</td><td>平均互動時間、玩家評論、KOL 接觸</td></tr>
+          <tr><td>如果反應好，下一步是什麼？</td><td>升級 shared booth、完整攤位、Business Day matchmaking</td><td>Year 2 方案與合作階梯</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="content" id="t2">
+  <div class="section">
+    <div class="section-title">重要平台與發行商地圖</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>對象</th><th>類型</th><th>公開訊號 / 規模</th><th>對 G-EIGHT 價值</th><th>BD 切角</th></tr></thead>
+        <tbody>
+          <tr><td>Kagura Games</td><td>Steam / 自有商店成人遊戲 localization publisher</td><td>Steam publisher page 顯示約 492K followers、214 results</td><td>成熟 Steam 發行商，能理解 wishlist / demo / localization ROI</td><td>繁中市場測試、adult RPG / VN 現場試玩</td></tr>
+          <tr><td>JAST USA / JAST BLUE</td><td>Japanese VN / dating sim / BL publisher</td><td>官方定位為 Japanese visual novels and dating-sim games for English market</td><td>mature VN、BL brand、日系內容海外發行經驗</td><td>mature narrative、BL / romance showcase</td></tr>
+          <tr><td>MangaGamer</td><td>日系 visual novel localization / distribution</td><td>以創作者原意把日本 otaku culture 帶給海外消費者</td><td>成熟 VN 發行商，適合 romance / yuri 類招商</td><td>台灣玩家對日系 mature VN 的接受度測試</td></tr>
+          <tr><td>NekoNyan</td><td>visual novel localization publisher</td><td>From Fans for Fans，高品質 VN localization</td><td>適合 romance VN、粉絲向深度玩家</td><td>VN-focused showcase / Asia fan engagement</td></tr>
+          <tr><td>Denpasoft / Sekai Project</td><td>adult VN imprint / VN publisher</td><td>Denpasoft 是 Sekai Project 的 adult content imprint</td><td>Steam + 成人版本拆分策略、實體販售經驗</td><td>Steam + 18+ edition showcase</td></tr>
+          <tr><td>FAKKU Games</td><td>adult otaku content / games</td><td>成人內容品牌辨識度高</td><td>可拓展 adult otaku content + game crossover</td><td>18+ otaku content sponsor / mature VN 特別合作</td></tr>
+          <tr><td>Nutaku</td><td>成人遊戲平台、發行與 funding</td><td>PG Connects 頁面標示 130M+ monthly visits、50M+ registered users、400+ 18+ games</td><td>平台贊助、publisher showcase、亞洲開發者 scouting</td><td>18+ showcase sponsorship / APAC market signal</td></tr>
+          <tr><td>Critical Bliss / adult indie publisher 類型</td><td>歐美成人 indie 發行商</td><td>偏 Steam / 自有商店 / adult indie catalog</td><td>比大型平台更可能接受代展測試</td><td>demo station package / shared booth</td></tr>
+          <tr><td>itch / Patreon adult indie 團隊</td><td>小型成人 indie / creator</td><td>Patreon、itch、Steam、自有社群</td><td>單家預算小，但名單量大，代展最合適</td><td>low-cost representation package</td></tr>
+          <tr><td>EROLABS</td><td>成人遊戲平台 / 發行生態</td><td>官方頁面可見 Rise of Eros、TenkafuMA 等作品</td><td>亞洲 adult F2P / mobile 廠商代表</td><td>第二波：18+ mobile / F2P showcase</td></tr>
+          <tr><td>DLsite / FANZA / DMM / Shiravune</td><td>日本平台與 VN 發行體系</td><td>日本 creator / VN 供給強</td><td>內容供給重要，但本階段不是歐美代展主力</td><td>日文提案 / creator export to Taiwan</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="content" id="t3">
+  <div class="section">
+    <div class="section-title">BD 優先級排序</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>波次</th><th>對象</th><th>理由</th><th>建議方案</th></tr></thead>
+        <tbody>
+          <tr><td><span class="tag a">第一波</span></td><td>Kagura Games</td><td>Steam adult publisher 規模大、產品多、懂 localization ROI</td><td>shared booth / publisher showcase</td></tr>
+          <tr><td><span class="tag a">第一波</span></td><td>MangaGamer</td><td>成熟 VN 發行商，適合 mature VN 區塊</td><td>mature VN showcase</td></tr>
+          <tr><td><span class="tag a">第一波</span></td><td>JAST USA / JAST BLUE</td><td>VN、dating sim、BL 方向，可擴展受眾</td><td>mature narrative / BL showcase</td></tr>
+          <tr><td><span class="tag a">第一波</span></td><td>NekoNyan</td><td>高品質 VN localization，粉絲向受眾精準</td><td>romance VN / fan engagement</td></tr>
+          <tr><td><span class="tag a">第一波</span></td><td>Denpasoft / Sekai Project</td><td>adult VN imprint，熟悉 Steam + 18+ 版本拆分</td><td>Steam + 18+ edition showcase / 代展</td></tr>
+          <tr><td><span class="tag a">第一波</span></td><td>Critical Bliss / 歐美 adult indie publisher 類型</td><td>較可能接受低成本亞洲測試</td><td>demo station package</td></tr>
+          <tr><td><span class="tag b">第二波</span></td><td>Nutaku</td><td>平台大、可談贊助，但決策層級高</td><td>18+ 展區數據、亞洲開發者名單、sponsorship deck</td></tr>
+          <tr><td><span class="tag b">第二波</span></td><td>FAKKU Games</td><td>品牌強，但 games 是否為核心需驗證</td><td>18+ otaku content + games 聯合提案</td></tr>
+          <tr><td><span class="tag c">第三波</span></td><td>itch / Patreon adult indie、Steam 小型成人 RPG / VN publisher</td><td>量大但預算分散</td><td>代展、demo station、低價 shared booth</td></tr>
+          <tr><td><span class="tag c">參考市場</span></td><td>EROLABS、DLsite、Shiravune / EXNOA</td><td>亞洲與日本內容重要，但不是本階段歐美代展主力</td><td>後續專區合作 / 日文提案</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">招商主張</div>
+    <div class="grid">
+      <div class="card"><h4>平台型廠商</h4><div class="code">G-EIGHT can serve as your APAC physical touchpoint for adult and mature indie games, combining player discovery, creator scouting, and a managed 18+ showcase environment in Taiwan.</div></div>
+      <div class="card"><h4>Steam 成人遊戲發行商</h4><div class="code">For Steam adult game publishers, G-EIGHT provides direct access to Taiwanese core players, wishlist-driving demo stations, and a rare physical showcase for mature games in Asia.</div></div>
+      <div class="card"><h4>VN localization publisher</h4><div class="code">Taiwan has a strong visual novel, romance, anime, and indie game audience. G-EIGHT can help mature VN publishers test Chinese-language demand and reach fans beyond Steam.</div></div>
+      <div class="card"><h4>小型海外 adult indie 團隊</h4><div class="code">If flying a team to Taiwan is too expensive, G-EIGHT can offer a lower-risk representation package: demo station setup, staff-assisted showcase, QR tracking, and post-event reporting.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="content" id="t4">
+  <div class="section">
+    <div class="section-title">歐美代展服務產品化</div>
+    <div class="quote">
+      <h3>對歐美廠商，第一年最容易賣的不是完整攤位，而是「不用派人到台灣，也能取得亞洲玩家測試資料」的代展包。</h3>
+      <p>產品核心是 demo 展示、現場人員協助、QR / wishlist tracking、玩家回饋與展後報告。</p>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>方案</th><th>內容</th><th>適合對象</th><th>主要賣點</th></tr></thead>
+        <tbody>
+          <tr><td><span class="tag b">Basic Demo Station</span></td><td>1 台展示機、遊戲安裝、QR code、基本現場引導、展後簡報</td><td>小型 Steam / itch / Patreon adult indie 團隊</td><td>最低成本測試台灣玩家反應</td></tr>
+          <tr><td><span class="tag high">Standard Representation</span></td><td>Basic + G-EIGHT 現場人員代介紹、玩家問卷、wishlist / QR tracking、照片紀錄</td><td>歐美 adult publisher、VN localization publisher</td><td>不用派人飛台灣，也能取得可回報的市場資料</td></tr>
+          <tr><td><span class="tag a">Premium Showcase</span></td><td>Standard + 18+ 展區重點露出、KOL / 媒體導覽、B2B 介紹、完整 ROI report</td><td>Kagura、JAST、MangaGamer、Nutaku 類型平台 / 發行商</td><td>把 G-EIGHT 當成 APAC mature game market test</td></tr>
+          <tr><td><span class="tag mid">Publisher Shared Booth</span></td><td>同一發行商或多家小團隊共用展區，展示 3-6 款作品</td><td>catalog 較多的 publisher 或多個小團隊集合</td><td>攤位成本分攤，內容密度更高</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">代展交付物</div>
+    <div class="grid">
+      <div class="card">
+        <h4>展前</h4>
+        <ul>
+          <li>展示版本檢查與安裝</li>
+          <li>18+ 展示內容審核</li>
+          <li>QR / UTM / wishlist landing page 設定</li>
+          <li>英文 / 中文一句話介紹與現場話術</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>展中</h4>
+        <ul>
+          <li>展示機維護與玩家引導</li>
+          <li>代為介紹遊戲亮點</li>
+          <li>收集玩家問卷與現場反應</li>
+          <li>拍攝攤位、人流、互動照片</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>展後</h4>
+        <ul>
+          <li>試玩人次、QR scan、wishlist click</li>
+          <li>玩家回饋摘要與常見問題</li>
+          <li>媒體 / KOL / B2B 接觸紀錄</li>
+          <li>是否值得升級完整攤位的建議</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">G-EIGHT 應準備的招商資產</div>
+    <div class="grid">
+      <div class="card">
+        <h4>Adult / Mature Showcase One-Pager</h4>
+        <ul>
+          <li>G-EIGHT 展會規模與受眾</li>
+          <li>18+ 展區定位、年齡驗證與動線管理</li>
+          <li>預估人流、demo station / shared booth / 代展方案</li>
+          <li>過往 mature / adult 參展案例</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>海外 BD 名單表</h4>
+        <ul>
+          <li>Company、Country、Category、Main platform</li>
+          <li>Product type、Language support、Steam followers</li>
+          <li>Asia interest signal、Pain point、Offer、Priority、Representation fit</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>18+ 展區營運規範</h4>
+        <ul>
+          <li>18+ 驗證、展示版本限制、螢幕角度</li>
+          <li>攝影限制、媒體導覽規範、未成年誤入處理</li>
+          <li>禁止題材與內容審核</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>展後 ROI 報告模板</h4>
+        <ul>
+          <li>試玩人次、QR scan、wishlist click</li>
+          <li>平均互動時間、玩家問卷、媒體 / KOL 接觸</li>
+          <li>B2B 洽談紀錄與下一步建議</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">立即行動清單</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>工作</th><th>產出</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr><td>建立歐美 adult / mature game BD 名單 50 家</td><td>A / B / C 優先級 + 代展適配度</td><td>直接冷開發</td></tr>
+          <tr><td>製作 Adult / Mature Showcase 英文 one-pager</td><td>PDF / deck</td><td>LinkedIn、email、展會會議</td></tr>
+          <tr><td>設計 demo station / shared booth / 代展方案</td><td>Basic / Standard / Premium / Shared Booth</td><td>降低歐美廠商首次參與門檻</td></tr>
+          <tr><td>製作 18+ 展區營運規範草案</td><td>年齡驗證與內容規範</td><td>降低品牌與場地風險</td></tr>
+          <tr><td>找 3-5 家歐美廠商需求訪談</td><td>痛點、預算、是否接受代展</td><td>驗證服務包與定價</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="content" id="t5">
+  <div class="section">
+    <div class="section-title">玩家反饋是否值得做？</div>
+    <div class="quote">
+      <h3>值得，但不是第一步。</h3>
+      <p>目前最缺的是海外 BD 名單與可賣的展區產品。如果先做玩家問卷，容易問得太散，且沒有明確招商對象可以驗證。</p>
+    </div>
+    <div class="flow">
+      <div class="flow-box">市場地圖</div><div class="flow-arrow">→</div>
+      <div class="flow-box">目標廠商名單</div><div class="flow-arrow">→</div>
+      <div class="flow-box">問卷設計</div><div class="flow-arrow">→</div>
+      <div class="flow-box">2026 現場收集</div><div class="flow-arrow">→</div>
+      <div class="flow-box">2027 招商資料</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">玩家問卷應驗證的問題</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>問題</th><th>招商用途</th></tr></thead>
+        <tbody>
+          <tr><td>玩家是否會主動進入 18+ 展區？</td><td>估算人流與展區價值</td></tr>
+          <tr><td>玩家偏好 VN、RPG、dating sim、BL / yuri、F2P mobile 哪一類？</td><td>決定招商類型</td></tr>
+          <tr><td>玩家是否願意掃 QR / 加 wishlist / 加 Discord？</td><td>證明轉換能力</td></tr>
+          <tr><td>玩家是否願意購買 18+ 專區票或 VIP？</td><td>定價與高端產品</td></tr>
+          <tr><td>玩家對分區與年齡驗證接受度如何？</td><td>降低營運風險</td></tr>
+          <tr><td>玩家是否希望看到海外 adult / mature 廠商？</td><td>支持海外招商</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="content" id="t6">
+  <div class="section source">
+    <div class="section-title">資料來源</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>來源</th><th>用途</th><th>連結</th></tr></thead>
+        <tbody>
+          <tr><td>Nutaku / PG Connects</td><td>130M+ monthly visits、50M+ registered users、400+ 18+ games</td><td><a href="https://www.pgconnects.com/digital/sponsor/nutaku-2/" target="_blank">pgconnects.com</a></td></tr>
+          <tr><td>PocketGamer.biz</td><td>Nutaku Gamescom 2019 數據與 mobile shift</td><td><a href="https://www.pocketgamer.biz/gamescom-2019-adult-games-platform-nutaku-closes-in-on-40-million-registered-users/" target="_blank">pocketgamer.biz</a></td></tr>
+          <tr><td>WN Hub</td><td>adult games market roundtable、平台地圖、風險、金流、廣告、discoverability 問題</td><td><a href="https://wnhub.io/news/analytics/item-43874" target="_blank">wnhub.io</a></td></tr>
+          <tr><td>EROLABS</td><td>平台與代表作品</td><td><a href="https://www.ero-labs.com/en/" target="_blank">ero-labs.com</a></td></tr>
+          <tr><td>Kagura Games Steam</td><td>Steam publisher followers、catalog size</td><td><a href="https://store.steampowered.com/publisher/Kagura/" target="_blank">store.steampowered.com</a></td></tr>
+          <tr><td>Kagura Games About</td><td>公司定位、語言支援、localization 方向</td><td><a href="https://kagura.games/ja/about/" target="_blank">kagura.games</a></td></tr>
+          <tr><td>JAST USA About</td><td>VN / dating sim 英文化發行商定位</td><td><a href="https://jastusa.com/page/about-us" target="_blank">jastusa.com</a></td></tr>
+          <tr><td>MangaGamer About</td><td>日系 VN 海外發行定位</td><td><a href="https://www.mangagamer.com/about.php" target="_blank">mangagamer.com</a></td></tr>
+          <tr><td>NekoNyan</td><td>VN localization publisher 定位</td><td><a href="https://nekonyansoft.com/" target="_blank">nekonyansoft.com</a></td></tr>
+          <tr><td>Denpasoft FAQ</td><td>Denpasoft 是 Sekai Project 成人內容 imprint</td><td><a href="https://support.denpasoft.com/portal/en/kb/articles/denpasoft-general-faq" target="_blank">support.denpasoft.com</a></td></tr>
+          <tr><td>Shiravune / EXNOA</td><td>公司資訊整理</td><td><a href="https://www.gematsu.com/companies/exnoa/shiravune" target="_blank">gematsu.com</a></td></tr>
+          <tr><td>The Guardian</td><td>2025 Steam / itch adult content 金流與平台政策背景</td><td><a href="https://www.theguardian.com/games/2025/jul/29/why-did-adult-titles-disappear-from-steam-itch-pc-gaming-payment-processors" target="_blank">theguardian.com</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="footer">Adult / Mature Game 海外市場地圖與招商研究 · G-EIGHT · 2026-06-09</div>
+
+<script>
+const tabs=document.querySelectorAll('.tab');
+const contents=document.querySelectorAll('.content');
+function sw(n,btn){
+  document.querySelectorAll('.tab,.menu-item').forEach(t=>t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  else tabs[n]?.classList.add('active');
+  document.querySelectorAll('.more-menu').forEach(m=>m.removeAttribute('open'));
+  contents.forEach((c,i)=>c.classList.toggle('active',i===n));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function placeMoreMenus(){
+  document.querySelectorAll('.more-menu[open]').forEach(menu=>{
+    const summary=menu.querySelector('summary');
+    const panel=menu.querySelector('.more-panel');
+    if(!summary||!panel) return;
+    const rect=summary.getBoundingClientRect();
+    const width=panel.offsetWidth||190;
+    const left=Math.max(12,Math.min(rect.right-width,window.innerWidth-width-12));
+    panel.style.left=left+'px';
+    panel.style.top=(rect.bottom+6)+'px';
+  });
+}
+document.querySelectorAll('.more-menu').forEach(menu=>{
+  menu.addEventListener('toggle',placeMoreMenus);
+});
+window.addEventListener('resize',placeMoreMenus);
+window.addEventListener('scroll',placeMoreMenus,{passive:true});
+</script>
+</body>
+</html>
