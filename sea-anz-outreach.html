@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G-EIGHT | 海外開發者冷開發名單</title>
+<style>
+  :root {
+    --bg: #0f0f13; --surface: #1a1a23; --surface2: #22222e; --border: #2e2e3e;
+    --accent: #7c5cfc; --accent2: #fc5c7d; --text: #e8e8f0; --muted: #7878a0;
+    --green: #3dd68c; --yellow: #ffd166; --blue: #5c9cfc; --orange: #ff9f43;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg,#1a1a23,#0f0f1a); border-bottom: 1px solid var(--border); padding: 20px 28px; }
+  .header h1 { font-size: 20px; font-weight: 700; }
+  .header h1 span { color: var(--accent); }
+  .header p { color: var(--muted); font-size: 12px; margin-top: 3px; }
+  .header-meta { display: flex; gap: 12px; margin-top: 14px; flex-wrap: wrap; align-items: center; }
+  .chip { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 7px 14px; }
+  .chip .val { font-size: 18px; font-weight: 700; color: var(--accent); }
+  .chip .lbl { font-size: 11px; color: var(--muted); }
+  .chip-red { background: rgba(252,92,125,.1); border-color: rgba(252,92,125,.3); }
+  .chip-red .val { color: var(--accent2); font-size: 14px; }
+  .tl { display: flex; margin-top: 14px; }
+  .tl-item { flex:1; border-left: 2px solid var(--border); padding: 4px 10px; }
+  .tl-item:first-child { border-left-color: var(--accent); }
+  .tl-item .d { font-size: 10px; font-weight: 700; color: var(--accent); }
+  .tl-item .t { font-size: 11px; color: var(--muted); }
+
+  .main { display: flex; height: calc(100vh - 168px); overflow: hidden; }
+  .sidebar { width: 200px; background: var(--surface); border-right: 1px solid var(--border); padding: 12px; flex-shrink: 0; overflow-y: auto; }
+  .content { flex: 1; overflow-y: auto; padding: 16px 20px; padding-bottom: 72px; }
+
+  .sb-head { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 12px 0 6px; }
+  .sb-head:first-child { margin-top: 0; }
+  .fb { display: flex; align-items: center; gap: 7px; width: 100%; padding: 6px 9px; border-radius: 5px; border: none; background: transparent; color: var(--text); cursor: pointer; font-size: 12px; text-align: left; }
+  .fb:hover { background: var(--surface2); }
+  .fb.active { background: rgba(124,92,252,.15); color: var(--accent); }
+  .fb .cnt { margin-left: auto; font-size: 10px; background: var(--surface2); border-radius: 3px; padding: 1px 5px; color: var(--muted); }
+  .fb.active .cnt { background: rgba(124,92,252,.2); color: var(--accent); }
+  hr.sdiv { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
+
+  .th { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .th h2 { font-size: 14px; font-weight: 600; }
+  .rc { color: var(--muted); font-size: 12px; }
+  .search-input { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 7px; padding: 7px 12px; color: var(--text); font-size: 13px; outline: none; margin-bottom: 12px; }
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--muted); }
+
+  table { width: 100%; border-collapse: collapse; }
+  thead th { background: var(--surface); border-bottom: 2px solid var(--border); padding: 8px 10px; text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); white-space: nowrap; }
+  tbody tr.sr { border-bottom: 1px solid var(--border); }
+  tbody tr.sr:hover { background: rgba(124,92,252,.03); }
+  tbody tr.cr { background: var(--surface2); border-bottom: 1px solid var(--border); display: none; }
+  tbody tr.cr.open { display: table-row; }
+  tbody td { padding: 9px 10px; vertical-align: middle; }
+  tbody tr.cr td { padding: 8px 10px 8px 28px; }
+  tr.hidden { display: none !important; }
+
+  .sname { font-weight: 600; font-size: 13px; }
+  .snote { color: var(--muted); font-size: 11px; margin-top: 2px; line-height: 1.4; max-width: 250px; }
+  .sgames { color: var(--muted); font-size: 11.5px; max-width: 170px; line-height: 1.35; }
+
+  .sb { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 10px; font-weight: 600; white-space: nowrap; }
+  .sb-l { background: rgba(61,214,140,.1);  color: var(--green);  border: 1px solid rgba(61,214,140,.2); }
+  .sb-m { background: rgba(92,156,252,.1);  color: var(--blue);   border: 1px solid rgba(92,156,252,.2); }
+  .sb-s { background: rgba(255,209,102,.09);color: var(--yellow); border: 1px solid rgba(255,209,102,.18); }
+
+  .tag { display: inline-block; padding: 1px 5px; border-radius: 3px; font-size: 10px; background: var(--surface2); color: var(--muted); margin: 1px 2px 1px 0; }
+  .tag.f { background: rgba(61,214,140,.09);  color: var(--green);  }
+  .tag.a { background: rgba(255,209,102,.09); color: var(--yellow); }
+  .tag.li{ background: rgba(124,92,252,.1);   color: var(--accent); }
+  .tag.g { background: rgba(92,156,252,.09);  color: var(--blue);   }
+  .tag.role-dev { background: rgba(92,156,252,.09); color: var(--blue); }
+  .tag.role-pubdev { background: rgba(61,214,140,.09); color: var(--green); }
+  .tag.role-service { background: rgba(255,159,67,.09); color: var(--orange); }
+  .tag.fund-high { background: rgba(61,214,140,.1); color: var(--green); border: 1px solid rgba(61,214,140,.2); }
+  .tag.fund-mid { background: rgba(92,156,252,.1); color: var(--blue); border: 1px solid rgba(92,156,252,.2); }
+  .tag.fund-lean { background: rgba(255,209,102,.09); color: var(--yellow); border: 1px solid rgba(255,209,102,.18); }
+  .tag.fund-unknown { background: rgba(120,120,160,.12); color: var(--muted); border: 1px solid var(--border); }
+
+  .lb { display: inline-flex; align-items: center; gap: 3px; padding: 3px 7px; border-radius: 4px; font-size: 11px; text-decoration: none; border: 1px solid var(--border); color: var(--muted); transition: all .12s; margin: 1px 2px 1px 0; white-space: nowrap; }
+  .lb:hover { border-color: var(--accent); color: var(--accent); background: rgba(124,92,252,.07); }
+  .lb.in { border-color: rgba(10,102,194,.3); color: #5c9cfc; }
+  .lb.in:hover { border-color: #5c9cfc; background: rgba(92,156,252,.07); }
+  .lb.em { border-color: rgba(252,92,125,.3); color: var(--accent2); }
+  .lb.em:hover { border-color: var(--accent2); background: rgba(252,92,125,.07); }
+  .lb.we { border-color: rgba(61,214,140,.25); color: var(--green); }
+  .lb.we:hover { border-color: var(--green); background: rgba(61,214,140,.07); }
+  .lb.ce { border-color: rgba(255,159,67,.3); color: var(--orange); }
+  .lb.ce:hover { border-color: var(--orange); background: rgba(255,159,67,.07); }
+  .lb.ce.bd { border-color: rgba(61,214,140,.4); color: var(--green); }
+  .lb.ce.bd:hover { border-color: var(--green); background: rgba(61,214,140,.07); }
+
+  .ss { background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 4px; padding: 3px 6px; font-size: 11px; cursor: pointer; outline: none; width: 82px; }
+  .eb { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 12px; padding: 1px 5px; border-radius: 3px; }
+  .eb:hover { color: var(--accent); background: rgba(124,92,252,.1); }
+  .eb.open { color: var(--accent); }
+
+  .cp { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 3px 0; }
+  .cn { font-weight: 500; font-size: 12px; }
+  .cr-label { font-size: 10px; color: var(--muted); background: var(--surface); border: 1px solid var(--border); border-radius: 3px; padding: 1px 5px; }
+  .plegend { display: flex; gap: 12px; font-size: 11px; color: var(--muted); margin-bottom: 10px; flex-wrap: wrap; }
+  .plegend span { display: flex; align-items: center; gap: 4px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+
+  .row-cb { width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer; }
+  tbody tr.sr.selected { background: rgba(124,92,252,.06); }
+
+  .sel-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--surface); border-top: 2px solid var(--accent);
+    padding: 11px 24px; display: flex; align-items: center; gap: 14px;
+    z-index: 100; transform: translateY(100%); transition: transform .2s ease;
+    box-shadow: 0 -4px 20px rgba(0,0,0,.4);
+  }
+  .sel-bar.show { transform: translateY(0); }
+  .sel-count { font-size: 13px; font-weight: 600; }
+  .sel-count em { color: var(--accent); font-style: normal; font-size: 17px; }
+  .sel-note { font-size: 11px; color: var(--muted); }
+  .btn-primary { background: var(--accent); color: #fff; border: none; border-radius: 6px; padding: 8px 18px; cursor: pointer; font-size: 13px; font-weight: 600; }
+  .btn-primary:hover { opacity: .88; }
+  .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 6px; padding: 8px 14px; cursor: pointer; font-size: 12px; }
+  .btn-ghost:hover { border-color: var(--muted); color: var(--text); }
+  .ml-auto { margin-left: auto; }
+
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.72);
+    z-index: 200; display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity .18s;
+  }
+  .modal-overlay.show { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    width: min(660px, 95vw); max-height: 76vh; display: flex; flex-direction: column;
+  }
+  .modal-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 22px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+  }
+  .modal-head h2 { font-size: 15px; font-weight: 700; }
+  .modal-head p { font-size: 11px; color: var(--muted); margin-top: 3px; }
+  .modal-close { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; line-height: 1; }
+  .modal-close:hover { color: var(--text); }
+  .modal-body { overflow-y: auto; padding: 14px 22px 18px; }
+  .send-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 0; border-bottom: 1px solid var(--border);
+  }
+  .send-item:last-child { border-bottom: none; }
+  .send-flag { font-size: 19px; flex-shrink: 0; }
+  .send-info { flex: 1; min-width: 0; }
+  .send-name { font-weight: 600; font-size: 13px; }
+  .send-email { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .no-email-badge { display: inline-block; padding: 3px 9px; border-radius: 4px; background: var(--surface2); color: var(--muted); font-size: 11px; border: 1px solid var(--border); }
+  .lb.gmail { border-color: rgba(234,67,53,.35); color: #f28b82; }
+  .lb.gmail:hover { border-color: #ea4335; background: rgba(234,67,53,.07); color: #ea4335; }
+  .modal-footer { padding: 12px 22px 16px; border-top: 1px solid var(--border); flex-shrink: 0; display: flex; gap: 10px; justify-content: flex-end; }
+
+  .tmpl-section { margin-top: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 9px; overflow: hidden; }
+  .tmpl-toggle { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; cursor: pointer; user-select: none; }
+  .tmpl-toggle h2 { font-size: 13px; font-weight: 600; }
+  .tmpl-body { display: none; padding: 0 16px 16px; }
+  .tmpl-body.open { display: block; }
+  .tmpl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; }
+  .tc { background: var(--surface2); border: 1px solid var(--border); border-radius: 7px; padding: 13px; }
+  .tc h3 { font-size: 12px; font-weight: 600; color: var(--accent); margin-bottom: 9px; }
+  .tc pre { font-family: 'Segoe UI', sans-serif; font-size: 12px; color: var(--text); line-height: 1.7; white-space: pre-wrap; word-break: break-word; }
+  .ph { color: var(--accent2); font-style: italic; }
+  .cpb { float: right; padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); cursor: pointer; font-size: 10px; }
+  .cpb:hover { border-color: var(--accent); color: var(--accent); }
+  .cpb.ok { color: var(--green); border-color: var(--green); }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>G-EIGHT <span>·</span> 海外開發者冷開發名單</h1>
+  <p>東南亞 / 紐澳開發團隊 — 創作者攤位（Developer Showcase）招募 | 7/1 報名開放</p>
+  <div class="header-meta">
+    <div class="chip"><div class="val" id="tc">—</div><div class="lbl">目標工作室</div></div>
+    <div class="chip"><div class="val" id="cc">0</div><div class="lbl">已聯繫</div></div>
+    <div class="chip"><div class="val" id="rc2">0</div><div class="lbl">有回覆</div></div>
+    <div class="chip"><div class="val" id="ec">0</div><div class="lbl">有 Email 管道</div></div>
+    <div class="chip-red chip"><div class="val">⏰ 7/1 報名開放</div><div class="lbl">第一波須在 6/25 前發出</div></div>
+  </div>
+  <div class="tl">
+    <div class="tl-item"><div class="d">6/16–6/20</div><div class="t">找聯絡人</div></div>
+    <div class="tl-item"><div class="d">6/21–6/25</div><div class="t">第一波：印尼＋新加坡</div></div>
+    <div class="tl-item"><div class="d">6/26–6/30</div><div class="t">第二波：馬來西亞＋泰國＋紐澳</div></div>
+    <div class="tl-item"><div class="d">7/1</div><div class="t">報名開放 → 追蹤所有對象</div></div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="sidebar">
+    <div class="sb-head">地區</div>
+    <button class="fb active" onclick="fReg('all',this)">🌏 全部 <span class="cnt" id="ca">—</span></button>
+    <button class="fb" onclick="fReg('ID',this)">🇮🇩 印尼 <span class="cnt" id="cID">—</span></button>
+    <button class="fb" onclick="fReg('SG',this)">🇸🇬 新加坡 <span class="cnt" id="cSG">—</span></button>
+    <button class="fb" onclick="fReg('MY',this)">🇲🇾 馬來西亞 <span class="cnt" id="cMY">—</span></button>
+    <button class="fb" onclick="fReg('TH',this)">🇹🇭 泰國 <span class="cnt" id="cTH">—</span></button>
+    <button class="fb" onclick="fReg('VN',this)">🇻🇳 越南 <span class="cnt" id="cVN">—</span></button>
+    <button class="fb" onclick="fReg('PH',this)">🇵🇭 菲律賓 <span class="cnt" id="cPH">—</span></button>
+    <button class="fb" onclick="fReg('MM',this)">🇲🇲 緬甸 <span class="cnt" id="cMM">—</span></button>
+    <hr class="sdiv">
+    <button class="fb" onclick="fReg('AU',this)">🇦🇺 澳洲 <span class="cnt" id="cAU">—</span></button>
+    <button class="fb" onclick="fReg('NZ',this)">🇳🇿 紐西蘭 <span class="cnt" id="cNZ">—</span></button>
+    <hr class="sdiv">
+    <div class="sb-head">規模</div>
+    <button class="fb" onclick="fScale('large',this)">🟢 大型 50人+</button>
+    <button class="fb" onclick="fScale('medium',this)">🔵 中型 15–50人</button>
+    <button class="fb" onclick="fScale('small',this)">🟡 小型 6–14人</button>
+    <hr class="sdiv">
+    <div class="sb-head">角色</div>
+    <button class="fb" onclick="fRole('dev',this)">🎮 開發商 <span class="cnt" id="rDev">—</span></button>
+    <button class="fb" onclick="fRole('pubdev',this)">🚀 發行兼開發 <span class="cnt" id="rPubdev">—</span></button>
+    <button class="fb" onclick="fRole('service',this)">🛠 外包支援 <span class="cnt" id="rService">—</span></button>
+    <hr class="sdiv">
+    <div class="sb-head">資金級距</div>
+    <button class="fb" onclick="fFund('high',this)">🟢 A 充足 <span class="cnt" id="fHigh">—</span></button>
+    <button class="fb" onclick="fFund('mid',this)">🔵 B 穩定 <span class="cnt" id="fMid">—</span></button>
+    <button class="fb" onclick="fFund('lean',this)">🟡 C 小型 <span class="cnt" id="fLean">—</span></button>
+    <button class="fb" onclick="fFund('unknown',this)">⚪ D 待確認 <span class="cnt" id="fUnknown">—</span></button>
+    <hr class="sdiv">
+    <div class="sb-head">狀態</div>
+    <button class="fb" onclick="fStat('未聯繫',this)">⚪ 未聯繫</button>
+    <button class="fb" onclick="fStat('已發信',this)">🔵 已發信</button>
+    <button class="fb" onclick="fStat('有回覆',this)">🟢 有回覆</button>
+    <button class="fb" onclick="fStat('跟進中',this)">🟡 跟進中</button>
+    <button class="fb" onclick="fStat('已在 Monday 系統裡',this)">🟣 已在 Monday 系統裡</button>
+    <hr class="sdiv">
+    <div class="sb-head">Email</div>
+    <button class="fb" onclick="fEmail(true,this)">📧 有 Email</button>
+    <button class="fb" onclick="fEmail(false,this)">— 僅 LinkedIn</button>
+  </div>
+
+  <div class="content">
+    <input class="search-input" type="text" placeholder="搜尋工作室、遊戲、國家、聯絡人名稱…" oninput="fSearch(this.value)">
+    <div class="plegend">
+      <span><span class="dot" style="background:var(--green)"></span>員工 Email（最優先）</span>
+      <span><span class="dot" style="background:var(--blue)"></span>員工 LinkedIn</span>
+      <span><span class="dot" style="background:var(--muted)"></span>公司管道</span>
+      <span><span class="dot" style="background:var(--green);outline:2px solid var(--green);outline-offset:1px"></span>BD/合作 Email ★</span>
+      <span><span class="dot" style="background:var(--orange)"></span>公司 Email（通用）</span>
+    </div>
+    <div class="th"><h2>目標工作室</h2><span class="rc" id="rcnt"></span></div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:30px;text-align:center"><input type="checkbox" class="row-cb" id="sel-all" onchange="togAll(this.checked)"></th>
+          <th style="width:20px"></th>
+          <th>工作室</th>
+          <th>國家</th>
+          <th>代表作</th>
+          <th>規模</th>
+          <th>角色</th>
+          <th>資金</th>
+          <th>標籤</th>
+          <th>聯絡 / 連結</th>
+          <th>狀態</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+
+    <div class="tmpl-section">
+      <div class="tmpl-toggle" onclick="togTmpl(this)">
+        <h2>✉️ Outreach 模板（Email + LinkedIn DM）</h2><span>▼</span>
+      </div>
+      <div class="tmpl-body" id="tmpl-body">
+        <p style="color:var(--muted);font-size:12px;">每封信必須個人化：<span style="color:var(--accent2)">[Name] [遊戲名] [具體細節]</span> 都要換，不要用泛語。</p>
+        <div class="tmpl-grid">
+          <div class="tc">
+            <h3>📧 Email 版<button class="cpb" onclick="cpTpl('et',this)">複製</button></h3>
+            <div id="et"><pre><b>Subject:</b> G-EIGHT Game Festival — Showcase <span class="ph">[遊戲名]</span> to 20,000+ Taiwanese Gamers
+
+Hi <span class="ph">[Name]</span>,
+
+<span class="ph">[一句具體稱讚 — 針對最近作品 / 設計細節 / 獲獎，不能是泛語]</span>
+
+We run G-EIGHT, one of Taiwan's largest indie game festivals — <b>20,000+ attendees</b>, and Developer Showcase titles have averaged <b>2–3x more wishlist gains</b> than comparable regional shows. Partners include Toge Productions, Shueisha Games, and Devolver Digital.
+
+We're opening <b>Creator Booth registrations on July 1st</b> and wanted to reach out before the announcement goes live.
+
+Happy to share more details or jump on a quick call.
+
+Benson
+G Eight | Overseas Business Development</pre></div>
+          </div>
+          <div class="tc">
+            <h3>💬 LinkedIn DM 版<button class="cpb" onclick="cpTpl('lt',this)">複製</button></h3>
+            <div id="lt"><pre>Hi <span class="ph">[Name]</span> — <span class="ph">[遊戲名]</span> caught my attention, especially <span class="ph">[一個具體細節]</span>.
+
+We run <b>G-EIGHT</b>, one of Taiwan's largest indie game festivals — <b>20,000+ attendees</b>, showcase titles average <b>2–3x the usual wishlist bump</b>. Creator Booth opens <b>July 1st</b>, before the public announcement.
+
+Worth a look? Happy to send details.
+
+Benson / G Eight</pre></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sel-bar" id="sel-bar">
+  <div>
+    <div class="sel-count">已選 <em id="sel-n">0</em> 家工作室</div>
+    <div class="sel-note" id="sel-note">...</div>
+  </div>
+  <button class="btn-ghost" onclick="clearSel()">取消全選</button>
+  <button class="btn-primary ml-auto" onclick="openSend()">✉️ 準備群發</button>
+</div>
+
+<div class="modal-overlay" id="modal-overlay" onclick="overlayClick(event)">
+  <div class="modal">
+    <div class="modal-head">
+      <div><h2>✉️ 群發準備</h2><p id="modal-desc"></p></div>
+      <button class="modal-close" onclick="closeSend()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer"><button class="btn-ghost" onclick="closeSend()">關閉</button></div>
+  </div>
+</div>
+
+<script>
+// p:1=employee email (green), p:2=employee LinkedIn (blue), p:3=company channel (gray)
+// ce = company email; ceType:"bd"|"general" controls display color
+const S = [
+  // ====== 印尼 ======
+  { id:1, c:"ID", f:"🇮🇩", cz:"印尼", name:"Toge Productions",
+    g:"Coffee Talk 系列、Necronator: Dead Wrong", sc:"medium", tags:["a"],
+    note:"印尼最重要的獨立發行商兼開發商，旗下含 Mojiken Studio",
+    cli:"https://www.linkedin.com/company/toge-productions", web:"https://www.togeproductions.com/",
+    ce:"info@togeproductions.com", ceType:"general",
+    contacts:[
+      { n:"Kris Antoni Hadiputra", r:"CEO & Founder", p:2, li:"https://www.linkedin.com/in/kris-antoni-hadiputra-a675b819/" },
+      { n:"Sarah Johana", r:"Head of Marketing", p:2, li:"https://www.linkedin.com/in/sarah-johana-27b159a3/" },
+    ], st:"已在 Monday 系統裡" },
+
+  { id:3, c:"ID", f:"🇮🇩", cz:"印尼", name:"Stairway Games",
+    g:"Coral Island", sc:"large", tags:["f"],
+    note:"Bali，100+ 人；Coral Island 全球熱銷，完全自有資金",
+    cli:"https://www.linkedin.com/company/stairwaygames", web:"https://press.stairwaygames.com/",
+    ce:"contact@stairwaygames.com", ceType:"general",
+    contacts:[
+      { n:"Soma Putera", r:"Game Producer", p:2, li:"https://www.linkedin.com/in/somawisnu/" },
+    ], st:"未聯繫" },
+
+  { id:4, c:"ID", f:"🇮🇩", cz:"印尼", name:"Gamecom Team",
+    g:"Troublemaker", sc:"medium", tags:["a"],
+    note:"Jakarta；印尼本土動作文化遊戲；2014 創立，2020 正式成立",
+    cli:"https://www.linkedin.com/company/gamecomteam/", web:"https://www.gamecomteam.com/",
+    ce:"official@gamecomteam.com", ceType:"general",
+    contacts:[
+      { n:"Nanda (Reza Febri Nanda)", r:"CEO & Founder", p:2, li:"https://www.linkedin.com/in/nandagamecom/" },
+    ], st:"未聯繫" },
+
+  { id:5, c:"ID", f:"🇮🇩", cz:"印尼", name:"Digital Happiness",
+    g:"DreadOut、DreadOut 2", sc:"medium", tags:[],
+    note:"Bandung；東南亞恐怖遊戲代表，首個成功眾籌的印尼遊戲公司，1M+ 下載",
+    cli:"https://www.linkedin.com/company/digital-happiness-id", web:"https://digitalhappiness.net/",
+    ce:"support@digitalhappiness.net", ceType:"general",
+    contacts:[
+      { n:"Rachmad Imron", r:"CEO & Founder", p:2, li:"https://www.linkedin.com/in/rachmad-imron-a7ab2a35/" },
+      { n:"Andre Agam", r:"PR & Marketing Manager", p:2, li:"https://www.linkedin.com/in/andre-agam/" },
+    ], st:"未聯繫" },
+
+  { id:6, c:"ID", f:"🇮🇩", cz:"印尼", name:"Agate International",
+    g:"Valthirian Arc、Rifstorm", sc:"large", tags:["f"],
+    note:"Bandung，200+ 人；印尼最大獨立遊戲公司，2009 創立",
+    cli:"https://www.linkedin.com/company/agate-international/", web:"https://agate.id/",
+    ce:"contact@agate.id", ceType:"general",
+    contacts:[
+      { n:"Shieny Aprilia", r:"CEO & Co-Founder", p:2, li:"https://www.linkedin.com/in/shienshien/" },
+      { n:"Aditia Dwiperdana", r:"Co-Founder / CPO", p:2, li:"https://www.linkedin.com/in/aditiadwiperdana/" },
+    ], st:"未聯繫" },
+
+  { id:46, c:"ID", f:"🇮🇩", cz:"印尼", name:"Akhir Pekan Studio",
+    g:"Warnet Life、Comic Book Store Simulator（PC + Mobile）", sc:"small", tags:[],
+    note:"Jakarta；模擬遊戲專長，持續穩定出品；2023 年營收 $108K",
+    cli:"", web:"https://akhirpekan.studio/",
+    ce:"business@akhirpekan.studio", ceType:"bd",
+    contacts:[], st:"未聯繫" },
+
+  { id:48, c:"ID", f:"🇮🇩", cz:"印尼", name:"Antimeta Studio",
+    g:"Verde and the Echoing Waters（Steam demo）", sc:"small", tags:["a"],
+    note:"Jakarta；Verde 獲 SEA Game Awards 2024 最佳學生遊戲；正式版即將推出",
+    cli:"https://www.linkedin.com/company/antimeta-studio/", web:"https://antimeta.id/",
+    ce:"studioantimeta@gmail.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  { id:52, c:"ID", f:"🇮🇩", cz:"印尼", name:"Gambir Studio",
+    g:"Knight vs Giant: The Broken Excalibur、Selera Nusantara", sc:"medium", tags:[],
+    note:"Yogyakarta；Steam 作品持續上架，兼具自製與發行能力；適合談展會曝光",
+    cli:"https://www.linkedin.com/company/gambirstudio/", web:"https://gambirstudio.com/",
+    ce:"halo@gambirstudio.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  { id:53, c:"ID", f:"🇮🇩", cz:"印尼", name:"Xelo Games",
+    g:"Petit Island、Escape from Naraka", sc:"small", tags:["a"],
+    note:"印尼 PC/console 獨立團隊；Petit Island 2024 登 Steam，題材偏療癒冒險",
+    cli:"https://www.linkedin.com/company/xelo-games/", web:"https://xelodigital.com/",
+    contacts:[
+      { n:"Irfan Sarwono", r:"CEO / official email", p:1, li:"https://www.linkedin.com/in/irfan-sarwono/", em:"mailto:sarwono.irfan@xelodigital.com" },
+    ], st:"未聯繫" },
+
+  { id:54, c:"ID", f:"🇮🇩", cz:"印尼", name:"Clay Game Studio",
+    g:"Faerie Afterlight", sc:"small", tags:["a"],
+    note:"Surabaya；Faerie Afterlight 2023 Steam 發行，手繪 Metroidvania / puzzle platformer",
+    cli:"https://www.linkedin.com/company/clay-game-studio/", web:"https://claygamestudio.com/",
+    ce:"contact@claygamestudio.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  { id:55, c:"ID", f:"🇮🇩", cz:"印尼", name:"Rolling Glory Jam",
+    g:"Hello Goodboy、What Comes After、Rage in Peace", sc:"small", tags:["a"],
+    note:"Bandung；多款 Steam 敘事 / adventure 作品，2023 仍有新作，文化敘事強",
+    cli:"https://www.linkedin.com/company/rolling-glory", web:"https://rollingglory.com/",
+    ce:"hello@rollingglory.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  { id:84, c:"ID", f:"🇮🇩", cz:"印尼", name:"MassHive Media",
+    g:"Potion Permit（2022）、Potion Permit: Complete Edition（2024）", sc:"small", tags:["a"],
+    note:"Bandung；Potion Permit Steam 暢銷，2024 追加 iOS；兄妹共同創立，2014 成立",
+    cli:"https://www.linkedin.com/company/masshive-media", web:"http://www.masshive-media.com/",
+    ce:"contact@masshive-media.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  { id:85, c:"ID", f:"🇮🇩", cz:"印尼", name:"Eksil Team",
+    g:"Acts of Blood（2026 Steam，動作 RPG）", sc:"small", tags:["a"],
+    note:"Bandung；Acts of Blood 獲 Summer Game Fest 2025 Geoff Keighley 直接邀請；反烏托邦萬隆世界觀；規模待確認",
+    cli:"https://www.linkedin.com/company/eksil-team", web:"",
+    contacts:[], st:"未聯繫" },
+
+  // ====== 新加坡 ======
+  { id:9, c:"SG", f:"🇸🇬", cz:"新加坡", name:"Mighty Bear Games",
+    g:"Disney Melee Mania、Butter Royale", sc:"medium", tags:["f"],
+    note:"前 King/Disney 老將；VC 支持；已更名為 We Are Mighty",
+    cli:"https://sg.linkedin.com/company/mighty-bear-games", web:"https://wearemighty.ai/",
+    ce:"hello@wearemighty.co", ceType:"general",
+    contacts:[
+      { n:"Simon Davis", r:"CEO & Co-Founder", p:2, li:"https://www.linkedin.com/in/simondavisgames/" },
+    ], st:"未聯繫" },
+
+  { id:10, c:"SG", f:"🇸🇬", cz:"新加坡", name:"Daylight Studios",
+    g:"Holy Potatoes! 系列（4 款）", sc:"small", tags:[],
+    note:"2011 成立，NUS 畢業生創立；Holy Potatoes! 全球 125,000+ 銷量",
+    cli:"https://sg.linkedin.com/company/daylight-studios", web:"",
+    ce:"potato@day-lightstudios.com", ceType:"general",
+    contacts:[
+      { n:"Don Sim", r:"Co-Founder & CEO", p:3, li:"https://sg.linkedin.com/company/daylight-studios" },
+    ], st:"未聯繫" },
+
+  { id:36, c:"SG", f:"🇸🇬", cz:"新加坡", name:"The Gentlebros",
+    g:"Cat Quest 系列（I / II / III）", sc:"small", tags:["a"],
+    note:"Singapore；Cat Quest III 2024 登 Switch；累計銷量 100 萬+",
+    cli:"https://www.linkedin.com/company/the-gentlebros/", web:"https://www.thegentlebros.com/",
+    ce:"contact@thegentlebros.com", ceType:"general",
+    contacts:[
+      { n:"Desmond Wong", r:"Co-Founder & CEO", p:2, li:"https://sg.linkedin.com/in/desmond-wong-1b0b5b6a" },
+    ], st:"未聯繫" },
+
+  { id:56, c:"SG", f:"🇸🇬", cz:"新加坡", name:"BattleBrew Productions",
+    g:"Cuisineer", sc:"small", tags:["a"],
+    note:"Singapore；Cuisineer 2023 Steam 發行，後續仍有跨平台與內容推廣",
+    cli:"", web:"https://battlebrewproductions.com/",
+    contacts:[], st:"未聯繫" },
+
+  { id:57, c:"SG", f:"🇸🇬", cz:"新加坡", name:"Mixed Realms",
+    g:"Gordian Quest、13Z", sc:"small", tags:["a"],
+    note:"Singapore；Gordian Quest deckbuilding RPG 表現穩定，13Z 為後續 Steam 新作",
+    cli:"", web:"https://www.mixedrealms.com/",
+    ce:"info@mixedrealms.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  { id:58, c:"SG", f:"🇸🇬", cz:"新加坡", name:"Springloaded",
+    g:"Let's Build a Zoo、Let's Build a Dungeon", sc:"small", tags:["a"],
+    note:"Singapore；management sim 團隊，Let's Build a Dungeon 已有 Steam 頁面與持續曝光",
+    cli:"https://www.linkedin.com/company/springloaded-pte-ltd/", web:"https://www.springloadedsoftware.com/",
+    ce:"james@springloadedsoftware.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  { id:59, c:"SG", f:"🇸🇬", cz:"新加坡", name:"Secret Base",
+    g:"Double Dragon Gaiden: Rise of the Dragons、Streets of Red", sc:"small", tags:[],
+    note:"Singapore；長期做 PC/console 動作遊戲，Double Dragon Gaiden 2023 登 Steam",
+    cli:"", web:"https://www.secretbase.com.sg/",
+    contacts:[], st:"未聯繫" },
+
+  // ====== 馬來西亞 ======
+  { id:13, c:"MY", f:"🇲🇾", cz:"馬來西亞", name:"Metronomik",
+    g:"No Straight Roads（系列）", sc:"medium", tags:["a"],
+    note:"創辦人 Wan Hazmer = 前 Square Enix（FF XV 主設計師）；馬來西亞最高知名度 IP",
+    cli:"https://www.linkedin.com/company/metronomik-sdn-bhd/", web:"https://www.metronomik.net/",
+    ce:"heythere@metronomik.net", ceType:"general",
+    contacts:[
+      { n:"Wan Hazmer", r:"Co-Founder & CEO", p:2, li:"https://www.linkedin.com/in/wan-hazmer-905a13106/" },
+      { n:"Putri Dina Megat Dziauddin", r:"Operations Director", p:2, li:"https://www.linkedin.com/in/putri-dina-megat-dziauddin-556430b1/" },
+    ], st:"未聯繫" },
+
+  { id:14, c:"MY", f:"🇲🇾", cz:"馬來西亞", name:"Passion Republic Games",
+    g:"Gigabash", sc:"medium", tags:["a"],
+    note:"Gigabash 有 Ultraman/MK 聯動；Bandai Namco 談合作；Gamescom Asia 2025",
+    cli:"https://www.linkedin.com/company/passion-republic/", web:"https://passionrepublicgames.com/",
+    ce:"team@passionrepublicgames.com", ceType:"general",
+    contacts:[
+      { n:"Ng Aik Sern", r:"Producer", p:2, li:"https://www.linkedin.com/in/sern/" },
+    ], st:"未聯繫" },
+
+  { id:15, c:"MY", f:"🇲🇾", cz:"馬來西亞", name:"Kaigan Games",
+    g:"Sara Is Missing、Simulacra 系列", sc:"small", tags:["a"],
+    note:"2016 創立，7+ 國際獎，millions 下載；BBC/Samsung/UNHCR 合作",
+    cli:"https://www.linkedin.com/company/kaigan-games/", web:"",
+    ce:"info@kaigangames.com", ceType:"general",
+    contacts:[
+      { n:"Shahrizar Roslan / Jeremy Ooi", r:"Co-Founders", p:3, li:"https://www.linkedin.com/company/kaigan-games/" },
+    ], st:"未聯繫" },
+
+  { id:16, c:"MY", f:"🇲🇾", cz:"馬來西亞", name:"Magnus Games Studio",
+    g:"Re:Legend、Project Survival（集英社）", sc:"medium", tags:["f"],
+    note:"東南亞最成功 Kickstarter 遊戲；現與 Shueisha Games 合作",
+    cli:"https://www.linkedin.com/company/magnus-games-studio/", web:"https://www.magnusgamesstudio.com/",
+    ce:"hello@magnusgamesstudio.com", ceType:"general",
+    contacts:[
+      { n:"DC Gan", r:"Co-Founder", p:2, li:"https://www.linkedin.com/in/dc-gan/" },
+      { n:"Welson Gan Wai Su", r:"Co-Founder", p:2, li:"https://my.linkedin.com/in/ganwaisu" },
+    ], st:"未聯繫" },
+
+  { id:60, c:"MY", f:"🇲🇾", cz:"馬來西亞", name:"7th Beat Games",
+    g:"Rhythm Doctor、A Dance of Fire and Ice", sc:"small", tags:["a"],
+    note:"馬來西亞節奏遊戲團隊；Rhythm Doctor Steam Early Access 長期更新，社群活躍",
+    cli:"", web:"https://7thbe.at/",
+    ce:"kyle@7thbe.at", ceType:"bd",
+    contacts:[
+      { n:"7th Beat support", r:"Technical support", p:3, em:"mailto:support@7thbe.at" },
+    ], st:"未聯繫" },
+
+  { id:61, c:"MY", f:"🇲🇾", cz:"馬來西亞", name:"Forust Studio",
+    g:"The Company Man、Office Rangers", sc:"small", tags:[],
+    note:"Kuala Lumpur；The Company Man 已登 Steam / Switch，後續仍有新專案曝光",
+    cli:"", web:"https://foruststudio.com/",
+    ce:"hello@foruststudio.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  { id:62, c:"MY", f:"🇲🇾", cz:"馬來西亞", name:"Aeonsparx Interactive",
+    g:"Zombie Soup", sc:"small", tags:[],
+    note:"Kuala Lumpur；Zombie Soup 2023 Steam 發行，arcade action 取向，適合玩家展",
+    cli:"https://www.linkedin.com/company/aeonsparx-interactive/", web:"https://aeonsparx.com/",
+    ce:"sales@aeonsparx.com", ceType:"bd",
+    contacts:[], st:"未聯繫" },
+
+  { id:63, c:"MY", f:"🇲🇾", cz:"馬來西亞", name:"Ammobox Studios",
+    g:"Eximius: Seize the Frontline", sc:"small", tags:[],
+    note:"Kuala Lumpur；Steam FPS/RTS hybrid 團隊，PC multiplayer 經驗完整",
+    cli:"https://www.linkedin.com/company/ammobox-studios/", web:"https://www.ammoboxstudios.com/",
+    ce:"info@ammoboxstudios.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  { id:86, c:"MY", f:"🇲🇾", cz:"馬來西亞", name:"Kurechii",
+    g:"King's League II（Steam）、Postknight 系列", sc:"medium", tags:[],
+    note:"Petaling Jaya；24 人；年營收約 500 萬 USD（2024）；2025 年辦 Kurechii Next 發表活動；2014 成立",
+    cli:"https://www.linkedin.com/company/kurechii", web:"https://kurechii.com/",
+    ce:"hello@kurechii.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  { id:87, c:"MY", f:"🇲🇾", cz:"馬來西亞", name:"Weyrdworks",
+    g:"Weyrdlets（Steam 虛擬寵物）、Super SteamPuff", sc:"small", tags:["a"],
+    note:"Petaling Jaya；Level Up KL 2024「Best Development Studio」；2016 成立",
+    cli:"https://www.linkedin.com/company/weyrdworks-productions", web:"https://weyrdworks.com/",
+    ce:"us@weyrdworks.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  // ====== 泰國 ======
+  { id:19, c:"TH", f:"🇹🇭", cz:"泰國", name:"Yggdrazil Group",
+    g:"Home Sweet Home 系列", sc:"large", tags:["li"],
+    note:"泰國 SET 上市公司；本土恐怖 IP，有電影延伸，2006 成立",
+    cli:"https://www.linkedin.com/company/yggdrazil/", web:"https://ygg-cg.com/",
+    ce:"globalbd@ygg-cg.com", ceType:"bd",
+    contacts:[], st:"未聯繫" },
+
+  { id:20, c:"TH", f:"🇹🇭", cz:"泰國", name:"Urnique Studio",
+    g:"Timelie", sc:"small", tags:["a"],
+    note:"Imagine Cup 獲獎者創立；Timelie 泰國 Steam 榜首，擊敗 RE7/8",
+    cli:"https://www.linkedin.com/company/urniquestudio", web:"https://www.urniquestudio.com/",
+    ce:"contact@urniquestudio.com", ceType:"general",
+    contacts:[
+      { n:"Parimeth Wongsatayanon", r:"CEO & Co-Founder", p:2, li:"https://www.linkedin.com/in/parimeth-wongsatayanon-728405108/" },
+    ], st:"未聯繫" },
+
+  { id:21, c:"TH", f:"🇹🇭", cz:"泰國", name:"FairPlay Studios",
+    g:"The Land Beneath Us、Fallen Knight", sc:"medium", tags:["a"],
+    note:"Bangkok；Xbox 稱 Land Beneath Us 為「indie darling」；SEA Awards 得主",
+    cli:"https://www.linkedin.com/company/fairplaystudios", web:"https://fairplaystudios.net/",
+    ce:"pr@fairplaystudios.net", ceType:"general",
+    contacts:[
+      { n:"Kachain Puttiwarawut", r:"CEO & Co-Founder", p:2, li:"https://th.linkedin.com/in/kachain-puttiwarawut-657263129" },
+    ], st:"未聯繫" },
+
+  { id:49, c:"TH", f:"🇹🇭", cz:"泰國", name:"Bit Egg Inc.",
+    g:"Lost & Found Co.（2026 Steam）、Zecha Tactics（TBA）", sc:"large", tags:[],
+    note:"Bangkok，80+ 人；外包（Square Enix/WayForward）+ 自製 IP；Zynga 老將創立",
+    cli:"https://www.linkedin.com/company/bit-egg-inc-", web:"https://bitegginc.com/",
+    ce:"hello@bitegginc.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  { id:50, c:"TH", f:"🇹🇭", cz:"泰國", name:"Nomadic Games",
+    g:"Burning Sword: Death Sun（武俠類魂，Steam prologue）", sc:"small", tags:[],
+    note:"Bangkok；Tokyo Game Show 2024 + 泰國 Game Festival 2024 展出",
+    cli:"https://www.linkedin.com/company/nomadic-games/", web:"https://www.nomadic-games.com/",
+    ce:"contact@nomadic-games.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  { id:64, c:"TH", f:"🇹🇭", cz:"泰國", name:"Vermillion Digital",
+    g:"M.A.S.S. Builder", sc:"small", tags:[],
+    note:"Thailand；M.A.S.S. Builder Steam Early Access 長期更新，機甲客製化受眾明確",
+    cli:"", web:"https://www.v-dgt.com/",
+    ce:"info@v-dgt.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  { id:88, c:"TH", f:"🇹🇭", cz:"泰國", name:"Peakware Studio",
+    g:"Exsys（Steam）", sc:"small", tags:[],
+    note:"Bangkok，2016 成立；有 BD 信箱可直接接觸",
+    cli:"", web:"https://peakwarestudio.com/",
+    ce:"business@peakwarestudio.com", ceType:"bd",
+    contacts:[], st:"未聯繫" },
+
+  // ====== 越南 ======
+  { id:22, c:"VN", f:"🇻🇳", cz:"越南", name:"Archmage Games Studio",
+    g:"（PC 獨立遊戲，TBA）", sc:"small", tags:[],
+    note:"河內，2021 成立；致力把越南 PC 遊戲推向國際",
+    cli:"https://www.linkedin.com/company/archmage-games-studio/", web:"https://archmagegames.com/",
+    ce:"info@archmagegames.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  { id:66, c:"VN", f:"🇻🇳", cz:"越南", name:"Hiker Games",
+    g:"300475、Caravan War、FZ9", sc:"medium", tags:[],
+    note:"Hanoi；越南老牌獨立 / PC mobile 團隊，300475 為越戰題材 Steam 作品",
+    cli:"", web:"https://hikergames.com/",
+    ce:"contact@hikergames.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  // ====== 菲律賓 ======
+  { id:23, c:"PH", f:"🇵🇭", cz:"菲律賓", name:"Ranida Games",
+    g:"BAYANI - FG、Vita Fighters、Fighting Pride", sc:"small", tags:["f"],
+    note:"2015 成立；有機構投資人；格鬥遊戲專長；Google Play IGA 2022 入選",
+    cli:"https://www.linkedin.com/company/ranida-games/", web:"",
+    ce:"info@ranidagames.com", ceType:"general",
+    contacts:[
+      { n:"Ben Joseph Banta", r:"CEO / Head of Games", p:2, li:"https://www.linkedin.com/in/ben-joseph-banta-b8580333/" },
+      { n:"Walter Manalo", r:"Head of Business Development", p:2, li:"https://www.linkedin.com/in/waltermanalo/" },
+    ], st:"未聯繫" },
+
+  { id:42, c:"PH", f:"🇵🇭", cz:"菲律賓", name:"Polychroma Games",
+    g:"Until Then（2024，PS5 + PC）", sc:"small", tags:["a"],
+    note:"Manila；Until Then 2024 年突圍之作，全菲律賓製作；登 PS5 + Steam",
+    cli:"https://www.linkedin.com/company/polychroma-games", web:"https://polychromagames.com/",
+    contacts:[
+      { n:"Mickole Klein Nulud", r:"Co-Founder & Director", p:3, li:"https://www.linkedin.com/company/polychroma-games" },
+    ], st:"未聯繫" },
+
+  { id:43, c:"PH", f:"🇵🇭", cz:"菲律賓", name:"Squeaky Wheel Studio",
+    g:"Political Animals、Academia: School Simulator（已售 Paradox）", sc:"small", tags:["a"],
+    note:"Manila；BAFTA 獎得主 Ryan Sumo 創立；Academia IP 已售 Paradox Interactive",
+    cli:"https://www.linkedin.com/company/squeaky-wheel-studio", web:"https://www.squeakywheel.ph/",
+    contacts:[
+      { n:"Ryan Sumo", r:"CEO & Founder", p:3, li:"https://www.linkedin.com/company/squeaky-wheel-studio" },
+    ], st:"未聯繫" },
+
+  { id:83, c:"PH", f:"🇵🇭", cz:"菲律賓", name:"Anino Games",
+    g:"Anito: Defend a Land Enraged（2003）、60+ 自製遊戲", sc:"medium", tags:["a"],
+    note:"Manila；菲律賓最早的遊戲公司（1999 創立）；首款獲國際獎項的菲律賓 PC 遊戲 Anito 開發商；現以外包＋自製 IP 並行",
+    cli:"https://www.linkedin.com/company/anino-entertainment/", web:"https://www.aninogames.com/",
+    contacts:[], st:"未聯繫" },
+
+  { id:67, c:"PH", f:"🇵🇭", cz:"菲律賓", name:"Yangyang Mobile",
+    g:"Saint Maker、The Letter、Perfect Gold", sc:"small", tags:["a"],
+    note:"Philippines；visual novel / horror 團隊，多款 Steam 作品，社群與 Kickstarter 經驗佳",
+    cli:"https://www.linkedin.com/company/yangyang-mobile/", web:"https://www.yangyangmobile.com/",
+    contacts:[], st:"未聯繫" },
+
+  // ====== 緬甸 ======
+  { id:51, c:"MM", f:"🇲🇲", cz:"緬甸", name:"Kodots Games Studio",
+    g:"DarkEnd、Wanda - A Beautiful Apocalypse、MARGO", sc:"small", tags:["a"],
+    note:"緬甸第一個上 Steam 的遊戲工作室；地牢爬行 + 敘事 RPG；Ko Chit Ko Ko 創立",
+    cli:"", web:"https://www.kodotsgames.com/",
+    contacts:[], st:"未聯繫" },
+
+  // ====== 澳洲 ======
+  { id:26, c:"AU", f:"🇦🇺", cz:"澳洲", name:"Witch Beam",
+    g:"Unpacking、Tempopo（2025）", sc:"small", tags:["a"],
+    note:"Brisbane；Unpacking 多項年度最佳；2025 年新作 Tempopo",
+    cli:"https://www.linkedin.com/company/witch-beam", web:"https://witchbeam.com.au/",
+    ce:"info@witchbeam.com.au", ceType:"general",
+    contacts:[
+      { n:"Wren Brier", r:"Director & Co-Founder", p:2, li:"https://www.linkedin.com/in/wrenbrier/" },
+    ], st:"未聯繫" },
+
+  { id:27, c:"AU", f:"🇦🇺", cz:"澳洲", name:"SMG Studio",
+    g:"Moving Out 系列、Death Squared、Lego Party", sc:"medium", tags:["a"],
+    note:"Sydney；Moving Out 全球熱銷，派對遊戲強項；AGDA 4 項提名",
+    cli:"https://au.linkedin.com/company/smg-studio", web:"https://smgstudio.com/",
+    ce:"biz@smgstudio.com", ceType:"bd",
+    contacts:[
+      { n:"Ashley Ringrose", r:"CEO & Co-Founder", p:2, li:"https://www.linkedin.com/in/mrtruffle/" },
+    ], st:"未聯繫" },
+
+  { id:28, c:"AU", f:"🇦🇺", cz:"澳洲", name:"Summerfall Studios",
+    g:"Stray Gods: The Roleplaying Musical、Malys（2025）", sc:"medium", tags:["a","f"],
+    note:"Melbourne；前 BioWare David Gaider 創立；Grammy 提名，AGDA 年度遊戲 2023",
+    cli:"https://au.linkedin.com/company/summerfall-studios", web:"https://www.summerfallstudios.com/",
+    ce:"press@summerfallstudios.com", ceType:"general",
+    contacts:[
+      { n:"David Gaider", r:"Co-Founder & Creative Director", p:2, li:"https://www.linkedin.com/in/davidgaider/" },
+      { n:"Liam Esler", r:"Managing Director", p:2, li:"https://www.linkedin.com/in/liamesler/" },
+    ], st:"未聯繫" },
+
+  { id:29, c:"AU", f:"🇦🇺", cz:"澳洲", name:"Prideful Sloth",
+    g:"Yonder: The Cloud Catcher Chronicles、Grow: Song of the Evertree", sc:"small", tags:[],
+    note:"Brisbane，2–10 人；前 AAA 老將；聯絡只有 form",
+    cli:"https://au.linkedin.com/company/prideful-sloth", web:"https://pridefulsloth.com/",
+    contacts:[
+      { n:"Cheryl Vance", r:"Co-Founder & Director", p:2, li:"https://www.linkedin.com/in/clvance/" },
+    ], st:"未聯繫" },
+
+  { id:30, c:"AU", f:"🇦🇺", cz:"澳洲", name:"Spitfire Interactive",
+    g:"Capes（2024）", sc:"small", tags:["a"],
+    note:"Brisbane；XCOM 風格超英遊戲，AGDA 2024 提名；聯絡只有 form",
+    cli:"https://www.linkedin.com/company/spitfire-interactive/", web:"",
+    contacts:[], st:"未聯繫" },
+
+  { id:31, c:"AU", f:"🇦🇺", cz:"澳洲", name:"League of Geeks",
+    g:"Armello、Jumplight Odyssey", sc:"medium", tags:["a"],
+    note:"Melbourne；Armello 策略桌遊佳作，目前仍有活躍 IP",
+    cli:"https://au.linkedin.com/company/league-of-geeks", web:"https://leagueofgeeks.com/",
+    ce:"hello@leagueofgeeks.com", ceType:"general",
+    contacts:[
+      { n:"Trent Kusters", r:"Co-Founder", p:2, li:"https://www.linkedin.com/in/trentkusters/" },
+      { n:"Ty Carey", r:"Co-Founder", p:2, li:"https://www.linkedin.com/in/ty-carey-57a68119/" },
+    ], st:"未聯繫" },
+
+  { id:38, c:"AU", f:"🇦🇺", cz:"澳洲", name:"Lumi Interactive",
+    g:"Kinder World（wellness plant game）", sc:"small", tags:["f"],
+    note:"Melbourne；a16z 領投 $9.76M；wellness + games 新賽道，Apple 精選",
+    cli:"https://www.linkedin.com/company/lumi-interactive/", web:"https://www.lumiinteractive.com/",
+    ce:"jack@lumiinteractive.com", ceType:"general",
+    contacts:[
+      { n:"Lauren Clinnick", r:"CEO & Co-Founder", p:2, li:"https://www.linkedin.com/in/laurenclinnick/" },
+    ], st:"未聯繫" },
+
+  { id:39, c:"AU", f:"🇦🇺", cz:"澳洲", name:"Uppercut Games",
+    g:"City of Brass、EPOCH 系列", sc:"small", tags:["a"],
+    note:"Canberra；City of Brass = Arabian Nights FPS roguelike；聯絡只有 form",
+    cli:"https://www.linkedin.com/company/uppercut-games/", web:"https://www.uppercutgames.com/",
+    contacts:[
+      { n:"Ryan Lancaster", r:"Co-Founder & Director", p:2, li:"https://www.linkedin.com/in/ryan-lancaster-0792314a/" },
+    ], st:"未聯繫" },
+
+  { id:40, c:"AU", f:"🇦🇺", cz:"澳洲", name:"5 Lives Studios",
+    g:"Satellite Reign（2015）", sc:"small", tags:["f"],
+    note:"Brisbane；Satellite Reign 是 Syndicate 精神續作，Kickstarter 成功後立項",
+    cli:"https://au.linkedin.com/company/5-lives-studios", web:"",
+    contacts:[], st:"未聯繫" },
+
+  { id:68, c:"AU", f:"🇦🇺", cz:"澳洲", name:"Powerhoof",
+    g:"The Drifter、Crawl、Regular Human Basketball", sc:"small", tags:["a"],
+    note:"Melbourne；The Drifter 2025 Steam 發行並獲 AGDA 2025 Game of the Year",
+    cli:"https://www.linkedin.com/company/powerhoof/", web:"https://powerhoof.com/",
+    ce:"contact@powerhoof.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  { id:69, c:"AU", f:"🇦🇺", cz:"澳洲", name:"Massive Monster",
+    g:"Cult of the Lamb、The Adventure Pals", sc:"medium", tags:["a","f"],
+    note:"Australia / UK；Cult of the Lamb 持續大型更新與 DLC，2026 仍有官方新聞",
+    cli:"https://www.linkedin.com/company/massive-monster/", web:"https://massivemonster.com/",
+    contacts:[], st:"未聯繫" },
+
+  { id:70, c:"AU", f:"🇦🇺", cz:"澳洲", name:"Beethoven & Dinosaur",
+    g:"Mixtape、The Artful Escape", sc:"small", tags:["a"],
+    note:"Melbourne；Mixtape 2026 登 Steam / Game Pass，Annapurna 發行",
+    cli:"", web:"https://www.beethovenanddinosaur.com/",
+    contacts:[], st:"未聯繫" },
+
+  { id:71, c:"AU", f:"🇦🇺", cz:"澳洲", name:"Blue Manchu",
+    g:"Wild Bastards、Void Bastards、Card Hunter", sc:"small", tags:["a"],
+    note:"Canberra；Wild Bastards 2024 Steam 發行，策略射擊 roguelike 受眾明確",
+    cli:"", web:"https://www.bluemanchu.com/",
+    contacts:[], st:"未聯繫" },
+
+  { id:72, c:"AU", f:"🇦🇺", cz:"澳洲", name:"DragonBear Studios",
+    g:"Innchanted", sc:"small", tags:[],
+    note:"Melbourne；Innchanted 2023 Steam 發行，本土文化題材 co-op management game",
+    cli:"", web:"https://www.dragonbearstudios.com/",
+    contacts:[], st:"未聯繫" },
+
+  { id:73, c:"AU", f:"🇦🇺", cz:"澳洲", name:"Ghost Pattern",
+    g:"Wayward Strand", sc:"small", tags:["a"],
+    note:"Melbourne；Wayward Strand Steam / console 發行，2024 Freeplay 敘事獎項仍有曝光",
+    cli:"https://www.linkedin.com/company/ghost-pattern/", web:"https://www.ghostpattern.com/",
+    contacts:[], st:"未聯繫" },
+
+  { id:74, c:"AU", f:"🇦🇺", cz:"澳洲", name:"Studio Drydock",
+    g:"Wylde Flowers", sc:"small", tags:["a"],
+    note:"Melbourne；Wylde Flowers Steam / Apple Arcade，cozy life sim 受眾與台灣玩家展契合",
+    cli:"https://www.linkedin.com/company/studio-drydock/", web:"https://studiodrydock.com/",
+    ce:"marketing@studiodrydock.com", ceType:"bd",
+    contacts:[
+      { n:"Studio Drydock info", r:"Company email", p:3, em:"mailto:info@studiodrydock.com" },
+    ], st:"未聯繫" },
+
+  { id:75, c:"AU", f:"🇦🇺", cz:"澳洲", name:"Bone Assembly",
+    g:"The Dungeon Experience", sc:"small", tags:[],
+    note:"Australia；The Dungeon Experience 2026 Steam demo / upcoming，喜劇 RPG parody 題材鮮明",
+    cli:"", web:"https://www.boneassembly.com/",
+    ce:"dungeonexperiencegame@gmail.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  { id:89, c:"AU", f:"🇦🇺", cz:"澳洲", name:"Drop Bear Bytes",
+    g:"Broken Roads（2024 Steam，澳洲後末日 CRPG）", sc:"small", tags:["a"],
+    note:"Torquay, Victoria；~10 人；2019 成立；多國遠端協作；傳統 CRPG 定位",
+    cli:"https://au.linkedin.com/company/dropbearbytes", web:"https://www.dropbearbytes.com/",
+    contacts:[], st:"未聯繫" },
+
+  { id:90, c:"AU", f:"🇦🇺", cz:"澳洲", name:"Chaos Theory Games",
+    g:"Crab God（Steam，策略建設）", sc:"small", tags:[],
+    note:"Sydney；使命型遊戲開發，強調有意義的遊戲體驗",
+    cli:"https://www.linkedin.com/company/chaostheorygames", web:"https://www.chaostheorygames.com/",
+    ce:"hello@chaostheorygames.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  // ====== 紐西蘭 ======
+  { id:32, c:"NZ", f:"🇳🇿", cz:"紐西蘭", name:"Grinding Gear Games",
+    g:"Path of Exile、Path of Exile 2", sc:"large", tags:["f"],
+    note:"紐西蘭最大遊戲公司；PoE 2024–2025 年收入 NZ$1.05 億",
+    cli:"https://www.linkedin.com/company/grinding-gear-games/", web:"https://www.grindinggear.com/",
+    ce:"contact@grindinggear.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  { id:33, c:"NZ", f:"🇳🇿", cz:"紐西蘭", name:"PikPok",
+    g:"Into the Dead 系列、Rival Stars", sc:"large", tags:["f"],
+    note:"Wellington，21 年；500M+ 全球下載，全自有 IP",
+    cli:"https://www.linkedin.com/company/pikpok/", web:"https://pikpok.com/",
+    contacts:[
+      { n:"Karah Sutton", r:"Chief Publishing Officer", p:1, li:"", em:"mailto:karah@pikpok.com" },
+    ], st:"未聯繫" },
+
+  { id:34, c:"NZ", f:"🇳🇿", cz:"紐西蘭", name:"RocketWerkz",
+    g:"Icarus、Stationeers", sc:"medium", tags:[],
+    note:"DayZ 創作者 Dean Hall 創立（Auckland）；生存模擬遊戲專家",
+    cli:"https://nz.linkedin.com/company/rocketwerkz", web:"https://rocketwerkz.com/",
+    ce:"press@rocketwerkz.com", ceType:"general",
+    contacts:[
+      { n:"Dean Hall", r:"CEO & Founder", p:2, li:"https://nz.linkedin.com/in/rocketkiwi" },
+    ], st:"未聯繫" },
+
+  { id:35, c:"NZ", f:"🇳🇿", cz:"紐西蘭", name:"Runaway Play",
+    g:"Rodeo Stampede、Sky: Zoo", sc:"small", tags:[],
+    note:"Dunedin；手機遊戲；僅有 Zendesk 支援入口，無公開 email",
+    cli:"https://www.linkedin.com/company/runaway-play/", web:"",
+    contacts:[], st:"未聯繫" },
+
+  { id:41, c:"NZ", f:"🇳🇿", cz:"紐西蘭", name:"Dinosaur Polo Club",
+    g:"Mini Metro（2015）、Mini Motorways（2021）", sc:"small", tags:["a","f"],
+    note:"Wellington；Mini Metro Apple Design Award；登 Apple Arcade；極簡設計代表作",
+    cli:"https://www.linkedin.com/company/dinosaur-polo-club/", web:"https://dinopoloclub.com/",
+    ce:"info@dinopoloclub.com", ceType:"general",
+    contacts:[
+      { n:"Peter Curry", r:"Co-Founder & Director", p:1, li:"https://www.linkedin.com/in/peter-curry-93baa2134/", em:"mailto:peter@dinopoloclub.com" },
+    ], st:"未聯繫" },
+
+  { id:76, c:"NZ", f:"🇳🇿", cz:"紐西蘭", name:"Black Salt Games",
+    g:"DREDGE", sc:"small", tags:["a","f"],
+    note:"Christchurch；DREDGE 2023 Steam 爆款，2024 DLC、2025 mobile/Apple 平台延伸，仍活躍",
+    cli:"https://www.linkedin.com/company/black-salt-games/", web:"https://www.blacksaltgames.com/",
+    contacts:[], st:"未聯繫" },
+
+  { id:77, c:"NZ", f:"🇳🇿", cz:"紐西蘭", name:"Balancing Monkey Games",
+    g:"Before We Leave、Beyond These Stars", sc:"small", tags:[],
+    note:"Dunedin；Beyond These Stars 為後續 Steam 新作，city-builder / cozy strategy 受眾清楚",
+    cli:"", web:"https://balancingmonkeygames.com/",
+    ce:"contact@balancingmonkeygames.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  { id:78, c:"NZ", f:"🇳🇿", cz:"紐西蘭", name:"Space Rock Games",
+    g:"Criminals Within", sc:"small", tags:[],
+    note:"New Zealand；Criminals Within Steam upcoming，雙人 co-op action adventure",
+    cli:"https://www.linkedin.com/company/space-rock-games/", web:"https://www.spacerockgames.com/",
+    ce:"hello@spacerockgames.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  { id:79, c:"NZ", f:"🇳🇿", cz:"紐西蘭", name:"Dry Cactus",
+    g:"Poly Bridge 3、Poly Bridge 2", sc:"small", tags:["a"],
+    note:"New Zealand；Poly Bridge 系列 Steam 長銷，Poly Bridge 3 2023 後仍有內容與社群",
+    cli:"", web:"https://www.drycactus.com/",
+    ce:"info@drycactus.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  { id:80, c:"NZ", f:"🇳🇿", cz:"紐西蘭", name:"Ninja Kiwi",
+    g:"Bloons TD 6、Bloons Card Storm", sc:"large", tags:["f"],
+    note:"Auckland；Bloons TD 6 Steam 長期高活躍，2025 仍有大型 DLC / expansion",
+    cli:"https://www.linkedin.com/company/ninja-kiwi/", web:"https://ninjakiwi.com/",
+    contacts:[], st:"未聯繫" },
+
+  { id:81, c:"NZ", f:"🇳🇿", cz:"紐西蘭", name:"Starcolt",
+    g:"Best Friend Forever、Get Krack!n", sc:"small", tags:[],
+    note:"Wellington；女性創辦團隊，Steam narrative / dating sim 經驗，仍以 original IP 與 work-for-hire 活躍",
+    cli:"https://www.linkedin.com/company/starcolt/", web:"https://starcolt.com/",
+    contacts:[], st:"未聯繫" },
+
+  { id:82, c:"NZ", f:"🇳🇿", cz:"紐西蘭", name:"Little Lost Fox",
+    g:"Letters To Arralla、Valleys Between", sc:"small", tags:["a"],
+    note:"New Zealand；Letters To Arralla 為 upcoming Steam 作品，cozy letter-delivery adventure",
+    cli:"", web:"https://www.littlelostfox.com/",
+    ce:"support@valleysbetween.com", ceType:"general",
+    contacts:[], st:"未聯繫" },
+
+  { id:91, c:"NZ", f:"🇳🇿", cz:"紐西蘭", name:"Deep Field Games",
+    g:"Abiotic Factor（2024 Steam EA，多人科幻生存）", sc:"small", tags:["a","f"],
+    note:"Dunedin，全遠端，~10 人；Playstack 發行；Steam 140 萬+ 銷售；NZ CODE 政府資助",
+    cli:"", web:"https://www.deepfield.games/",
+    ce:"zag@deepfield.games", ceType:"general",
+    contacts:[
+      { n:"Deep Field contact", r:"Public contact page", p:1, em:"mailto:zag@deepfield.games" }
+    ], st:"未聯繫" },
+
+  { id:92, c:"NZ", f:"🇳🇿", cz:"紐西蘭", name:"Flightless",
+    g:"Monster Racing League（2023 Steam EA）、Doomsday Vault（Switch / Steam / Epic）", sc:"small", tags:[],
+    note:"Mount Maunganui，6 人；2005 成立；環保主題原創 IP；多平台發行",
+    cli:"https://nz.linkedin.com/company/flightless", web:"https://www.flightless.co.nz/",
+    ce:"info@flightless.co.nz", ceType:"general",
+    contacts:[], st:"未聯繫" },
+];
+
+const scLbl = { large:"大型（50+）", medium:"中型（15–50）", small:"小型（6–14）" };
+const scCls = { large:"sb-l", medium:"sb-m", small:"sb-s" };
+const tgLbl = { f:"有資金", a:"獲獎", li:"上市", g:"Google IGA" };
+const tgCls = { f:"f", a:"a", li:"li", g:"g" };
+const pColor = { 1:"var(--green)", 2:"var(--blue)", 3:"var(--muted)" };
+const roleMeta = {
+  dev: { lbl:"開發商", cls:"role-dev" },
+  pubdev: { lbl:"發行兼開發", cls:"role-pubdev" },
+  service: { lbl:"外包支援", cls:"role-service" }
+};
+const fundMeta = {
+  high: { lbl:"A 充足", cls:"fund-high" },
+  mid: { lbl:"B 穩定", cls:"fund-mid" },
+  lean: { lbl:"C 小型", cls:"fund-lean" },
+  unknown: { lbl:"D 待確認", cls:"fund-unknown" }
+};
+const roleOverrides = {
+  1:"pubdev", 6:"service", 10:"pubdev", 14:"service", 19:"service", 27:"pubdev",
+  31:"pubdev", 32:"pubdev", 33:"pubdev", 49:"service", 52:"pubdev", 55:"service",
+  58:"pubdev", 59:"pubdev", 80:"pubdev"
+};
+const fundOverrides = {
+  1:"high", 3:"high", 6:"high", 9:"high", 14:"high", 19:"high",
+  27:"high", 28:"high", 31:"high", 32:"high", 33:"high", 38:"high", 49:"high",
+  69:"high", 80:"high",
+  35:"unknown", 40:"unknown", 51:"unknown"
+};
+function inferRole(s) {
+  return roleOverrides[s.id] || "dev";
+}
+function inferFund(s) {
+  if (fundOverrides[s.id]) return fundOverrides[s.id];
+  if (s.sc === "large" || s.tags.includes("li") || s.tags.includes("f")) return "high";
+  if (s.sc === "medium" || s.tags.includes("a")) return "mid";
+  return "lean";
+}
+S.forEach(s => {
+  s.role = s.role || inferRole(s);
+  s.fund = s.fund || inferFund(s);
+});
+
+let aR="all", aS=null, aRole=null, aFund=null, aSt=null, aQ="", aEM=null;
+const sel = new Set();
+
+function hasEmail(s) {
+  return !!(s.ce || s.contacts.find(c => c.p===1 && c.em));
+}
+function vis(s) {
+  if (aEM===true && !hasEmail(s)) return false;
+  if (aEM===false && hasEmail(s)) return false;
+  return (aR==="all"||s.c===aR) && (!aS||s.sc===aS) && (!aRole||s.role===aRole)
+    && (!aFund||s.fund===aFund) && (!aSt||s.st===aSt)
+    && (!aQ||`${s.name}${s.g}${s.cz}${s.note}${roleMeta[s.role].lbl}${fundMeta[s.fund].lbl}${s.contacts.map(c=>c.n).join("")}`.toLowerCase().includes(aQ.toLowerCase()));
+}
+
+function render() {
+  const tb = document.getElementById("tbody"); tb.innerHTML = "";
+  let n = 0;
+  S.forEach(s => {
+    const show = vis(s);
+    if (show) n++;
+    const tags = s.tags.map(t=>`<span class="tag ${tgCls[t]||''}">${tgLbl[t]||t}</span>`).join("");
+    const role = roleMeta[s.role] || roleMeta.dev;
+    const fund = fundMeta[s.fund] || fundMeta.unknown;
+    const isBD = s.ceType === "bd";
+    const ceLabel = s.ce ? (isBD ? `★ BD: ${s.ce}` : `📧 ${s.ce.replace(/@.+/,'@…')}`) : "";
+    const ceClass = isBD ? "lb ce bd" : "lb ce";
+    const clinks = [
+      s.cli ? `<a class="lb in" href="${s.cli}" target="_blank">🏢 LI</a>` : "",
+      s.web ? `<a class="lb we" href="${s.web}" target="_blank">🌐</a>` : "",
+      s.ce  ? `<a class="${ceClass}" href="mailto:${s.ce}" title="${s.ce}">${ceLabel}</a>` : ""
+    ].join("");
+    const opts = ["未聯繫","已發信","有回覆","跟進中","已在 Monday 系統裡","不適合"].map(o=>`<option ${s.st===o?"selected":""} value="${o}">${o}</option>`).join("");
+    const hasCon = s.contacts.length > 0;
+    const checked = sel.has(s.id) ? "checked" : "";
+
+    const tr = document.createElement("tr");
+    tr.className="sr"+(show?"":" hidden")+(sel.has(s.id)?" selected":""); tr.dataset.id=s.id;
+    tr.innerHTML=`
+      <td style="text-align:center"><input type="checkbox" class="row-cb" ${checked} onchange="togSel(${s.id},this)"></td>
+      <td>${hasCon?`<button class="eb" onclick="tog(${s.id},this)">▶</button>`:""}</td>
+      <td><div class="sname">${s.name}</div><div class="snote">${s.note}</div></td>
+      <td><div style="font-size:16px">${s.f}</div><div style="font-size:10px;color:var(--muted)">${s.cz}</div></td>
+      <td class="sgames">${s.g}</td>
+      <td><span class="sb ${scCls[s.sc]}">${scLbl[s.sc]}</span></td>
+      <td><span class="tag ${role.cls}">${role.lbl}</span></td>
+      <td><span class="tag ${fund.cls}">${fund.lbl}</span></td>
+      <td>${tags}</td>
+      <td>${clinks}</td>
+      <td><select class="ss" onchange="setSt(${s.id},this.value)">${opts}</select></td>`;
+    tb.appendChild(tr);
+
+    if (hasCon) {
+      const cr = document.createElement("tr");
+      cr.className="cr"; cr.id="cr"+s.id;
+      const chtml = s.contacts.map(c => {
+        const dot = `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${pColor[c.p]||pColor[3]};margin-right:4px;vertical-align:middle"></span>`;
+        const liL = c.li ? `<a class="lb in" href="${c.li}" target="_blank">LinkedIn</a>` : "";
+        const emL = c.em ? `<a class="lb em" href="${c.em}">Email</a>` : "";
+        return `<div class="cp">${dot}<span class="cn">${c.n}</span><span class="cr-label">${c.r}</span>${liL}${emL}</div>`;
+      }).join("");
+      cr.innerHTML=`<td></td><td></td><td colspan="9"><div style="padding:2px 0">${chtml}</div></td>`;
+      tb.appendChild(cr);
+    }
+  });
+  document.getElementById("rcnt").textContent=`顯示 ${n} / ${S.length} 家`;
+  updCnt(); updBar();
+}
+
+function tog(id,btn){
+  const cr=document.getElementById("cr"+id); if(!cr)return;
+  const o=cr.classList.toggle("open");
+  btn.textContent=o?"▼":"▶"; btn.classList.toggle("open",o);
+}
+function setSt(id,v){ S.find(s=>s.id===id).st=v; updCnt(); }
+function updCnt(){
+  document.getElementById("tc").textContent=S.length;
+  document.getElementById("cc").textContent=S.filter(s=>s.st!=="未聯繫").length;
+  document.getElementById("rc2").textContent=S.filter(s=>["有回覆","跟進中"].includes(s.st)).length;
+  document.getElementById("ec").textContent=S.filter(hasEmail).length;
+  ["ID","SG","MY","TH","VN","PH","MM","AU","NZ"].forEach(r=>{
+    const el=document.getElementById("c"+r); if(el) el.textContent=S.filter(s=>s.c===r).length;
+  });
+  [["rDev","dev"],["rPubdev","pubdev"],["rService","service"]].forEach(([id,r])=>{
+    const el=document.getElementById(id); if(el) el.textContent=S.filter(s=>s.role===r).length;
+  });
+  [["fHigh","high"],["fMid","mid"],["fLean","lean"],["fUnknown","unknown"]].forEach(([id,f])=>{
+    const el=document.getElementById(id); if(el) el.textContent=S.filter(s=>s.fund===f).length;
+  });
+  document.getElementById("ca").textContent=S.length;
+}
+function fReg(r,btn){ aR=r;aS=null;aRole=null;aFund=null;aSt=null;aEM=null; document.querySelectorAll(".fb").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); render(); }
+function fScale(s,btn){ aS=(aS===s?null:s); document.querySelectorAll(".fb").forEach(b=>b.classList.remove("active")); if(aS)btn.classList.add("active"); render(); }
+function fRole(r,btn){ aRole=(aRole===r?null:r); document.querySelectorAll(".fb").forEach(b=>b.classList.remove("active")); if(aRole)btn.classList.add("active"); render(); }
+function fFund(f,btn){ aFund=(aFund===f?null:f); document.querySelectorAll(".fb").forEach(b=>b.classList.remove("active")); if(aFund)btn.classList.add("active"); render(); }
+function fStat(s,btn){ aSt=(aSt===s?null:s); document.querySelectorAll(".fb").forEach(b=>b.classList.remove("active")); if(aSt)btn.classList.add("active"); render(); }
+function fEmail(v,btn){ aEM=(aEM===v?null:v); document.querySelectorAll(".fb").forEach(b=>b.classList.remove("active")); if(aEM!==null)btn.classList.add("active"); render(); }
+function fSearch(q){ aQ=q; render(); }
+function togTmpl(btn){ const b=document.getElementById("tmpl-body"); b.classList.toggle("open"); btn.querySelector("span").textContent=b.classList.contains("open")?"▲":"▼"; }
+function cpTpl(id,btn){ navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>{ btn.textContent="✓ 已複製";btn.classList.add("ok"); setTimeout(()=>{btn.textContent="複製";btn.classList.remove("ok");},2000); }); }
+
+function togSel(id,cb){
+  if(cb.checked) sel.add(id); else sel.delete(id);
+  cb.closest("tr").classList.toggle("selected",cb.checked);
+  updBar(); updSelAll();
+}
+function togAll(checked){
+  S.forEach(s=>{ if(!vis(s))return; if(checked)sel.add(s.id); else sel.delete(s.id); });
+  render();
+}
+function clearSel(){ sel.clear(); render(); document.getElementById("sel-all").checked=false; }
+function updSelAll(){
+  const visible=S.filter(vis);
+  document.getElementById("sel-all").checked=visible.length>0&&visible.every(s=>sel.has(s.id));
+}
+function updBar(){
+  const bar=document.getElementById("sel-bar"); const n=sel.size;
+  if(n===0){bar.classList.remove("show");return;}
+  bar.classList.add("show");
+  document.getElementById("sel-n").textContent=n;
+  const withEmail=S.filter(s=>sel.has(s.id)&&getBestEmail(s));
+  document.getElementById("sel-note").textContent=
+    `${withEmail.length} 家有 Email 可發 Gmail 草稿・${n-withEmail.length} 家僅 LinkedIn`;
+}
+function getBestEmail(s){
+  const p1=s.contacts.find(c=>c.p===1&&c.em);
+  if(p1) return p1.em.replace("mailto:","");
+  if(s.ce) return s.ce;
+  return null;
+}
+
+const EMAIL_SUBJ="G-EIGHT Game Festival — Showcase [遊戲名] to 20,000+ Taiwanese Gamers";
+const EMAIL_BODY=`Hi [Name],
+
+[一句具體稱讚 — 針對最近作品 / 設計細節 / 獲獎，不能是泛語]
+
+We run G-EIGHT, one of Taiwan's largest indie game festivals — 20,000+ attendees, and Developer Showcase titles have averaged 2–3x more wishlist gains than comparable regional shows. Partners include Toge Productions, Shueisha Games, and Devolver Digital.
+
+We're opening Creator Booth registrations on July 1st and wanted to reach out before the announcement goes live.
+
+Happy to share more details or jump on a quick call.
+
+Benson
+G Eight | Overseas Business Development`;
+
+function gmailUrl(to){
+  return`https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(to)}&su=${encodeURIComponent(EMAIL_SUBJ)}&body=${encodeURIComponent(EMAIL_BODY)}`;
+}
+function openSend(){
+  const selected=S.filter(s=>sel.has(s.id));
+  const withEmail=selected.filter(s=>getBestEmail(s));
+  const noEmail=selected.filter(s=>!getBestEmail(s));
+  document.getElementById("modal-desc").textContent=
+    `${withEmail.length} 家可開啟 Gmail 草稿・${noEmail.length} 家僅 LinkedIn`;
+  let html="";
+  if(withEmail.length){
+    html+=`<div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">有 Email — 點開 Gmail 草稿</div>`;
+    withEmail.forEach(s=>{
+      const email=getBestEmail(s);
+      const isPersonal=s.contacts.find(c=>c.p===1&&c.em);
+      const isBd=s.ceType==="bd";
+      const typ=isPersonal?"👤 員工 Email":isBd?"★ BD Email":"🏢 公司 Email";
+      html+=`<div class="send-item">
+        <span class="send-flag">${s.f}</span>
+        <div class="send-info"><div class="send-name">${s.name}</div><div class="send-email">${typ} · ${email}</div></div>
+        <a class="lb gmail" href="${gmailUrl(email)}" target="_blank">✉️ 開啟 Gmail</a>
+      </div>`;
+    });
+  }
+  if(noEmail.length){
+    if(withEmail.length) html+=`<div style="margin:14px 0 8px;border-top:1px solid var(--border)"></div>`;
+    html+=`<div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">僅 LinkedIn 管道</div>`;
+    noEmail.forEach(s=>{
+      const liUrl=s.cli||(s.contacts[0]&&s.contacts[0].li)||"";
+      html+=`<div class="send-item">
+        <span class="send-flag">${s.f}</span>
+        <div class="send-info"><div class="send-name">${s.name}</div><div class="send-email">無 Email — 只能透過 LinkedIn 聯絡</div></div>
+        ${liUrl?`<a class="lb in" href="${liUrl}" target="_blank">LinkedIn</a>`:`<span class="no-email-badge">無管道</span>`}
+      </div>`;
+    });
+  }
+  document.getElementById("modal-body").innerHTML=html;
+  document.getElementById("modal-overlay").classList.add("show");
+}
+function closeSend(){document.getElementById("modal-overlay").classList.remove("show");}
+function overlayClick(e){if(e.target===document.getElementById("modal-overlay"))closeSend();}
+
+render();
+</script>
+</body>
+</html>
