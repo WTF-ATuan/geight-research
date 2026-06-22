@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>競品展會對標與合作可能 · G-EIGHT</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f13;--bg2:#1a1a24;--bg3:#13131e;--bg4:#111119;
+  --border:#2a2a3a;--border2:#1e1e2e;
+  --g:#64ffda;--o:#ff8a65;--p:#b388ff;--y:#ffd54f;--b:#42a5f5;--r:#ef5350;
+  --text:#e8e8f0;--muted:#8888aa;--dim:#555570;
+}
+body{font-family:'Segoe UI','PingFang TC','Microsoft JhengHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;min-height:100vh}
+body.light{
+  --bg:#f6f7fb;--bg2:#ffffff;--bg3:#eef1f7;--bg4:#f9fafc;
+  --border:#d8deea;--border2:#e6eaf2;
+  --g:#008f7a;--o:#c8522b;--p:#6f48c9;--y:#9a6b00;--b:#1677b8;--r:#c62828;
+  --text:#182033;--muted:#5f6b82;--dim:#8a95a8;
+}
+body.light .utility-nav{background:rgba(255,255,255,.96)}
+body.light .hero{background:linear-gradient(135deg,#f1ecff 0%,#e8f2ff 44%,#e9f8ef 100%)}
+body.light .logo{background:linear-gradient(90deg,var(--text),var(--b),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+body.light .card,body.light .kpi,body.light .highlight,body.light .note,body.light .quote,body.light .tbl-wrap,body.light .step{background:#fff}
+body.light .card h3,body.light .card h4,body.light .highlight h3,body.light .step h4,body.light td{color:var(--text)}
+body.light .quote{color:#243047}
+body.light tr:hover td{background:rgba(22,119,184,.04)}
+.theme-toggle{margin-left:auto;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--muted);border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.theme-toggle:hover{color:var(--text);border-color:var(--g);background:rgba(100,255,218,.1)}
+body.light .theme-toggle{background:#fff;color:var(--muted);box-shadow:0 1px 2px rgba(16,24,40,.06)}
+.utility-nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 24px;background:rgba(15,15,19,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.utility-nav a{flex:0 0 auto;color:var(--muted);text-decoration:none;font-size:12px;padding:5px 10px;border:1px solid transparent;border-radius:8px}
+.utility-nav a:hover{color:var(--text);background:rgba(255,255,255,.04);border-color:var(--border)}
+.utility-nav .home{color:var(--o);border-color:rgba(255,138,101,.35);background:rgba(255,138,101,.08)}
+.utility-nav .active{color:var(--g);border-color:rgba(100,255,218,.35);background:rgba(100,255,218,.08)}
+.hero{background:linear-gradient(135deg,#20113c 0%,#17233f 44%,#1a241b 100%);padding:46px 40px 0;border-bottom:1px solid var(--border);position:sticky;top:42px;z-index:100}
+.hero-top{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+.logo{font-size:1.35rem;font-weight:800;background:linear-gradient(90deg,#fff,var(--b),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.meta{margin-left:auto;font-size:11px;color:var(--dim)}
+.hero p{max-width:1040px;color:var(--muted);font-size:13px;margin-bottom:18px}
+.tabs{display:flex;align-items:stretch;gap:6px;padding-bottom:16px}
+.tab{flex:1 1 0;min-width:0;min-height:36px;padding:8px 10px;font-size:12px;font-weight:600;color:var(--muted);border:1px solid var(--border);background:rgba(15,15,22,.45);cursor:pointer;border-radius:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.25;text-align:center}
+.tab:hover{color:var(--text);background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.16)}
+.tab.active{color:var(--text);border-color:rgba(100,255,218,.55);background:rgba(100,255,218,.1);box-shadow:inset 0 0 0 1px rgba(100,255,218,.18)}
+.pane{display:none;max-width:1120px;margin:0 auto;padding:36px 24px 80px}
+.pane.active{display:block}
+.section{margin-bottom:44px}
+.section-title{font-size:.82rem;font-weight:700;color:var(--g);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(100,255,218,.35),transparent)}
+.highlight{background:linear-gradient(135deg,rgba(100,255,218,.08),rgba(66,165,245,.06));border:1px solid rgba(100,255,218,.22);border-radius:12px;padding:20px;margin-bottom:20px}
+.highlight h3{font-size:15px;font-weight:700;color:#e8fff8;margin-bottom:8px}
+.highlight p{font-size:13px;color:var(--muted);line-height:1.8}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:20px}
+.kpi{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--g)}
+.kpi.o::before{background:var(--o)}.kpi.b::before{background:var(--b)}.kpi.p::before{background:var(--p)}.kpi.y::before{background:var(--y)}.kpi.r::before{background:var(--r)}
+.kpi-label{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.kpi-val{font-size:1.65rem;font-weight:800;line-height:1.1;color:var(--text)}
+.kpi.g .kpi-val{color:var(--g)}.kpi.o .kpi-val{color:var(--o)}.kpi.b .kpi-val{color:var(--b)}.kpi.p .kpi-val{color:var(--p)}.kpi.y .kpi-val{color:var(--y)}.kpi.r .kpi-val{color:var(--r)}
+.kpi-sub{font-size:11px;color:var(--dim);margin-top:5px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px}
+.card h3,.card h4{font-size:14px;font-weight:700;color:#ddddee;margin-bottom:8px}
+.card p,.card li{font-size:12px;color:var(--muted);line-height:1.8}
+.card ul{padding-left:18px}
+.card strong{color:#e8e8f0}
+.tbl-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:18px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--bg3);color:var(--muted);font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
+td{padding:10px 14px;border-bottom:1px solid var(--border2);vertical-align:top;color:var(--text)}
+td:first-child{font-weight:700;color:#ddddee}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.018)}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.3px;white-space:nowrap}
+.badge-g{background:rgba(100,255,218,.12);color:var(--g)}.badge-o{background:rgba(255,138,101,.12);color:var(--o)}
+.badge-b{background:rgba(66,165,245,.12);color:var(--b)}.badge-p{background:rgba(179,136,255,.12);color:var(--p)}
+.badge-y{background:rgba(255,213,79,.12);color:var(--y)}.badge-r{background:rgba(239,83,80,.12);color:var(--r)}
+.note{background:var(--bg3);border-left:3px solid var(--g);border-radius:0 8px 8px 0;padding:12px 16px;font-size:12px;color:var(--muted);margin:14px 0}
+.note.o{border-left-color:var(--o)}.note.b{border-left-color:var(--b)}.note.p{border-left-color:var(--p)}.note.y{border-left-color:var(--y)}
+.quote{font-family:Consolas,'Courier New',monospace;background:#101018;border:1px solid var(--border);border-radius:8px;padding:12px 14px;color:#d6fff4;font-size:12px;line-height:1.7;overflow:auto;margin:10px 0}
+.score{font-weight:800;text-align:center}
+.score.high{color:var(--g)}.score.mid{color:var(--y)}.score.low{color:var(--r)}
+.timeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.step{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative}
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:rgba(100,255,218,.12);color:var(--g);font-weight:800;font-size:12px;margin-bottom:10px}
+.step h4{font-size:13px;color:#ddddee;margin-bottom:8px}
+.step p{font-size:12px;color:var(--muted);line-height:1.8}
+.quad-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:18px}
+.quad{position:relative;height:520px;border:1px solid var(--border);border-radius:12px;background:
+  linear-gradient(90deg,transparent calc(50% - 1px),var(--border) calc(50% - 1px),var(--border) calc(50% + 1px),transparent calc(50% + 1px)),
+  linear-gradient(0deg,transparent calc(50% - 1px),var(--border) calc(50% - 1px),var(--border) calc(50% + 1px),transparent calc(50% + 1px)),
+  radial-gradient(circle at 20% 20%,rgba(100,255,218,.05),transparent 32%),
+  radial-gradient(circle at 80% 25%,rgba(255,138,101,.06),transparent 30%),
+  var(--bg3);overflow:hidden}
+.quad-axis{position:absolute;font-size:11px;color:var(--dim);letter-spacing:.6px;text-transform:uppercase}
+.axis-y-top{top:12px;left:50%;transform:translateX(-50%)}
+.axis-y-bottom{bottom:12px;left:50%;transform:translateX(-50%)}
+.axis-x-left{left:14px;top:50%;transform:translateY(-50%)}
+.axis-x-mid{left:50%;top:50%;transform:translate(-50%,18px)}
+.axis-x-right{right:14px;top:50%;transform:translateY(-50%)}
+.quad-label{position:absolute;font-size:12px;font-weight:700;color:var(--muted);padding:5px 8px;border-radius:8px;background:rgba(15,15,19,.54);border:1px solid var(--border)}
+body.light .quad-label{background:rgba(255,255,255,.72)}
+.q1{top:46px;left:30px}.q2{top:46px;left:50%;transform:translateX(-50%)}.q3{top:46px;right:30px}.q4{bottom:46px;left:30px}.q5{bottom:46px;right:30px}
+.plot{position:absolute;transform:translate(-50%,-50%);min-width:86px;max-width:140px;padding:7px 9px;border-radius:10px;border:1px solid var(--border);background:rgba(26,26,36,.92);box-shadow:0 10px 24px rgba(0,0,0,.18);font:inherit;color:inherit;text-align:left;cursor:pointer}
+body.light .plot{background:rgba(255,255,255,.95);box-shadow:0 8px 18px rgba(16,24,40,.08)}
+.plot strong{display:block;font-size:12px;color:var(--text);line-height:1.25}
+.plot span{display:block;font-size:10px;color:var(--muted);line-height:1.35;margin-top:2px}
+.plot.g{border-color:rgba(100,255,218,.45)}.plot.b{border-color:rgba(66,165,245,.45)}.plot.o{border-color:rgba(255,138,101,.45)}.plot.y{border-color:rgba(255,213,79,.45)}.plot.p{border-color:rgba(179,136,255,.45)}
+.plot:hover,.plot:focus-visible,.plot.active{outline:none;color:var(--text);border-color:var(--g);box-shadow:0 0 0 2px rgba(100,255,218,.18),0 14px 28px rgba(0,0,0,.24)}
+.plot.active::after{content:'';position:absolute;left:10px;right:10px;bottom:-1px;height:2px;background:var(--g);border-radius:2px}
+.plot.bitsummit{left:61%;top:22%}.plot.tgd{left:43%;top:19%}.plot.gca{left:78%;top:42%}.plot.tgs{left:73%;top:62%}.plot.bic{left:28%;top:24%}.plot.tgsi{left:51%;top:31%}.plot.level{left:32%;top:45%}.plot.pgd{left:18%;top:34%}.plot.pax{left:69%;top:76%}.plot.gameverse{left:20%;top:55%}
+.partner-detail{display:grid;grid-template-columns:minmax(180px,.8fr) minmax(0,1.6fr);gap:16px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px;margin:0 0 18px}
+.partner-detail h3{font-size:16px;line-height:1.35;margin-bottom:8px;color:var(--text)}
+.partner-detail p{font-size:12px;color:var(--muted);line-height:1.8}
+.partner-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.partner-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.partner-field{border:1px solid var(--border2);border-radius:10px;padding:12px;background:var(--bg3)}
+.partner-field.full{grid-column:1/-1}
+.partner-field h4{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+.partner-field p{color:var(--text)}
+@media(max-width:760px){
+  .quad{height:640px}
+  .plot{min-width:92px}
+  .quad-label{font-size:11px}
+  .plot.bitsummit{left:66%;top:24%}.plot.tgd{left:42%;top:13%}.plot.gca{left:76%;top:36%}.plot.tgs{left:74%;top:55%}.plot.bic{left:27%;top:26%}.plot.tgsi{left:48%;top:39%}.plot.level{left:34%;top:51%}.plot.pgd{left:24%;top:39%}.plot.pax{left:68%;top:78%}.plot.gameverse{left:28%;top:62%}
+  .partner-detail,.partner-fields{grid-template-columns:1fr}
+}
+.footer{text-align:center;padding:28px;color:#44445f;font-size:12px;border-top:1px solid var(--border2)}
+@media(max-width:760px){
+  .utility-nav{padding:8px 14px}.hero{position:relative;top:0;padding:34px 18px 0}.hero-top{display:block}.meta{margin-left:0;margin-top:6px}.logo{font-size:1.1rem}
+  .tab{font-size:11px;padding:8px 6px}.pane{padding:28px 16px 64px}
+}
+</style>
+</head>
+<body>
+
+<nav class="utility-nav" aria-label="研究導覽">
+  <a class="home" href="index.html">← 研究總覽</a>
+  <a href="05_BitSummit研究.html">BitSummit</a>
+  <a href="06_歐美獨立遊戲展深度研究.html">歐美展比較</a>
+  <a href="07_成人遊戲海外市場地圖與招商研究.html">Adult / Mature</a>
+  <a class="active" href="08_競品展會對標與合作可能.html">競品對標</a>
+  <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="切換深色與淺色模式">淺色模式</button>
+</nav>
+
+<div class="hero">
+  <div class="hero-top">
+    <div class="logo">G-EIGHT 競品展會對標、合作可能與品牌影響力分析</div>
+    <div class="meta">2026-06-22 更新 · 整合 05 / 06 / 07 研究</div>
+  </div>
+  <p>把既有的市場、ROI、海外展會研究，整理成 G-EIGHT 的競品對標、合作可能、品牌影響力與策略推演。重點不是產出對外話術，而是協助讀者判斷：G-EIGHT 在亞洲 indie 展會版圖中該站在哪裡、哪些合作有真實機會、哪些方向只是看似合理但投入報酬不足。</p>
+  <div class="tabs">
+    <button class="tab active" onclick="show('position',this)">定位總覽</button>
+    <button class="tab" onclick="show('matrix',this)">對標矩陣</button>
+    <button class="tab" onclick="show('brand',this)">品牌影響力</button>
+    <button class="tab" onclick="show('partner',this)">合作路線</button>
+    <button class="tab" onclick="show('strategy',this)">策略推演</button>
+  </div>
+</div>
+
+<div class="pane active" id="pane-position">
+  <div class="section">
+    <div class="section-title">核心結論</div>
+    <div class="highlight">
+      <h3>G-EIGHT 目前不缺市場分析，缺的是一套清楚的對標與定位語言。</h3>
+      <p>如果只用人次與規模比較，G-EIGHT 會被 Gamescom、Tokyo Game Show、台北電玩展、Gamescom Asia 壓過。但如果用純 indie 濃度、高意圖玩家、台灣 / 華語市場測試、adult / mature 可控展示、亞洲區域橋接來比較，G-EIGHT 有明確差異化。</p>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi g"><div class="kpi-label">最佳定位</div><div class="kpi-val">Boutique</div><div class="kpi-sub">亞洲精品 indie 展，而非小型綜合展</div></div>
+      <div class="kpi b"><div class="kpi-label">核心賣點</div><div class="kpi-val">APAC</div><div class="kpi-sub">台灣 / 華語市場測試與區域橋接</div></div>
+      <div class="kpi p"><div class="kpi-label">品牌缺口</div><div class="kpi-val">B2B</div><div class="kpi-sub">媒合、評審、政府背書與國際素材</div></div>
+      <div class="kpi o"><div class="kpi-label">最優先合作</div><div class="kpi-val">3</div><div class="kpi-sub">BitSummit、BIC、台北電玩展 Indie House</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">不是這樣定位</div>
+    <div class="grid">
+      <div class="card">
+        <h3>不是台灣的小型 Gamescom</h3>
+        <p>Gamescom 的強項是全球最大 B2B + B2C 綜合規模。G-EIGHT 不應用人次、展場面積、國家館數量與它硬比。</p>
+      </div>
+      <div class="card">
+        <h3>不是台灣版台北電玩展</h3>
+        <p>台北電玩展是綜合型大眾展，G-EIGHT 的價值是純 indie 濃度與玩家社群。兩者應做年度互補，而不是定位重疊。</p>
+      </div>
+      <div class="card">
+        <h3>不是純 B2B 業界會議</h3>
+        <p>G-EIGHT 現階段買方密度不足，不宜直接轉成 Business Day 主軸。更務實的是 Industry Lite：少量但高品質媒合。</p>
+      </div>
+    </div>
+    <div class="note">建議定位：亞洲精品 indie 展，連接台灣核心玩家、日本與東南亞 indie 生態，並提供高互動市場測試。</div>
+    <div class="quote">G-EIGHT is a boutique indie game festival in Taiwan, built around high-intent players, curated indie discovery, and APAC market validation.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">競爭展會分層</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>類型</th><th>主要展會</th><th>與 G-EIGHT 的關係</th><th>判斷</th></tr></thead>
+        <tbody>
+          <tr><td>直接對標</td><td>BitSummit、BIC、Tokyo Game Dungeon</td><td>同屬亞洲純 indie / indie-heavy 展會</td><td><span class="badge badge-g">最值得學，也最適合合作</span></td></tr>
+          <tr><td>年度預算競爭</td><td>Tokyo Game Show、Gamescom Asia、台北電玩展 Indie House</td><td>海外展商可能一年只選 1-2 個亞洲展</td><td>需用差異化降低被替代性</td></tr>
+          <tr><td>品牌曝光競爭</td><td>PAX、EGX、Day of the Devs、INDIE Live Expo</td><td>展商追求玩家口碑、媒體曝光、入選光環</td><td>G-EIGHT 需建立入選價值</td></tr>
+          <tr><td>B2B 競爭</td><td>Gamescom、GDC、Level Up KL、IGDX</td><td>搶發行商、平台、投資人和政府資源</td><td>不正面競爭，改做區域補充</td></tr>
+          <tr><td>Adult / mature 替代渠道</td><td>Anime Expo、Steam Next Fest、itch、Patreon、DLsite、FANZA / DMM</td><td>成人 / mature 團隊的曝光與銷售替代方案</td><td>G-EIGHT 可提供線下可控展示，是稀缺差異</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="pane" id="pane-matrix">
+  <div class="section">
+    <div class="section-title">主要對標矩陣</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>展會</th><th>核心定位</th><th>G-EIGHT 可學什麼</th><th>G-EIGHT 不該模仿什麼</th><th>合作可能</th></tr></thead>
+        <tbody>
+          <tr><td>BitSummit</td><td>日本最大純 indie 展，Business Day + MeetToMatch 成熟</td><td>評審制度、Business Day、M2M、政府合作、國際展商比例</td><td>不應直接複製日本市場入口定位</td><td><span class="badge badge-g">高：BitSummit Picks at G-EIGHT、台灣市場回饋、共同 shortlist</span></td></tr>
+          <tr><td>Tokyo Game Dungeon</td><td>日本 indie 社群與開發者展示型活動</td><td>小型策展、開發者直面玩家、低摩擦參展與日本 indie 名單探索</td><td>不應把它當成 TGS 等級的商業入口，也不必一開始談大型官方聯名</td><td><span class="badge badge-b">中高：Tokyo Game Dungeon Picks、少量日本團隊代展測試、名單互推</span></td></tr>
+          <tr><td>BIC</td><td>韓國 indie 國際節點，政府雙軌支持，開發者社群強</td><td>KOCCA + 地方政府模型、玩家票選、開發者講座、低門檻 B2B</td><td>不應全面免費入場，除非贊助可填補票務</td><td><span class="badge badge-g">高：亞洲 indie 聯盟、韓國展商互推</span></td></tr>
+          <tr><td>台北電玩展 Indie House</td><td>台灣最大綜合遊戲展內的 indie 展區</td><td>B2B Zone、國際展商招募、政府 / 產業資源</td><td>不應變成綜合商業展附屬展區</td><td><span class="badge badge-g">高：1 月 / 12 月台灣 indie 雙節點</span></td></tr>
+          <tr><td>Gamescom Asia</td><td>東南亞大型綜合展，B2C 規模強，B2B 國際化</td><td>國家館、區域招商、與在地大展合辦</td><td>不應追求大眾綜合展規模</td><td><span class="badge badge-b">中高：接觸 SEA 展商、成為台灣精品 indie 補充點</span></td></tr>
+          <tr><td>Tokyo Game Show</td><td>亞洲最大商業遊戲展，日本市場入口</td><td>海外商務接待、平台商與 publisher 接觸</td><td>不應與大廠商業展比規模與媒體量</td><td><span class="badge badge-y">中：TGS 後續導流 mature / indie 廠商</span></td></tr>
+          <tr><td>PAX</td><td>玩家文化與社群型展會</td><td>PAX Rising、玩家試玩密度、社群感、展位體驗</td><td>不應模仿高成本北美展會營運</td><td><span class="badge badge-y">中：接觸重視玩家口碑的 indie 團隊</span></td></tr>
+          <tr><td>Gamescom Cologne</td><td>全球最大 B2B + B2C 綜合展</td><td>B2B 排程、國家館、國際媒體節奏</td><td>不應把 G-EIGHT 包裝成同級 B2B 展</td><td><span class="badge badge-y">中：鎖定已參展且想進亞洲的歐洲團隊</span></td></tr>
+          <tr><td>Level Up KL / IGDX</td><td>東南亞開發者與 B2B 導向展會</td><td>政府主導媒合、內容團隊培育、商務會議</td><td>不應改成純 B2B 會議</td><td><span class="badge badge-b">中高：SEA 開發者招募與政府合作入口</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">合作姿態象限圖</div>
+    <div class="quad-wrap">
+      <div class="quad" aria-label="主辦方合作姿態象限圖">
+        <div class="quad-axis axis-y-top">合作價值密度高：值得設計合作產品</div>
+        <div class="quad-axis axis-y-bottom">合作價值密度低：先觀察或作為參考</div>
+        <div class="quad-axis axis-x-left">G-EIGHT 可主導 / 對方較小</div>
+        <div class="quad-axis axis-x-mid">接近同級 / 可互惠</div>
+        <div class="quad-axis axis-x-right">對方較強 / 借勢承接</div>
+
+        <div class="quad-label q1">G-EIGHT 主導型</div>
+        <div class="quad-label q2">戰略互惠型</div>
+        <div class="quad-label q3">借勢承接型</div>
+        <div class="quad-label q4">培養型 pipeline</div>
+        <div class="quad-label q5">參考 / 低優先</div>
+
+        <button class="plot o bitsummit active" type="button" onclick="showPartner('bitsummit',this)" aria-pressed="true"><strong>BitSummit</strong><span>戰略互惠：Asia circuit</span></button>
+        <button class="plot o tgd" type="button" onclick="showPartner('tgd',this)" aria-pressed="false"><strong>Tokyo Game Dungeon</strong><span>輕量互惠：日本 indie pipeline</span></button>
+        <button class="plot b gca" type="button" onclick="showPartner('gca',this)" aria-pressed="false"><strong>Gamescom Asia</strong><span>借勢：SEA 展商承接</span></button>
+        <button class="plot y tgs" type="button" onclick="showPartner('tgs',this)" aria-pressed="false"><strong>Tokyo Game Show</strong><span>借勢：商業大展後續導流</span></button>
+        <button class="plot g bic" type="button" onclick="showPartner('bic',this)" aria-pressed="false"><strong>BIC</strong><span>G-EIGHT 可主導互惠</span></button>
+        <button class="plot g tgsi" type="button" onclick="showPartner('tgsi',this)" aria-pressed="false"><strong>TGS Indie House</strong><span>戰略互補：台灣雙節點</span></button>
+        <button class="plot b level" type="button" onclick="showPartner('level',this)" aria-pressed="false"><strong>Level Up KL / IGDX</strong><span>區域 pipeline / B2B</span></button>
+        <button class="plot p pgd" type="button" onclick="showPartner('pgd',this)" aria-pressed="false"><strong>PGDX</strong><span>G-EIGHT 主導吸納</span></button>
+        <button class="plot p gameverse" type="button" onclick="showPartner('gameverse',this)" aria-pressed="false"><strong>GameVerse</strong><span>培養：SEA 來源</span></button>
+        <button class="plot y pax" type="button" onclick="showPartner('pax',this)" aria-pressed="false"><strong>PAX / EGX</strong><span>參考模型 / 名單來源</span></button>
+      </div>
+    </div>
+    <div class="partner-detail" id="partner-detail" aria-live="polite">
+      <div>
+        <h3 id="partner-title">BitSummit</h3>
+        <p id="partner-position">成熟度高於 G-EIGHT，但同屬亞洲純 indie 展會，理想情況下可接近戰略同級。</p>
+        <div class="partner-meta" id="partner-meta"><span class="badge badge-o">戰略互惠</span></div>
+      </div>
+      <div class="partner-fields">
+        <div class="partner-field">
+          <h4>G-EIGHT 應保持的態度</h4>
+          <p id="partner-attitude">不用低姿態，但合作形式要高於單純換展位。</p>
+        </div>
+        <div class="partner-field">
+          <h4>合理合作形式</h4>
+          <p id="partner-fit">Asia Indie Circuit、BitSummit Picks at G-EIGHT、Partner Award、台灣玩家市場驗證報告、共同 shortlist。</p>
+        </div>
+        <div class="partner-field full">
+          <h4>不適合的提案</h4>
+          <p id="partner-avoid">只談 booth swap，會低估雙方品牌；直接要求共同主辦也過早。</p>
+        </div>
+      </div>
+    </div>
+    <div class="note b">讀法：X 軸不是單純大小，而是 G-EIGHT 在合作中的主導權。BIC、PGDX、GameVerse 這類對象，G-EIGHT 可以更主動設計交換與吸納機制；BitSummit 應放在戰略互惠區，不需要過度低姿態，但合作形式要比「換展位」更高階；Gamescom Asia、TGS、PAX / EGX 則更適合作為借勢承接或參考來源。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">象限判斷依據</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>判斷維度</th><th>如何影響圖上位置</th><th>觀察重點</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>相對品牌 / 規模</td>
+            <td>決定 G-EIGHT 是可主導、可互惠，還是需要借勢承接</td>
+            <td>展會年資、人次、媒體能見度、國際展商比例、業界認知</td>
+          </tr>
+          <tr>
+            <td>Indie 純度</td>
+            <td>Indie 純度越高，與 G-EIGHT 的內容互補性越高</td>
+            <td>是否以 indie 為主軸、是否有 selection / award、展商是否以開發者本人為核心</td>
+          </tr>
+          <tr>
+            <td>地理 / 市場互補性</td>
+            <td>若對方缺台灣 / 華語玩家觸點，G-EIGHT 的交換價值提高</td>
+            <td>對方是否服務日本、韓國、SEA、歐美，是否缺華語市場驗證</td>
+          </tr>
+          <tr>
+            <td>B2B / publisher 資源</td>
+            <td>B2B 資源越強，越適合做 scouting、pitch、buyer program 類合作</td>
+            <td>是否有 Business Day、MeetToMatch、publisher / platform 出席、政府媒合機制</td>
+          </tr>
+          <tr>
+            <td>可交換價值</td>
+            <td>決定合作是否只是曝光交換，還是值得設計成產品</td>
+            <td>對方能提供展商 pipeline、品牌背書、買方資源、政府資源或媒體觸點</td>
+          </tr>
+          <tr>
+            <td>合作執行成本</td>
+            <td>成本越高，越不適合一開始就談大型合作，應先做 pilot</td>
+            <td>跨國溝通、人員負擔、展位成本、法務 / 品牌授權、是否需要共同售票或共同招商</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">象限策略含義</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>象限 / 區域</th><th>策略含義</th><th>適合合作形式</th><th>代表對象</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>G-EIGHT 主導型</td>
+            <td>G-EIGHT 可以主動定義合作框架，對方提供地區展商或 developer pipeline</td>
+            <td>展位交換、Taiwan Selection、Japan / SEA Picks、country focus、單場線上 pitch</td>
+            <td>BIC、Tokyo Game Dungeon、PGDX、GameVerse、部分 SEA 展會</td>
+          </tr>
+          <tr>
+            <td>戰略互惠型</td>
+            <td>雙方都有品牌價值，不宜停留在低階交換，應設計共同 selection、award 或 circuit</td>
+            <td>Cross-Event Picks、Partner Award、Guest Curator、Asia Indie Circuit Calendar、market validation report</td>
+            <td>BitSummit、台北電玩展 Indie House</td>
+          </tr>
+          <tr>
+            <td>借勢承接型</td>
+            <td>對方規模較大或商業屬性較強，G-EIGHT 不一定要談主辦方合作，而是承接展商與市場訊號</td>
+            <td>post-event outreach、overseas first-time package、Demo Station 代展、publisher scouting list</td>
+            <td>Gamescom Asia、Tokyo Game Show、Gamescom Cologne</td>
+          </tr>
+          <tr>
+            <td>培養型 pipeline</td>
+            <td>對方可能較小或成熟度不一，先用低成本合作驗證是否能成為穩定來源</td>
+            <td>名單交換、1-2 組展商測試、online showcase、country watchlist</td>
+            <td>PGDX、Vietnam GameVerse、早期 SEA 活動</td>
+          </tr>
+          <tr>
+            <td>參考 / 低優先</td>
+            <td>主辦方合作成本高或地理互補性低，主要價值在於學模式與追蹤入選團隊</td>
+            <td>觀察 PAX Rising / Leftfield Collection、追蹤入選名單、學習玩家體驗設計</td>
+            <td>PAX、EGX、Day of the Devs</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">合作形式可能性：不只換展位與贊助</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>合作形式</th><th>適合對象</th><th>G-EIGHT 利益點</th><th>對方利益點</th><th>成熟市場參考 / 亞洲機會</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>展位交換 / Booth Swap</td>
+            <td>BIC、PGDX、Level Up KL、IGDX</td>
+            <td>取得海外曝光與展商來源，成本低</td>
+            <td>取得台灣玩家與 G-EIGHT 現場曝光</td>
+            <td>影展 / 設計展常見；亞洲 indie 遊戲展尚未制度化</td>
+          </tr>
+          <tr>
+            <td>Curated Picks 交換</td>
+            <td>BitSummit、Tokyo Game Dungeon、BIC、TGS Indie House</td>
+            <td>借到對方策展公信力，增加國際內容</td>
+            <td>讓其入選作品延伸到另一市場</td>
+            <td>Day of the Devs、Indie Megabooth 類策展品牌；亞洲可做更明確的跨展 Picks</td>
+          </tr>
+          <tr>
+            <td>G-EIGHT Taiwan Selection</td>
+            <td>BIC、PGDX、GameVerse、Level Up KL</td>
+            <td>把 G-EIGHT 做成台灣 indie 對外窗口</td>
+            <td>獲得高品質台灣內容與國際化展區</td>
+            <td>國家館 / country showcase 常見；G-EIGHT 可做小型精品版</td>
+          </tr>
+          <tr>
+            <td>Overseas Picks at G-EIGHT</td>
+            <td>BitSummit、Tokyo Game Dungeon、BIC、SEA 展會</td>
+            <td>增加國際作品與展會新鮮度</td>
+            <td>讓其展商低成本測試台灣 / 華語玩家</td>
+            <td>Guest country / guest festival 概念常見於影展；亞洲遊戲展可補位</td>
+          </tr>
+          <tr>
+            <td>Guest Curator</td>
+            <td>BitSummit、BIC、Day of the Devs 型策展人</td>
+            <td>提升 G-EIGHT 的國際策展可信度</td>
+            <td>對方策展品牌獲得亞洲延伸曝光</td>
+            <td>藝術節 / 影展常見；亞洲 indie 遊戲展較少正式化</td>
+          </tr>
+          <tr>
+            <td>Shared Award / Partner Award</td>
+            <td>BitSummit、BIC、TGS Indie House、平台商</td>
+            <td>建立「被 G-EIGHT 認可」的外部信號</td>
+            <td>對方品牌與優秀作品共同露出</td>
+            <td>IGF、IndieCade、影展 partner award；亞洲可形成 Asia indie recognition</td>
+          </tr>
+          <tr>
+            <td>Publisher Scouting List</td>
+            <td>Publisher、BIC、Level Up KL、IGDX</td>
+            <td>補足 B2B 影響力，讓展會不只靠玩家人流</td>
+            <td>節省 publisher 篩選團隊的時間</td>
+            <td>GDC / Gamescom meeting systems；G-EIGHT 可做輕量 curated list</td>
+          </tr>
+          <tr>
+            <td>Hosted Buyer Program</td>
+            <td>Publisher、平台、投資人、政府單位</td>
+            <td>提升買方密度與國際商務可信度</td>
+            <td>買方獲得被篩選過的開發者接觸機會</td>
+            <td>MICE 展會常見；亞洲 indie 展少見，潛力高但需謹慎驗證</td>
+          </tr>
+          <tr>
+            <td>Joint Pitch Session</td>
+            <td>BIC、Level Up KL、IGDX、publisher</td>
+            <td>創造可被媒體與產業理解的事件</td>
+            <td>對方獲得團隊 pipeline 與展示舞台</td>
+            <td>GDC pitch、Nordic Game pitch；亞洲可做 Asia Indie Pitch Night</td>
+          </tr>
+          <tr>
+            <td>Market Validation Report</td>
+            <td>BitSummit 入選團隊、海外展商、publisher</td>
+            <td>把 G-EIGHT 玩家社群轉化成可回報的商業資料</td>
+            <td>取得台灣 / 華語玩家反應，降低亞洲投入風險</td>
+            <td>PAX 展商回饋、user research report；G-EIGHT 很適合建立標準格式</td>
+          </tr>
+          <tr>
+            <td>Demo Station 代展</td>
+            <td>歐美 / SEA / BitSummit / BIC 入選團隊</td>
+            <td>增加國際內容，建立低門檻海外參展產品</td>
+            <td>不用飛台灣也能取得曝光與市場測試</td>
+            <td>國家館代理參展常見；G-EIGHT 可把它產品化</td>
+          </tr>
+          <tr>
+            <td>Joint Online Showcase</td>
+            <td>BIC、PGDX、SEA 展會</td>
+            <td>低成本測試合作轉換率</td>
+            <td>雙方都能取得線上曝光與名單資料</td>
+            <td>INDIE Live Expo、Day of the Devs digital；可作為合作前 pilot</td>
+          </tr>
+          <tr>
+            <td>Asia Indie Circuit Calendar</td>
+            <td>BitSummit、BIC、G-EIGHT、TGS Indie House</td>
+            <td>讓 G-EIGHT 進入亞洲 indie 年度路線</td>
+            <td>展商更容易規劃亞洲巡迴，publisher 更容易追蹤作品</td>
+            <td>歐美 festival circuit 概念成熟；亞洲 indie 展缺清楚 circuit</td>
+          </tr>
+          <tr>
+            <td>Talent / Student Exchange</td>
+            <td>BIC、韓國 / SEA 學校、政府單位</td>
+            <td>補強開發者社群與年輕創作者 pipeline</td>
+            <td>對方獲得台灣展示與跨國學習場景</td>
+            <td>GDC student programs；亞洲可與文化 / 教育單位連動</td>
+          </tr>
+          <tr>
+            <td>Sponsor Package Exchange</td>
+            <td>BIC、台北電玩展、SEA 展會</td>
+            <td>讓贊助商跨展曝光，提高方案單價</td>
+            <td>對方共享商業資源與贊助觸點</td>
+            <td>巡迴贊助 / festival network sponsorship；亞洲 indie sponsor bundle 尚少見</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note p">判斷：對 BIC / PGDX / GameVerse，G-EIGHT 可以主動提出展位交換、Taiwan Selection、Picks 與 pitch 類合作；對 BitSummit，應提高合作層級，主打 Asia Indie Circuit、Partner Award、Market Validation Report，而不是只談換展位。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">G-EIGHT 的相對優勢</div>
+    <div class="grid">
+      <div class="card">
+        <h3>純 indie 濃度高</h3>
+        <p>台北電玩展與 Gamescom Asia 規模更大，但它們是綜合展。G-EIGHT 的價值在於觀眾是主動來看 indie，而不是順路看到 indie。</p>
+        <div class="quote">You are not competing with AAA booths for attention. G-EIGHT gives indie games a focused audience.</div>
+      </div>
+      <div class="card">
+        <h3>台灣 / 華語市場測試點</h3>
+        <p>對海外團隊而言，台灣不是最大市場，但可以作為低風險測試點：繁中在地化、亞洲玩家反應、角色偏好、定價接受度、wishlist / demo 轉換。</p>
+        <div class="quote">Use G-EIGHT as a low-risk APAC validation point before committing to larger Asian campaigns.</div>
+      </div>
+      <div class="card">
+        <h3>adult / mature 可控展示</h3>
+        <p>多數主流遊戲展對 adult / mature 內容不友善或規範模糊。G-EIGHT 若能制度化 18+ 展區，會形成其他 indie 展不一定具備的差異化。</p>
+        <div class="quote">G-EIGHT can offer a clearly managed 18+ showcase for mature narrative, romance, visual novel, and adult indie games.</div>
+      </div>
+      <div class="card">
+        <h3>年末檔期</h3>
+        <p>12 月可作為年度收尾的亞洲玩家測試與明年度亞洲展會規劃節點，與 BitSummit、Gamescom、TGS、台北電玩展錯開。</p>
+        <div class="quote">G-EIGHT sits at the end of the year, making it useful for APAC planning, wishlist pushes, and next-year publishing decisions.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pane" id="pane-brand">
+  <div class="section">
+    <div class="section-title">品牌影響力比較</div>
+    <div class="note">以下為策略評估用的相對分數，10 分為最高。分數不是精確量化，而是用來判斷 G-EIGHT 該補哪一塊。</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>展會</th><th>玩家品牌</th><th>開發者品牌</th><th>B2B 影響力</th><th>國際媒體</th><th>政府 / 產業背書</th><th>G-EIGHT 應對</th></tr></thead>
+        <tbody>
+          <tr><td>Gamescom</td><td class="score high">10</td><td class="score mid">8</td><td class="score high">10</td><td class="score high">10</td><td class="score high">9</td><td>作為國際 B2B 標竿，不正面競爭</td></tr>
+          <tr><td>Tokyo Game Show</td><td class="score high">9</td><td class="score mid">7</td><td class="score mid">8</td><td class="score high">9</td><td class="score high">9</td><td>作為日本 / 亞洲商業展標竿</td></tr>
+          <tr><td>BitSummit</td><td class="score mid">7</td><td class="score high">9</td><td class="score mid">8</td><td class="score mid">8</td><td class="score mid">8</td><td>最重要直接對標</td></tr>
+          <tr><td>BIC</td><td class="score mid">6</td><td class="score mid">8</td><td class="score mid">7</td><td class="score mid">6</td><td class="score high">9</td><td>政府合作與開發者社群標竿</td></tr>
+          <tr><td>PAX</td><td class="score high">9</td><td class="score mid">7</td><td class="score low">5</td><td class="score mid">7</td><td class="score low">4</td><td>玩家文化與社群體驗標竿</td></tr>
+          <tr><td>台北電玩展 Indie House</td><td class="score mid">8</td><td class="score mid">7</td><td class="score mid">7</td><td class="score mid">6</td><td class="score mid">8</td><td>台灣互補合作對象</td></tr>
+          <tr><td>Gamescom Asia</td><td class="score mid">8</td><td class="score mid">6</td><td class="score mid">7</td><td class="score mid">7</td><td class="score mid">7</td><td>SEA 區域競合對象</td></tr>
+          <tr><td>G-EIGHT</td><td class="score mid">6</td><td class="score mid">6</td><td class="score low">2</td><td class="score low">3</td><td class="score low">2</td><td>強在台灣玩家與純 indie，弱在 B2B、國際與制度背書</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">品牌缺口</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>缺口</th><th>現況</th><th>補強方式</th></tr></thead>
+        <tbody>
+          <tr><td>國際辨識度</td><td>台灣玩家圈強，海外展商認知弱</td><td>建立英文招商頁、海外入選名單、英文展後報告</td></tr>
+          <tr><td>入選光環</td><td>有參展事實，但缺乏 selection brand</td><td>建立 G-EIGHT Selection、公開評審、入選徽章</td></tr>
+          <tr><td>B2B 信任</td><td>尚未形成固定發行商 / 平台出席習慣</td><td>先做邀請制媒合場，再升級 Business Day</td></tr>
+          <tr><td>政府背書</td><td>目前較像民間自力展會</td><td>爭取 TAICCA、台北市文化局、數位部合作</td></tr>
+          <tr><td>媒體傳播點</td><td>缺少可年度報導的固定事件</td><td>玩家票選、評審獎、Pitch Night、adult / mature showcase</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">相對弱點與優先級</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>弱點</th><th>為什麼重要</th><th>直接後果</th><th>補強優先級</th></tr></thead>
+        <tbody>
+          <tr><td>缺正式 B2B 機制</td><td>海外展商會問除了玩家試玩還能拿到什麼</td><td>高單價展商與 publisher 較難成交</td><td><span class="badge badge-r">最高</span></td></tr>
+          <tr><td>缺公開評審 / 獎項制度</td><td>入選無法變成履歷與媒體素材</td><td>品牌影響力難外溢</td><td><span class="badge badge-r">最高</span></td></tr>
+          <tr><td>缺英文化招商資產</td><td>海外 BD 溝通成本高</td><td>每次都要重新解釋 G-EIGHT</td><td><span class="badge badge-o">高</span></td></tr>
+          <tr><td>缺展後 ROI report</td><td>展商續展與加購缺乏數據</td><td>價格上不去</td><td><span class="badge badge-o">高</span></td></tr>
+          <tr><td>政府 / 產業合作弱</td><td>國際展商信任與補助不足</td><td>海外展商來台成本高</td><td><span class="badge badge-y">中高</span></td></tr>
+          <tr><td>國際媒體弱</td><td>海外曝光有限</td><td>對 publisher / platform 的吸引力不足</td><td><span class="badge badge-y">中</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="pane" id="pane-partner">
+  <div class="section">
+    <div class="section-title">合作路線：從願望清單改成可成交方案</div>
+    <div class="highlight">
+      <h3>目前合作路線不能只寫「互推、交換、共同評審」。對方真正會問的是：我為什麼要投入資源？風險多大？第一步能不能很小？合作後我能對外說什麼？</h3>
+      <p>因此，G-EIGHT 的合作策略應從「找誰合作」改成「把合作產品化」。對 BitSummit / BIC 這類主辦方，賣點是展商的第二市場延伸；對 publisher，賣點是低成本 scouting；對政府與產業單位，賣點是台灣 indie 的國際節點角色。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">對方視角檢查</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>對象</th><th>看到目前研究會認同什麼</th><th>仍會追問什麼</th><th>合作提案必須補上的答案</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Publisher / platform</td>
+            <td>G-EIGHT 有台灣核心玩家、純 indie 場域、12 月檔期與 adult / mature 差異化</td>
+            <td>我能找到什麼作品？能接觸多少有效 developer lead？我需要投入多少時間？</td>
+            <td>curated pitch list、scouting pass、1:1 meeting slots、pre-event catalog、post-event lead report</td>
+          </tr>
+          <tr>
+            <td>BitSummit 主辦方</td>
+            <td>G-EIGHT 理解 BitSummit 的日本入口與 Business Day 價值，且月份互補</td>
+            <td>G-EIGHT 能幫 BitSummit 展商補什麼？會不會只是借 logo？我方營運負擔多大？</td>
+            <td>BitSummit Picks at G-EIGHT、Taiwan market report、低負擔 pilot、共同對外敘事</td>
+          </tr>
+          <tr>
+            <td>BIC / SEA 展會</td>
+            <td>G-EIGHT 可作為韓國與東南亞團隊測試華語玩家的節點</td>
+            <td>台灣市場足夠有價值嗎？團隊第一次來台成本如何降低？</td>
+            <td>first-time exhibitor package、country focus showcase、中文支援、展後玩家回饋</td>
+          </tr>
+          <tr>
+            <td>台北電玩展 / 台灣產業單位</td>
+            <td>1 月大型綜合展與 12 月純 indie 展可以互補</td>
+            <td>合作是否會稀釋品牌？誰負責招商、資料、媒合？</td>
+            <td>Taiwan Indie Year-Round Showcase、共同年度行事曆、雙展入選回訪機制</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">合作產品化：G-EIGHT 可以拿出去談的 6 個方案</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>合作產品</th><th>目標對象</th><th>對方利益</th><th>G-EIGHT 拿到什麼</th><th>第一版 Pilot</th><th>成功指標</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Cross-Event Picks</td>
+            <td>BitSummit、BIC、台北電玩展 Indie House</td>
+            <td>讓入選團隊在另一個亞洲市場得到二次曝光，不增加太多營運成本</td>
+            <td>借到對方策展公信力，建立 G-EIGHT Selection 的國際感</td>
+            <td>各自推薦 3-5 款作品，做線上頁面 + 現場小型展示</td>
+            <td>推薦作品參展數、社群曝光、媒體提及、隔年續約意願</td>
+          </tr>
+          <tr>
+            <td>APAC Publisher Scouting List</td>
+            <td>publisher、platform、投資人</td>
+            <td>不用逛完整展場，就能先看被 G-EIGHT 篩過的 20-30 組團隊</td>
+            <td>建立 publisher 出席理由，補足 B2B 影響力</td>
+            <td>展前 2 週寄 curated catalog，展期安排 10-15 場 1:1 會議</td>
+            <td>會議數、有效 lead、展後 follow-up、publisher 回訪率</td>
+          </tr>
+          <tr>
+            <td>First-Time Overseas Exhibitor Package</td>
+            <td>SEA indie、韓國 indie、歐美 mature / VN 團隊</td>
+            <td>降低第一次來台成本，獲得中文支援與玩家回饋</td>
+            <td>擴大海外展商來源，提高國際比例</td>
+            <td>5-8 組 shared booth / demo station + 展後 report</td>
+            <td>海外展商數、成本回收率、隔年升級攤位比例</td>
+          </tr>
+          <tr>
+            <td>BitSummit / BIC Picks at G-EIGHT</td>
+            <td>BitSummit、BIC 主辦方與其入選團隊</td>
+            <td>讓已入選作品延伸到台灣玩家，不需要主辦方大規模出人</td>
+            <td>取得高品質內容與國際背書，強化展會可看性</td>
+            <td>3 款遠端代展 + 2 款現場參展，掛 partner label</td>
+            <td>玩家試玩數、wishlist / QR scan、展後市場回饋報告</td>
+          </tr>
+          <tr>
+            <td>Taiwan Indie Year-Round Showcase</td>
+            <td>台北電玩展、TAICCA、台北市文化局、數位部</td>
+            <td>把台灣 indie 從單一活動變成全年國際曝光節點</td>
+            <td>取得政府 / 產業背書與海外招商資源</td>
+            <td>1 月 TGS Indie House + 12 月 G-EIGHT 共同年度頁面</td>
+            <td>共同曝光量、海外展商轉換、政府補助或正式支持</td>
+          </tr>
+          <tr>
+            <td>Mature / Adult APAC Showcase</td>
+            <td>adult / mature publisher、VN 發行商、平台</td>
+            <td>取得主流展會少有的可控線下展示與亞洲玩家測試</td>
+            <td>建立 G-EIGHT 的差異化招商品類</td>
+            <td>3-5 款 mature / VN 代展 + 18+ 動線與內容規範</td>
+            <td>入區人流、QR scan、玩家問卷、展商續談率</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">主辦方合作優先級：不是誰最大，而是誰最容易一起做出成果</div>
+    <div class="grid">
+      <div class="card">
+        <h3><span class="badge badge-g">Priority 1</span> BitSummit</h3>
+        <p><strong>應改成低負擔合作：</strong>不要一開始談大型聯名或共同主辦，先談 BitSummit Picks at G-EIGHT。</p>
+        <ul>
+          <li><strong>對 BitSummit 的價值：</strong>幫入選 / 得獎團隊延伸到台灣與華語玩家，增加展商成功故事。</li>
+          <li><strong>G-EIGHT 提供：</strong>現場 demo station、中文玩家回饋、wishlist / QR tracking、展後 market note。</li>
+          <li><strong>第一步：</strong>邀請 3 組 BitSummit Selection / award-adjacent 團隊做台灣 showcase。</li>
+          <li><strong>避免說法：</strong>不要說「借 BitSummit 品牌」，要說「幫 BitSummit 展商延伸亞洲市場」。</li>
+        </ul>
+        <div class="quote">BitSummit is the indie gateway to Japan. G-EIGHT can help selected teams test Taiwan and Chinese-speaking APAC players after Kyoto.</div>
+      </div>
+      <div class="card">
+        <h3><span class="badge badge-g">Priority 2</span> BIC</h3>
+        <p><strong>應主打韓國 indie 出海：</strong>BIC 的國際多元性與開發者社群強，G-EIGHT 可提供華語市場測試場。</p>
+        <ul>
+          <li><strong>對 BIC 的價值：</strong>讓韓國與國際入選團隊多一個亞洲曝光節點。</li>
+          <li><strong>G-EIGHT 提供：</strong>Korea Picks 小專區、玩家票選、publisher scouting list。</li>
+          <li><strong>第一步：</strong>3-5 組 BIC 團隊遠端代展或 shared booth。</li>
+          <li><strong>延伸：</strong>邀請韓國 publisher / platform 參與 Industry Lite。</li>
+        </ul>
+        <div class="quote">BIC helps the world discover Korean and global indie games. G-EIGHT can add a Taiwan-facing validation layer.</div>
+      </div>
+      <div class="card">
+        <h3><span class="badge badge-g">Priority 3</span> 台北電玩展 Indie House</h3>
+        <p><strong>應做台灣年度雙節點：</strong>不要把台北電玩展當競品，而是包裝成 1 月大型曝光 + 12 月深度社群回訪。</p>
+        <ul>
+          <li><strong>對 TGS 的價值：</strong>延長 Indie House 入選團隊在台灣市場的曝光週期。</li>
+          <li><strong>G-EIGHT 提供：</strong>年末玩家回饋、深度試玩、G-EIGHT Selection 回訪。</li>
+          <li><strong>第一步：</strong>共同整理 Taiwan Indie Calendar，互相推薦入選團隊。</li>
+          <li><strong>政府敘事：</strong>台灣 indie 不是一次性活動，而是全年文化輸出平台。</li>
+        </ul>
+        <div class="quote">Taipei Game Show gives global exposure in January. G-EIGHT gives focused indie community engagement in December.</div>
+      </div>
+      <div class="card">
+        <h3><span class="badge badge-b">Priority 4</span> Gamescom Asia / SEA 展會</h3>
+        <p><strong>應做承接，不做正面競爭：</strong>Gamescom Asia 負責大規模區域曝光，G-EIGHT 負責精品 indie 與台灣玩家驗證。</p>
+        <ul>
+          <li><strong>對 SEA 團隊的價值：</strong>低成本進入台灣，取得中文回饋與亞洲 publisher 接觸。</li>
+          <li><strong>G-EIGHT 提供：</strong>overseas first-time package、country focus、代展選項。</li>
+          <li><strong>第一步：</strong>從泰國、印尼、馬來西亞各找 1-2 組做 SEA Picks。</li>
+          <li><strong>招商時機：</strong>Gamescom Asia 後 2 週內接觸展商，銜接 12 月 G-EIGHT。</li>
+        </ul>
+        <div class="quote">After Gamescom Asia, G-EIGHT offers a focused Taiwan market validation point for SEA indie teams.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Publisher 合作路線：把 G-EIGHT 變成 scouting 工具</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>產品</th><th>包含內容</th><th>適合對象</th><th>收費 / 交換方式</th><th>為什麼會買單</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Scouting Pass</td>
+            <td>展前 catalog、推薦名單、現場導覽、10 場 1:1 快速會議</td>
+            <td>亞洲 publisher、平台 BD、投資人</td>
+            <td>低價業界票 / invite-only sponsor benefit</td>
+            <td>省下自行篩選展商的時間，快速接觸有品質的團隊</td>
+          </tr>
+          <tr>
+            <td>Publisher Roundtable</td>
+            <td>封閉式 60-90 分鐘小型圓桌，5-8 家 publisher + 8-12 組開發者</td>
+            <td>需要亞洲 pipeline 的發行商</td>
+            <td>邀請制，先不重收費，以建立案例為主</td>
+            <td>比一般展場閒聊更有效率，且不需要完整 Business Day</td>
+          </tr>
+          <tr>
+            <td>Curated Pitch Hour</td>
+            <td>6-8 組團隊，每組 5 分鐘 pitch + 5 分鐘 QA</td>
+            <td>publisher、platform、政府 / accelerator</td>
+            <td>可由 sponsor 冠名</td>
+            <td>媒體、publisher、政府都能理解的可報導事件</td>
+          </tr>
+          <tr>
+            <td>Post-Event Lead Report</td>
+            <td>會議數、作品類型、團隊需求、follow-up 狀態、玩家信號</td>
+            <td>publisher、贊助商、政府單位</td>
+            <td>包含在 sponsor / partner package</td>
+            <td>把「逛展」變成可回報的商業成果</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note b">重點：G-EIGHT 不需要立刻複製 BitSummit Business Day。更務實的是先把 publisher 的參與成本降到最低，讓他們用 2-3 小時完成 scouting，而不是要求他們為整天業界日付高價。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">合作提案的四階段路徑</div>
+    <div class="timeline">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h4>Phase 1：低風險互測</h4>
+        <p>互掛 partner、共同 shortlist、3-5 組 Cross-Event Picks、1 場線上 pitch。目標不是營收，而是建立第一個合作案例與對外敘事。</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h4>Phase 2：現場產品化</h4>
+        <p>把 Picks 變成現場小專區或 demo station，加入玩家投票、QR tracking、publisher scouting。開始產出展後 report。</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h4>Phase 3：Asia Indie Circuit</h4>
+        <p>與 BitSummit、BIC、台北電玩展形成年度互推，讓展商有亞洲巡迴路徑，讓 publisher 有固定 scouting list。</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h4>Phase 4：正式商務化</h4>
+        <p>當 publisher / partner 回訪率穩定後，再導入 MeetToMatch、Hosted Buyer、贊助冠名或正式 Business Day。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">合作對外敘事</div>
+    <div class="grid">
+      <div class="card">
+        <h3>對 BitSummit / BIC</h3>
+        <div class="quote">We are not trying to compete with your event. We want to help selected teams extend their Asian visibility into Taiwan and Chinese-speaking players with a low-friction showcase and post-event feedback.</div>
+      </div>
+      <div class="card">
+        <h3>對 publisher</h3>
+        <div class="quote">G-EIGHT can become a lightweight APAC scouting stop: a curated indie catalog, compact 1:1 meetings, and player signal reports from Taiwan's high-intent indie audience.</div>
+      </div>
+      <div class="card">
+        <h3>對政府 / 產業單位</h3>
+        <div class="quote">By connecting BitSummit, BIC, Taipei Game Show and G-EIGHT, Taiwan can position itself as a practical indie game bridge between Japan, Korea, Southeast Asia and Chinese-speaking players.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pane" id="pane-strategy">
+  <div class="section">
+    <div class="section-title">四種可能路線</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>路線</th><th>核心假設</th><th>需要成立的前提</th><th>主要風險</th><th>觀察指標</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>深度 B2C 玩家展</td>
+            <td>G-EIGHT 的最大資產是高意圖玩家，而不是 B2B 密度</td>
+            <td>玩家願意為更好體驗、長試玩、主題策展或 premium ticket 付費</td>
+            <td>展商會質疑商業回收不夠清楚，海外招商難度仍高</td>
+            <td>試玩時長、重複入場、premium ticket 接受度、展後 wishlist / QR 成效</td>
+          </tr>
+          <tr>
+            <td>Asia Indie Circuit 節點</td>
+            <td>G-EIGHT 可以成為 BitSummit、BIC、台北電玩展之間的台灣節點</td>
+            <td>其他展會認為 G-EIGHT 能替其展商創造第二市場價值</td>
+            <td>若缺乏實際轉換數據，合作會停留在 logo exchange</td>
+            <td>Cross-Event Picks 數量、合作展會續約、被推薦團隊回訪率</td>
+          </tr>
+          <tr>
+            <td>Publisher Scouting Node</td>
+            <td>發行商需要更有效率地接觸台灣 / SEA / mature indie 團隊</td>
+            <td>G-EIGHT 能提供有篩選品質的 catalog、meeting slots 與 post-event lead report</td>
+            <td>買方密度不足時，過早做 Business Day 會顯得空</td>
+            <td>publisher 出席數、有效會議數、展後 follow-up、實際簽約或代理洽談</td>
+          </tr>
+          <tr>
+            <td>Adult / Mature 差異化平台</td>
+            <td>主流展會對 mature / adult indie 容納度不足，G-EIGHT 可建立稀缺展示場景</td>
+            <td>內容規範、18+ 動線、場地方與贊助商風險邊界都能制度化</td>
+            <td>若溝通失焦，可能傷害整體 indie 品牌與政府合作彈性</td>
+            <td>18+ 區人流、展商續談、媒體語言是否維持在 mature indie / VN / narrative</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">情境預測</div>
+    <div class="grid">
+      <div class="card">
+        <h3>保守情境：維持台灣玩家展</h3>
+        <p>G-EIGHT 繼續靠玩家社群與本地展商成長，海外合作偶發。品牌穩定但國際影響力提升有限，展商費與贊助天花板較早出現。</p>
+        <p><strong>可能結果：</strong>玩家口碑維持，但海外展商會把 G-EIGHT 視為可選項，而非年度必排節點。</p>
+      </div>
+      <div class="card">
+        <h3>中性情境：成為台灣 indie 年末節點</h3>
+        <p>與台北電玩展形成 1 月 / 12 月互補，G-EIGHT 強化年末玩家回饋、深度試玩和展商資料回報。國際合作仍有限，但對台灣 indie 生態的定位變清楚。</p>
+        <p><strong>可能結果：</strong>更容易取得本地產業支持，也更容易向海外展商解釋參展目的。</p>
+      </div>
+      <div class="card">
+        <h3>進取情境：亞洲精品 indie circuit</h3>
+        <p>G-EIGHT 與 BitSummit、BIC、SEA 展會建立 Cross-Event Picks 與 publisher scouting list。展會不一定變很大，但在亞洲 indie 網絡中的位置變重要。</p>
+        <p><strong>可能結果：</strong>品牌影響力上升，國際展商比例提升，但需要穩定營運資料與合作維護能力。</p>
+      </div>
+      <div class="card">
+        <h3>高風險情境：過早轉向 B2B</h3>
+        <p>若在 publisher 密度、展商 catalog、媒合流程尚未成熟前就推出正式 Business Day，可能造成業界人士體驗不足，反而降低信任。</p>
+        <p><strong>可能結果：</strong>投入成本上升，但短期收入與品牌效果不成比例。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">需要被驗證的假設</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>假設</th><th>為什麼重要</th><th>如何觀察</th><th>若不成立的意義</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>海外展商願意為台灣玩家測試付費</td>
+            <td>這決定 G-EIGHT 能否出售 market validation，而不是只賣攤位</td>
+            <td>海外首次參展包詢問率、代展方案接受度、展後報告需求</td>
+            <td>海外招商應降速，回到本地展商與台灣品牌深耕</td>
+          </tr>
+          <tr>
+            <td>publisher 願意為 curated scouting 節省時間</td>
+            <td>這決定 Industry Lite 是否值得做</td>
+            <td>publisher 是否願意提前看 catalog、預約會議、展後追蹤</td>
+            <td>不應做正式 Business Day，只保留媒體 / publisher 導覽</td>
+          </tr>
+          <tr>
+            <td>BitSummit / BIC 願意讓入選團隊延伸到 G-EIGHT</td>
+            <td>這決定 Asia Indie Circuit 是否可行</td>
+            <td>對方是否接受 3-5 組 pilot、是否願意共同對外露出</td>
+            <td>合作應退回展商層級，不必追求主辦方層級合作</td>
+          </tr>
+          <tr>
+            <td>adult / mature 展區可制度化且不傷害主品牌</td>
+            <td>這決定 mature showcase 是成長引擎還是品牌風險</td>
+            <td>場地方接受度、贊助商反應、媒體標題、玩家動線投訴</td>
+            <td>應只做代展 / 封閉展示，不做高調公開專區</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">讀者應帶走的決策問題</div>
+    <div class="grid">
+      <div class="card">
+        <h3>G-EIGHT 最應保護的是什麼？</h3>
+        <p>是玩家社群信任、純 indie 品牌、國際化潛力，還是 adult / mature 差異化？不同答案會導向不同取捨。</p>
+      </div>
+      <div class="card">
+        <h3>合作的最小可行單位是什麼？</h3>
+        <p>主辦方級聯名不一定是第一步。也許 3 款 Picks、1 份 shortlist、1 場 publisher roundtable 就足以驗證合作價值。</p>
+      </div>
+      <div class="card">
+        <h3>哪些數據會改變判斷？</h3>
+        <p>如果沒有試玩、QR、wishlist、會議、follow-up、續展等指標，合作與品牌影響力會停留在主觀感受。</p>
+      </div>
+      <div class="card">
+        <h3>什麼事情暫時不該做？</h3>
+        <p>過早做正式 Business Day、過度承諾 publisher 成效、或把 adult / mature 包裝得太像成人展，都可能讓策略跑偏。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">參考基礎</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>既有研究</th><th>本頁整合用途</th></tr></thead>
+        <tbody>
+          <tr><td>05_BitSummit研究.html</td><td>Business Day、MeetToMatch、政府合作、評審與獎項制度</td></tr>
+          <tr><td>06_歐美獨立遊戲展深度研究.html</td><td>PAX、Gamescom、BIC、Gamescom Asia、台北電玩展等展會比較</td></tr>
+          <tr><td>07_成人遊戲海外市場地圖與招商研究.html</td><td>adult / mature game 展區、代展服務與海外 BD 優先級</td></tr>
+          <tr><td>資料 / 05_參展商ROI分析.md</td><td>展商 ROI、wishlist、B2B lead、展後報告與風險邊界</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="footer">競品展會對標與合作可能 · G-EIGHT · 2026-06-22</div>
+
+<script>
+const partnerDetails = {
+  bitsummit: {
+    title: 'BitSummit',
+    badge: '戰略互惠',
+    badgeClass: 'badge-o',
+    position: '成熟度高於 G-EIGHT，但同屬亞洲純 indie 展會，理想情況下可接近戰略同級。',
+    attitude: '不用低姿態，但合作形式要高於單純換展位。',
+    fit: 'Asia Indie Circuit、BitSummit Picks at G-EIGHT、Partner Award、台灣玩家市場驗證報告、共同 shortlist。',
+    avoid: '只談 booth swap，會低估雙方品牌；直接要求共同主辦也過早。'
+  },
+  tgd: {
+    title: 'Tokyo Game Dungeon',
+    badge: '輕量互惠',
+    badgeClass: 'badge-o',
+    position: '日本 indie 社群與開發者展示屬性較強，規模與國際品牌低於 BitSummit / TGS，但 indie 純度與名單探索價值高。',
+    attitude: 'G-EIGHT 可以主動提出低成本互推，把它當成日本 indie pipeline 與小規模合作試點。',
+    fit: 'Tokyo Game Dungeon Picks at G-EIGHT、G-EIGHT Taiwan Picks、入選 / 參展團隊名單追蹤、線上 pitch、少量日本團隊代展測試。',
+    avoid: '一開始就談大型官方聯名或高成本展區；也不應把它當成 Tokyo Game Show 等級的商業入口。'
+  },
+  bic: {
+    title: 'BIC',
+    badge: 'G-EIGHT 主導互惠',
+    badgeClass: 'badge-g',
+    position: '政府 / 產業資源強，但玩家展聲量與區域曝光上 G-EIGHT 可更主動。',
+    attitude: '可談交換，但由 G-EIGHT 設計合作框架。',
+    fit: '互換展位、Korea Picks at G-EIGHT、Taiwan Selection at BIC、共同 publisher roundtable、人才 / 學生交流。',
+    avoid: '只把 BIC 當學習對象，會忽略 G-EIGHT 可提供更成熟玩家場域與台灣曝光。'
+  },
+  tgsi: {
+    title: '台北電玩展 Indie House',
+    badge: '戰略互補',
+    badgeClass: 'badge-g',
+    position: '整體展會大於 G-EIGHT，但定位不同：綜合展 vs 純 indie。',
+    attitude: '不分上下，做 1 月 / 12 月台灣雙節點。',
+    fit: 'Taiwan Indie Year-Round Showcase、雙展入選回訪、年度 indie calendar、海外展商資料互補、共同政府敘事。',
+    avoid: '把彼此包裝成競品，或要求對方把 B2B 資源直接轉給 G-EIGHT。'
+  },
+  gca: {
+    title: 'Gamescom Asia / Thailand Game Show',
+    badge: '承接補充',
+    badgeClass: 'badge-b',
+    position: '品牌與規模明顯高於 G-EIGHT，但 indie 深度與台灣市場不是核心。',
+    attitude: '不談平等合作，談 SEA 展商後續台灣 validation。',
+    fit: 'Gamescom Asia 後續展商接觸、SEA first-time package、精品 indie 台灣測試。',
+    avoid: '要求成為官方 partner 或交換資源，除非已有明確展商轉換數據。'
+  },
+  tgs: {
+    title: 'Tokyo Game Show',
+    badge: '借勢承接',
+    badgeClass: 'badge-y',
+    position: '商業大展品牌遠高於 G-EIGHT，但 indie 與台灣玩家深度驗證不是主軸。',
+    attitude: '把 TGS 當成名單與市場訊號來源，不急著談主辦方級合作。',
+    fit: 'TGS 後續 outreach、海外 first-time package、入選 indie 名單追蹤、publisher scouting list 補強。',
+    avoid: '直接談大型官方合作或共同主辦，成本高且 G-EIGHT 可交換籌碼不足。'
+  },
+  level: {
+    title: 'Level Up KL / IGDX',
+    badge: '區域 pipeline',
+    badgeClass: 'badge-b',
+    position: '區域產業 / B2B 導向強，與 G-EIGHT 的玩家場域互補。',
+    attitude: 'G-EIGHT 可吸收其 developer pipeline，但需尊重其 B2B / 政府資源。',
+    fit: 'SEA indie delegation、country focus、publisher scouting list、政府補助展商包、joint pitch session。',
+    avoid: '只談玩家展曝光，會忽略對方更重視 B2B / developer support。'
+  },
+  pgd: {
+    title: 'PGDX',
+    badge: 'G-EIGHT 主導吸納',
+    badgeClass: 'badge-p',
+    position: '規模與國際成熟度通常小於 G-EIGHT，但可能提供東南亞團隊來源。',
+    attitude: '不必對等交換，可用 pipeline / country watchlist 管理。',
+    fit: 'SEA Picks、名單交換、單場線上 pitch、1-2 組展商測試、country focus 小展示。',
+    avoid: '過早承諾大規模專區或年度合作；把對方視為同級主辦方聯盟。'
+  },
+  gameverse: {
+    title: 'Vietnam GameVerse',
+    badge: '培養型 pipeline',
+    badgeClass: 'badge-p',
+    position: '區域活動成熟度不一，但可作為越南與 SEA 團隊的早期觀察來源。',
+    attitude: '先小規模驗證名單品質與展商回訪率，再決定是否升級合作。',
+    fit: 'country watchlist、1-2 組展商測試、online showcase、越南團隊小型主題展示。',
+    avoid: '一開始就做大型 Vietnam Pavilion 或長期聯名，會讓執行成本先於成效。'
+  },
+  pax: {
+    title: 'PAX / EGX',
+    badge: '參考學習',
+    badgeClass: 'badge-y',
+    position: '玩家品牌強，但地理與合作互補性較低。',
+    attitude: '主要學玩家文化與社群體驗，不急著談主辦方合作。',
+    fit: '觀察 PAX Rising / Leftfield Collection 入選團隊，作為海外招商來源。',
+    avoid: '投入主辦方級合作談判，成本高且轉換不明確。'
+  }
+};
+function setPartnerText(id,text){
+  const node = document.getElementById(id);
+  if(node) node.textContent = text;
+}
+function showPartner(id,btn){
+  const detail = partnerDetails[id];
+  if(!detail) return;
+  document.querySelectorAll('.quad .plot').forEach(plot=>{
+    plot.classList.remove('active');
+    plot.setAttribute('aria-pressed','false');
+  });
+  if(btn){
+    btn.classList.add('active');
+    btn.setAttribute('aria-pressed','true');
+  }
+  setPartnerText('partner-title', detail.title);
+  setPartnerText('partner-position', detail.position);
+  setPartnerText('partner-attitude', detail.attitude);
+  setPartnerText('partner-fit', detail.fit);
+  setPartnerText('partner-avoid', detail.avoid);
+  const meta = document.getElementById('partner-meta');
+  if(meta){
+    const badge = document.createElement('span');
+    badge.className = `badge ${detail.badgeClass}`;
+    badge.textContent = detail.badge;
+    meta.replaceChildren(badge);
+  }
+}
+function applyTheme(theme){
+  document.body.classList.toggle('light', theme === 'light');
+  document.querySelectorAll('.theme-toggle').forEach(btn=>{
+    btn.textContent = theme === 'light' ? '深色模式' : '淺色模式';
+  });
+}
+function toggleTheme(){
+  const next = document.body.classList.contains('light') ? 'dark' : 'light';
+  localStorage.setItem('geight-theme', next);
+  applyTheme(next);
+}
+applyTheme(localStorage.getItem('geight-theme') || 'dark');
+function show(id,btn){
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  const pane=document.getElementById('pane-'+id);
+  if(pane) pane.classList.add('active');
+  if(btn) btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
