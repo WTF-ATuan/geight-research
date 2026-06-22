@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G-EIGHT 研究總覽</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f13;--bg2:#1a1a24;--bg3:#13131e;--bg4:#111119;
+  --border:#2a2a3a;--border2:#1e1e2e;
+  --g:#64ffda;--g2:rgba(100,255,218,0.12);
+  --o:#ff8a65;--o2:rgba(255,138,101,0.12);
+  --p:#b388ff;--p2:rgba(179,136,255,0.12);
+  --b:#4fc3f7;--b2:rgba(79,195,247,0.12);
+  --y:#ffd54f;--y2:rgba(255,213,79,0.12);
+  --r:#ef5350;
+  --text:#e8e8f0;--muted:#8888aa;--dim:#555570;
+}
+body{font-family:'Segoe UI','PingFang TC','Microsoft JhengHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+body.light{
+  --bg:#f6f7fb;--bg2:#ffffff;--bg3:#eef1f7;--bg4:#f9fafc;
+  --border:#d8deea;--border2:#e6eaf2;
+  --g:#008f7a;--g2:rgba(0,143,122,0.12);
+  --o:#c8522b;--o2:rgba(200,82,43,0.12);
+  --p:#6f48c9;--p2:rgba(111,72,201,0.12);
+  --b:#1677b8;--b2:rgba(22,119,184,0.12);
+  --y:#9a6b00;--y2:rgba(154,107,0,0.14);
+  --r:#c62828;
+  --text:#182033;--muted:#5f6b82;--dim:#8a95a8;
+}
+body.light .header{background:linear-gradient(135deg,#f0e8ff 0%,#e8f2ff 50%,#e9f8ef 100%)}
+body.light .logo{background:linear-gradient(90deg,var(--text),var(--p),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+body.light .card h4,body.light .link-card h4,body.light .pillar h3,body.light .tl-title,body.light .status-val,body.light td{color:var(--text)}
+body.light tr:hover td{background:rgba(22,119,184,.04)}
+body.light .tl-dot{background:var(--bg)}
+.theme-toggle{margin-left:8px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--muted);border-radius:999px;padding:7px 12px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.theme-toggle:hover{color:var(--text);border-color:var(--p);background:rgba(179,136,255,.1)}
+body.light .theme-toggle{background:#fff;color:var(--muted);box-shadow:0 1px 2px rgba(16,24,40,.06)}
+
+/* HEADER */
+.header{
+  background:linear-gradient(135deg,#1a0533 0%,#0d1f3c 50%,#0a2a1a 100%);
+  padding:28px 32px 0;border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:100;
+}
+.header-top{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.logo{font-size:1.6rem;font-weight:800;background:linear-gradient(90deg,#fff,var(--p),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header-meta{font-size:11px;color:var(--dim);margin-left:auto}
+
+/* TABS */
+.tabs{display:flex;gap:2px;overflow-x:auto;padding-bottom:0;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  padding:10px 20px;font-size:13px;font-weight:500;
+  color:var(--muted);border:none;background:transparent;cursor:pointer;
+  border-radius:8px 8px 0 0;white-space:nowrap;
+  transition:all .2s;border-bottom:3px solid transparent;
+}
+.tab:hover{color:var(--text);background:rgba(255,255,255,0.04)}
+.tab.active{color:var(--text);border-bottom-color:var(--p);background:rgba(179,136,255,0.08)}
+
+/* CONTENT */
+.pane{display:none;max-width:1100px;margin:0 auto;padding:36px 24px 80px}
+.pane.active{display:block}
+
+/* SECTION */
+.section{margin-bottom:44px}
+.section-title{
+  font-size:.8rem;font-weight:700;color:var(--p);
+  letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:16px;display:flex;align-items:center;gap:10px;
+}
+.section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,#3a2a5a,transparent)}
+
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:24px}
+.kpi{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.kpi.g::before{background:linear-gradient(90deg,var(--g),#1de9b6)}
+.kpi.o::before{background:linear-gradient(90deg,#ff6b6b,#ffa726)}
+.kpi.p::before{background:linear-gradient(90deg,var(--p),#7c4dff)}
+.kpi.b::before{background:linear-gradient(90deg,var(--b),#0288d1)}
+.kpi.y::before{background:linear-gradient(90deg,var(--y),#ff8f00)}
+.kpi-label{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.kpi-val{font-size:1.7rem;font-weight:700;line-height:1.1}
+.kpi.g .kpi-val{color:var(--g)}.kpi.o .kpi-val{color:var(--o)}.kpi.p .kpi-val{color:var(--p)}
+.kpi.b .kpi-val{color:var(--b)}.kpi.y .kpi-val{color:var(--y)}
+.kpi-sub{font-size:11px;color:var(--dim);margin-top:5px}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--bg3);color:var(--muted);font-weight:600;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
+td{padding:10px 14px;border-bottom:1px solid var(--border2);color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,0.02)}
+.tbl-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:18px}
+.num{font-variant-numeric:tabular-nums;font-weight:600}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.5px}
+.badge-g{background:var(--g2);color:var(--g)}.badge-o{background:var(--o2);color:var(--o)}
+.badge-p{background:var(--p2);color:var(--p)}.badge-b{background:var(--b2);color:var(--b)}
+.badge-y{background:var(--y2);color:var(--y)}.badge-r{background:rgba(239,83,80,.12);color:var(--r)}
+
+/* CARDS */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px}
+.card h4{font-size:13px;font-weight:600;margin-bottom:8px;color:var(--text)}
+.card p{font-size:12px;color:var(--muted);line-height:1.7}
+.card ul{font-size:12px;color:var(--muted);padding-left:16px;line-height:1.9}
+
+/* TIMELINE */
+.timeline{position:relative;padding-left:28px}
+.timeline::before{content:'';position:absolute;left:7px;top:0;bottom:0;width:2px;background:var(--border)}
+.tl-item{position:relative;margin-bottom:20px}
+.tl-dot{position:absolute;left:-24px;top:4px;width:12px;height:12px;border-radius:50%;border:2px solid var(--p);background:var(--bg)}
+.tl-item.done .tl-dot{background:var(--g);border-color:var(--g)}
+.tl-item.now .tl-dot{background:var(--y);border-color:var(--y);box-shadow:0 0 8px var(--y)}
+.tl-year{font-size:10px;color:var(--dim);margin-bottom:3px;letter-spacing:1px}
+.tl-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px}
+.tl-sub{font-size:12px;color:var(--muted)}
+
+/* LINK CARDS */
+.link-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.link-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+  padding:18px 20px;text-decoration:none;color:var(--text);
+  display:flex;align-items:center;gap:14px;
+  transition:all .2s;
+}
+.link-card:hover{border-color:var(--p);background:rgba(179,136,255,0.06);transform:translateY(-2px)}
+.link-icon{font-size:1.6rem;flex-shrink:0}
+.link-card h4{font-size:13px;font-weight:600;margin-bottom:3px}
+.link-card p{font-size:11px;color:var(--muted)}
+
+/* CHECKLIST */
+.checklist{list-style:none;font-size:13px}
+.checklist li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border2)}
+.checklist li:last-child{border-bottom:none}
+.check-icon{flex-shrink:0;margin-top:2px;font-size:14px}
+.check-text{color:var(--muted)}
+
+/* STRATEGY PILLARS */
+.pillar-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.pillar-grid{grid-template-columns:1fr}.card-grid{grid-template-columns:1fr}}
+.pillar{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:22px}
+.pillar-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.pillar-num{font-size:.7rem;font-weight:700;color:var(--p);letter-spacing:2px}
+.pillar h3{font-size:14px;font-weight:700}
+.pillar-body{font-size:12px;color:var(--muted);line-height:1.8}
+.pillar-body ul{padding-left:14px}
+
+/* STATUS ROW */
+.status-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.status-item{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.status-label{font-size:10px;color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.status-val{font-size:13px;font-weight:600}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border2);margin:28px 0}
+
+/* ALERT */
+.alert{background:var(--y2);border:1px solid rgba(255,213,79,.25);border-radius:10px;padding:14px 16px;font-size:12px;color:var(--y);margin-bottom:20px;display:flex;gap:10px;align-items:flex-start}
+
+/* FLOW CHART */
+.flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0}
+.flow-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:12px;white-space:nowrap}
+.flow-arrow{color:var(--dim);font-size:16px}
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="logo">G-EIGHT 研究總覽</div>
+    <div class="header-meta">台灣獨立遊戲展 · 2026-06-09 更新</div>
+    <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="切換深色與淺色模式">淺色模式</button>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="show('overview',this)">總覽</button>
+    <button class="tab" onclick="show('scale',this)">歷屆規模</button>
+    <button class="tab" onclick="show('exhibitors',this)">2025 展商</button>
+    <button class="tab" onclick="show('audience',this)">客群分析</button>
+    <button class="tab" onclick="show('2026',this)">2026 追蹤</button>
+    <button class="tab" onclick="show('strategy',this)">業務策略</button>
+    <button class="tab" onclick="show('files',this)">深度研究</button>
+  </div>
+</div>
+
+<!-- ═══════════ TAB 1 總覽 ═══════════ -->
+<div class="pane active" id="pane-overview">
+
+  <div class="section">
+    <div class="section-title">展會概況</div>
+    <div class="kpi-grid">
+      <div class="kpi g"><div class="kpi-label">最新屆次</div><div class="kpi-val">第四屆</div><div class="kpi-sub">2025/12/12–14</div></div>
+      <div class="kpi o"><div class="kpi-label">參展廠商</div><div class="kpi-val">156</div><div class="kpi-sub">+11% vs 2024</div></div>
+      <div class="kpi p"><div class="kpi-label">展出遊戲</div><div class="kpi-val">250+</div><div class="kpi-sub">含 13 款世界首亮相</div></div>
+      <div class="kpi b"><div class="kpi-label">入場人次（2024）</div><div class="kpi-val">20,000+</div><div class="kpi-sub">YoY +30%</div></div>
+      <div class="kpi y"><div class="kpi-label">VIP 售票速度</div><div class="kpi-val">24分鐘</div><div class="kpi-sub">NT$8,888 終身 VIP 售罄</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">展會定位</div>
+    <div class="card-grid">
+      <div class="card">
+        <h4>核心定位</h4>
+        <p>「由玩家、為玩家」— 台灣本土獨立遊戲為核心，固定每年 12 月在台北花博爭艷館舉辦，連續四屆規模持續擴大。</p>
+      </div>
+      <div class="card">
+        <h4>主要客群</h4>
+        <p>18–35 歲台灣玩家為核心，70% 一般玩家、20% 業界人士、5% 媒體/KOL。北部為主，中南部及海外粉絲專程北上。</p>
+      </div>
+      <div class="card">
+        <h4>國際化趨勢</h4>
+        <p>第四屆（2025）首次引入 6 家海外廠商（日本 3、韓國 1、印尼 1、新加坡 1），顯示受眾對海外獨立遊戲接受度高。</p>
+      </div>
+      <div class="card">
+        <h4>我方角色</h4>
+        <p>G-EIGHT 海外業務：① 招攬歐美廠商參展 ② 發展代展（Showcase Representation）業務。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">2026 第五屆 狀態</div>
+    <div class="alert">⚠ 展商徵件預計 2026 年 6–7 月公告，現在是最佳接觸歐美廠商的時機點。</div>
+    <div class="status-grid">
+      <div class="status-item"><div class="status-label">展會日期</div><div class="status-val">2026/12/4–6 （五至日）</div></div>
+      <div class="status-item"><div class="status-label">地點</div><div class="status-val">台北花博爭艷館</div></div>
+      <div class="status-item"><div class="status-label">展商徵件</div><div class="status-val" style="color:var(--y)">尚未開放</div></div>
+      <div class="status-item"><div class="status-label">預估入場人次</div><div class="status-val">25,000–30,000</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">成長軌跡</div>
+    <div class="timeline">
+      <div class="tl-item done">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2022/12</div>
+        <div class="tl-title">第一屆</div>
+        <div class="tl-sub">台北花博爭艷館 · 15,000+ 人次</div>
+      </div>
+      <div class="tl-item done">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2023/12</div>
+        <div class="tl-title">第二屆</div>
+        <div class="tl-sub">150+ 款遊戲</div>
+      </div>
+      <div class="tl-item done">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2024/11–12</div>
+        <div class="tl-title">第三屆</div>
+        <div class="tl-sub">140 家廠商 · 180+ 款遊戲 · 20,000+ 人次（YoY +30%）· VIP 24 分鐘售罄</div>
+      </div>
+      <div class="tl-item done">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2025/12</div>
+        <div class="tl-title">第四屆</div>
+        <div class="tl-sub">156 家廠商 · 250+ 款遊戲 · 6 家首次海外廠商</div>
+      </div>
+      <div class="tl-item now">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2026/12</div>
+        <div class="tl-title">第五屆 ← 現在籌備中</div>
+        <div class="tl-sub">預計 25,000–30,000 人次 · 展商徵件 6–7 月開放</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB 2 歷屆規模 ═══════════ -->
+<div class="pane" id="pane-scale">
+
+  <div class="section">
+    <div class="section-title">歷屆基本數據</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>屆次</th><th>時間</th><th>地點</th><th>廠商數</th><th>展出作品</th><th>入場人次</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge badge-b">第一屆</span></td><td>2022/12/9–11</td><td>台北花博爭艷館</td><td class="num">—</td><td class="num">—</td><td class="num">15,000+</td></tr>
+          <tr><td><span class="badge badge-b">第二屆</span></td><td>2023/12/8–10</td><td>台北花博爭艷館</td><td class="num">—</td><td class="num">150+</td><td class="num">—</td></tr>
+          <tr><td><span class="badge badge-g">第三屆</span></td><td>2024/11/29–12/1</td><td>台北花博爭艷館</td><td class="num">140 家</td><td class="num">180+</td><td class="num">20,000+ <span class="badge badge-g">+30%</span></td></tr>
+          <tr><td><span class="badge badge-g">第四屆</span></td><td>2025/12/12–14</td><td>台北花博爭艷館</td><td class="num">156 家</td><td class="num">250+</td><td class="num" style="color:var(--dim)">尚未公布</td></tr>
+          <tr><td><span class="badge badge-y">第五屆</span></td><td>2026/12/4–6</td><td>台北花博爭艷館</td><td colspan="3" style="color:var(--y)">籌備中（徵件預計 6–7 月）</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">成長指標</div>
+    <div class="card-grid">
+      <div class="card">
+        <h4>展出作品成長</h4>
+        <p>2022 → 2025 年間成長約 <strong style="color:var(--g)">67%</strong>（150+ 至 250+）</p>
+      </div>
+      <div class="card">
+        <h4>入場人次成長</h4>
+        <p>2022–2024 成長 <strong style="color:var(--g)">33%+</strong>（15,000 → 20,000+），年均 +30%</p>
+      </div>
+      <div class="card">
+        <h4>售票動能</h4>
+        <p>第三屆售票量較第二屆成長 <strong style="color:var(--g)">30%</strong>；終身 VIP（NT$8,888）<strong style="color:var(--y)">24 分鐘售罄</strong></p>
+      </div>
+      <div class="card">
+        <h4>2026 預估</h4>
+        <p>延續年均 +30% 趨勢，預估入場人次達 <strong style="color:var(--b)">25,000–30,000</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">歷年展商徵件時間參考</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>屆次</th><th>展會日期</th><th>徵件開放（推估）</th><th>距展會</th></tr></thead>
+        <tbody>
+          <tr><td>第三屆</td><td>2024/11/29</td><td>2024 上半年</td><td class="num">約 5–6 個月前</td></tr>
+          <tr><td>第四屆</td><td>2025/12/12</td><td>2025 上半年</td><td class="num">約 5–6 個月前</td></tr>
+          <tr><td style="color:var(--y);font-weight:600">第五屆 ←</td><td style="color:var(--y)">2026/12/4</td><td style="color:var(--y)">預計 2026/6–7 月</td><td class="num" style="color:var(--y)">即將公告</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB 3 2025 展商 ═══════════ -->
+<div class="pane" id="pane-exhibitors">
+
+  <div class="section">
+    <div class="section-title">第四屆（2025）展商規模</div>
+    <div class="kpi-grid">
+      <div class="kpi g"><div class="kpi-label">獨立遊戲開發團隊</div><div class="kpi-val">126</div><div class="kpi-sub">家</div></div>
+      <div class="kpi o"><div class="kpi-label">發行商 / 硬體周邊</div><div class="kpi-val">30</div><div class="kpi-sub">家</div></div>
+      <div class="kpi p"><div class="kpi-label">展出遊戲總數</div><div class="kpi-val">250+</div><div class="kpi-sub">款</div></div>
+      <div class="kpi b"><div class="kpi-label">世界首亮相新作</div><div class="kpi-val">13</div><div class="kpi-sub">款</div></div>
+      <div class="kpi y"><div class="kpi-label">全新試玩內容</div><div class="kpi-val">14</div><div class="kpi-sub">款</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">海外首次參展廠商（2025，共 6 家）</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>廠商</th><th>國家</th><th>備註</th></tr></thead>
+        <tbody>
+          <tr><td>松竹遊戲（Shochiku Games）</td><td><span class="badge badge-b">日本</span></td><td>—</td></tr>
+          <tr><td>Phoenixx Inc.</td><td><span class="badge badge-b">日本</span></td><td>—</td></tr>
+          <tr><td>Ukiyo Studios</td><td><span class="badge badge-b">日本</span></td><td>展出《MONOWAVE》</td></tr>
+          <tr><td>Smilegate - STOVE</td><td><span class="badge badge-o">韓國</span></td><td>—</td></tr>
+          <tr><td>Toge Productions</td><td><span class="badge badge-g">印尼</span></td><td>—</td></tr>
+          <tr><td>Soft Source</td><td><span class="badge badge-p">新加坡</span></td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12px;color:var(--dim);margin-top:8px">完整名單（約 24 頁）：<a href="https://geight.io/en/category/2025-geight-exhibitors/" style="color:var(--b)" target="_blank">geight.io 官方頁面</a></p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">首次亮相遊戲（部分已知，共 13 款）</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>#</th><th>遊戲名稱</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>水果山派對</td></tr>
+          <tr><td>2</td><td>降星少女</td></tr>
+          <tr><td>3</td><td>夢遊邊境</td></tr>
+          <tr><td>4</td><td>SONZAI：神在之地</td></tr>
+          <tr><td>5</td><td>Strik-9: Rhythm Rat Rampage</td></tr>
+          <tr><td>6</td><td>Hyper Euphoria 全能私立偵探社</td></tr>
+          <tr><td>7</td><td>SPC 超科學掠食研究部</td></tr>
+          <tr><td>8</td><td>我推招喚裝置</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">推出全新試玩內容（共 14 款）</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>遊戲名稱</th><th>備註</th></tr></thead>
+        <tbody>
+          <tr><td>阿雷塔 YARETA</td><td>開放世界，提供長達 2 小時試玩</td></tr>
+          <tr><td>歡迎光臨啾便利！</td><td>互動小說</td></tr>
+          <tr><td>Dream Strikers</td><td>3D 動作格鬥</td></tr>
+          <tr><td>死深</td><td>—</td></tr>
+          <tr><td>Lily Fantasia 莉莉幻想曲</td><td>—</td></tr>
+          <tr><td>幻牌交鋒</td><td>—</td></tr>
+          <tr><td>活俠傳</td><td>—</td></tr>
+          <tr><td>亞路塔：狐狸狐途的麵包冒險</td><td>—</td></tr>
+          <tr><td>異病偵探</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">周邊販售知名 IP</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <span class="badge badge-p" style="font-size:12px;padding:5px 12px">空洞騎士</span>
+      <span class="badge badge-p" style="font-size:12px;padding:5px 12px">Undertale</span>
+      <span class="badge badge-p" style="font-size:12px;padding:5px 12px">星露谷物語</span>
+      <span class="badge badge-p" style="font-size:12px;padding:5px 12px">黑帝斯</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB 4 客群分析 ═══════════ -->
+<div class="pane" id="pane-audience">
+
+  <div class="section">
+    <div class="section-title">客群概況（推估）</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>維度</th><th>推估</th><th>依據</th></tr></thead>
+        <tbody>
+          <tr><td>主要年齡層</td><td><strong style="color:var(--g)">18–35 歲</strong></td><td>獨立遊戲核心受眾、KKTIX 售票通路使用族群</td></tr>
+          <tr><td>次要年齡層</td><td>13–17 歲</td><td>假日場次氛圍、現場試玩機制吸引青少年</td></tr>
+          <tr><td>主要地理範圍</td><td><strong>台灣北部</strong></td><td>展場固定於台北花博爭艷館</td></tr>
+          <tr><td>次要地理範圍</td><td>中南部、海外同好</td><td>部分粉絲專程北上</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">身份組成（推估比例）</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>身份</th><th>比例（估）</th><th>說明</th></tr></thead>
+        <tbody>
+          <tr><td>一般玩家</td><td><span class="badge badge-g">~70%</span></td><td>展會主要定位「由玩家、為玩家」</td></tr>
+          <tr><td>遊戲開發者 / 業界人士</td><td><span class="badge badge-b">~20%</span></td><td>設有業界交流活動、開發商展區</td></tr>
+          <tr><td>媒體 / KOL / 創作者</td><td><span class="badge badge-o">~5%</span></td><td>設有 Creators' Zone</td></tr>
+          <tr><td>其他（學生、研究者）</td><td><span class="badge badge-p">~5%</span></td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">忠誠度與消費意願指標</div>
+    <div class="card-grid">
+      <div class="card">
+        <h4>終身 VIP 售票速度</h4>
+        <p>NT$8,888 的終身 VIP 套票上架後 <strong style="color:var(--y)">24 分鐘售罄</strong>，顯示高黏著核心粉絲群的強烈消費意願。</p>
+      </div>
+      <div class="card">
+        <h4>年成長率</h4>
+        <p>第三屆售票量較第二屆成長 <strong style="color:var(--g)">30%</strong>，展會連續四屆規模持續擴大，回頭客比例高。</p>
+      </div>
+      <div class="card">
+        <h4>國際化接受度</h4>
+        <p>第四屆首次 6 家海外廠商參展（日韓東南亞），受眾對海外獨立遊戲接受度高，國際交流需求上升。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">客群興趣偏好（由展出類型推估）</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>遊戲類型</th><th>代表作品</th></tr></thead>
+        <tbody>
+          <tr><td>動作 / 格鬥</td><td>Dream Strikers</td></tr>
+          <tr><td>冒險 / 探索</td><td>夢遊邊境、阿雷塔 YARETA</td></tr>
+          <tr><td>音樂 / 節奏</td><td>Strik-9: Rhythm Rat Rampage、WotaBeats: Code Aria</td></tr>
+          <tr><td>視覺小說 / 互動敘事</td><td>歡迎光臨啾便利！、時空印記－台日戀想</td></tr>
+          <tr><td>策略 / 卡牌</td><td>幻牌交鋒</td></tr>
+          <tr><td>像素 / 復古風</td><td>空洞騎士、Undertale 周邊</td></tr>
+          <tr><td>RPG / 武俠</td><td>活俠傳</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">2026 客群預測</div>
+    <div class="status-grid">
+      <div class="status-item"><div class="status-label">預估入場人次</div><div class="status-val" style="color:var(--g)">25,000–30,000</div></div>
+      <div class="status-item"><div class="status-label">海外廠商趨勢</div><div class="status-val" style="color:var(--b)">持續增加</div></div>
+      <div class="status-item"><div class="status-label">受眾黏著度</div><div class="status-val" style="color:var(--g)">持續提升</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB 5 2026 追蹤 ═══════════ -->
+<div class="pane" id="pane-2026">
+
+  <div class="section">
+    <div class="section-title">已確認資訊</div>
+    <div class="status-grid">
+      <div class="status-item"><div class="status-label">舉辦日期</div><div class="status-val">2026/12/4（五）– 12/6（日）</div></div>
+      <div class="status-item"><div class="status-label">地點</div><div class="status-val">台北花博爭艷館</div></div>
+      <div class="status-item"><div class="status-label">展商徵件</div><div class="status-val" style="color:var(--y)">尚未開放</div></div>
+      <div class="status-item"><div class="status-label">完整展商名單</div><div class="status-val" style="color:var(--y)">尚未公開</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">待追蹤事項</div>
+    <div class="tbl-wrap" style="padding:16px 20px">
+      <ul class="checklist">
+        <li><span class="check-icon">⏳</span><span class="check-text">展商徵件開放時間（預計 2026/6–7 月）</span></li>
+        <li><span class="check-icon">⏳</span><span class="check-text">獨立遊戲開發者報名截止日</span></li>
+        <li><span class="check-icon">⏳</span><span class="check-text">完整展商名單公告</span></li>
+        <li><span class="check-icon">⏳</span><span class="check-text">售票開放日期與票價</span></li>
+        <li><span class="check-icon">⏳</span><span class="check-text">第四屆（2025）最終入場人次官方公布</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">官方資訊管道</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>管道</th><th>連結</th></tr></thead>
+        <tbody>
+          <tr><td>官方網站</td><td><a href="https://geight.io/" style="color:var(--b)" target="_blank">geight.io</a></td></tr>
+          <tr><td>Facebook</td><td><a href="https://www.facebook.com/geight.fb/" style="color:var(--b)" target="_blank">@geight.fb</a></td></tr>
+          <tr><td>Instagram</td><td><a href="https://www.instagram.com/geight.ig/" style="color:var(--b)" target="_blank">@geight.ig</a></td></tr>
+          <tr><td>X / Twitter</td><td><a href="https://x.com/geight_tw" style="color:var(--b)" target="_blank">@geight_tw</a></td></tr>
+          <tr><td>YouTube</td><td><a href="https://www.youtube.com/c/GEIGHT" style="color:var(--b)" target="_blank">youtube.com/c/GEIGHT</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">行動時間窗口</div>
+    <div class="alert">現在（6 月）是接觸歐美廠商的最佳時機：徵件即將開放，廠商仍在決策是否參加亞洲展會。</div>
+    <div class="flow">
+      <div class="flow-box" style="border-color:var(--y);color:var(--y)">6–7 月<br>接觸廠商</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box">徵件開放<br>協助廠商報名</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box">8–11 月<br>確認參展計畫</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:var(--g);color:var(--g)">12 月<br>現場執行</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB 6 業務策略 ═══════════ -->
+<div class="pane" id="pane-strategy">
+
+  <div class="section">
+    <div class="section-title">兩大業務主軸</div>
+    <div class="pillar-grid">
+      <div class="pillar">
+        <div class="pillar-head">
+          <div class="pillar-num">策略 01</div>
+          <h3>招攬歐美廠商參展</h3>
+        </div>
+        <div class="pillar-body">
+          <ul>
+            <li><strong>優先目標：</strong>已有繁/簡中版本的歐美廠商、曾參加 TGS 或 Taipei Game Show 的廠商、正尋找 APAC 發行商的中小型工作室</li>
+            <li><strong>主要工具：</strong>LinkedIn Sales Navigator、英文招商一頁式資料（one-pager）</li>
+            <li><strong>訊息策略：</strong>點出對方亞太市場動作（如已推繁中版）→ 說明展會觸及規模 → 邀約 15 分鐘視訊</li>
+            <li><strong>月追蹤目標：</strong>50+ 連結邀請 / 回覆率 &gt;15% / 5+ 進入通話</li>
+          </ul>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-head">
+          <div class="pillar-num">策略 02</div>
+          <h3>代展業務發展</h3>
+        </div>
+        <div class="pillar-body">
+          <ul>
+            <li><strong>模式：</strong>幫廠商在展會代為呈現遊戲（參考 Indie MEGABOOTH）</li>
+            <li><strong>定價參考：</strong>$5,000–10,000 USD / 台（大型展會）；多客戶共用攤位時利潤最大</li>
+            <li><strong>優先切入：</strong>亞洲廠商想進歐美（語言/人力障礙明顯，你熟悉歐美展）</li>
+            <li><strong>發展路徑：</strong>Phase 1 建立第一個案例 → Phase 2 標準化服務包 → Phase 3 規模化</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">兩塊業務的協同效應</div>
+    <div class="flow" style="margin:0 0 12px">
+      <div class="flow-box" style="border-color:var(--o);color:var(--o)">招商業務</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box">認識廠商</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:var(--p);color:var(--p)">發現代展需求</div>
+    </div>
+    <div class="flow">
+      <div class="flow-box" style="border-color:var(--p);color:var(--p)">代展成功案例</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:var(--g);color:var(--g)">最佳招商素材</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:var(--o);color:var(--o)">更好的招商成效</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-title">LinkedIn 冷開發訊息模板</div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:18px;font-size:13px;font-family:monospace;line-height:1.8;color:#c8c8e0">
+Hi [Name],<br><br>
+I noticed [Company] recently launched a Traditional Chinese version of [Game] — great move for the APAC market.<br><br>
+I'm with G Eight, organizers of Taiwan's leading indie gaming expo with [X] attendees annually. We've helped titles connect with Taiwanese and Southeast Asian gamers and media.<br><br>
+Would you be open to a quick 15-min call to explore if this could be a fit for your APAC strategy?<br><br>
+Best,<br>
+[Name]
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">目標展會（出差 / 競業研究）</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>展會</th><th>時間</th><th>適合做什麼</th></tr></thead>
+        <tbody>
+          <tr><td>GDC（San Francisco）</td><td>每年 3 月</td><td>認識開發者、發行商 BD</td></tr>
+          <tr><td>PAX East / PAX West</td><td>3 月 / 8 月</td><td>接觸獨立工作室</td></tr>
+          <tr><td>Gamescom（Cologne）</td><td>每年 8 月</td><td>歐洲最大展，B2B 媒合</td></tr>
+          <tr><td>Tokyo Game Show</td><td>每年 9 月</td><td>亞洲最大，適合想進日本市場的客戶</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">追蹤指標</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>指標</th><th>目標</th><th>頻率</th></tr></thead>
+        <tbody>
+          <tr><td>LinkedIn 連結邀請</td><td class="num">50+</td><td>月</td></tr>
+          <tr><td>回覆率</td><td class="num">&gt; 15%</td><td>月</td></tr>
+          <tr><td>進入通話階段</td><td class="num">5+</td><td>月</td></tr>
+          <tr><td>成交廠商數</td><td class="num">1–2</td><td>季</td></tr>
+          <tr><td>研究完成的展會數</td><td class="num">3</td><td>本月</td></tr>
+          <tr><td>第一個代展案例</td><td class="num">1</td><td>6 個月內</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB 7 深度研究 ═══════════ -->
+<div class="pane" id="pane-files">
+
+  <div class="section">
+    <div class="section-title">深度分析報告</div>
+    <div class="link-grid">
+      <a class="link-card" href="05_BitSummit研究.html">
+        <div class="link-icon">🇯🇵</div>
+        <div>
+          <h4>BitSummit 深度研究 &amp; G-EIGHT 比較</h4>
+          <p>規模成長、商業模式、深度 B2C、成人 / mature 專場、展覽商可複製策略</p>
+        </div>
+      </a>
+      <a class="link-card" href="06_歐美獨立遊戲展深度研究.html">
+        <div class="link-icon">🌍</div>
+        <div>
+          <h4>歐美獨立遊戲展深度研究</h4>
+          <p>PAX、GDC、Gamescom 等展會研究，聚焦 G-EIGHT 深度 B2C 與招商策略</p>
+        </div>
+      </a>
+      <a class="link-card" href="07_成人遊戲海外市場地圖與招商研究.html">
+        <div class="link-icon">18+</div>
+        <div>
+          <h4>Adult / Mature Game 歐美代展研究</h4>
+          <p>歐美 Steam / VN 發行商、adult indie 團隊、代展服務與 BD 優先級</p>
+        </div>
+      </a>
+      <a class="link-card" href="08_競品展會對標與合作可能.html">
+        <div class="link-icon">VS</div>
+        <div>
+          <h4>競品展會對標與合作可能</h4>
+          <p>BitSummit、BIC、TGS、Gamescom Asia、PAX 等展會對標、合作優先級與品牌影響力分析</p>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">原始資料文件</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>檔案</th><th>內容</th><th>位置</th></tr></thead>
+        <tbody>
+          <tr><td>01_歷屆規模總覽.md</td><td>歷屆時間、展商數、人次、成長趨勢（詳細版）</td><td>資料/</td></tr>
+          <tr><td>02_2025展商名單.md</td><td>第四屆完整展商與遊戲列表（含資料來源）</td><td>資料/</td></tr>
+          <tr><td>03_客群分析.md</td><td>年齡層、身份組成、興趣偏好、忠誠度指標</td><td>資料/</td></tr>
+          <tr><td>04_2026展會狀態與追蹤.md</td><td>第五屆進度、官方聯絡管道、徵件時間推估</td><td>資料/</td></tr>
+          <tr><td>05_參展商ROI分析.md</td><td>參展商 ROI、adult / mature game 展區價值、招商資料包方向</td><td>資料/</td></tr>
+          <tr><td>07_成人遊戲海外市場地圖與招商研究.html</td><td>歐美 adult / mature game 市場地圖、代展服務、BD 優先級</td><td>分析/</td></tr>
+          <tr><td>08_競品展會對標與合作可能.html</td><td>競品展會分層、對標矩陣、合作可能、品牌影響力、策略推演與決策問題</td><td>分析/</td></tr>
+          <tr><td>策略_01_招攬歐美遊戲廠商參展.md</td><td>詳細招商策略、行動步驟、話術</td><td>策略/</td></tr>
+          <tr><td>策略_02_代展業務發展.md</td><td>代展業務模式、Phase 1–3 發展路徑</td><td>策略/</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">資料夾結構</div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:18px;font-size:13px;font-family:monospace;line-height:2;color:#c8c8e0">
+GEIGHT_研究/<br>
+├── <span style="color:var(--g)">00_總覽.html</span> &nbsp;&nbsp;&nbsp;&nbsp;← 主入口（本頁）<br>
+├── 分析/<br>
+│ &nbsp;&nbsp;├── 05_營收分析與BitSummit比較.html<br>
+│ &nbsp;&nbsp;├── 06_歐美獨立遊戲展深度研究.html<br>
+│ &nbsp;&nbsp;├── 07_成人遊戲海外市場地圖與招商研究.html<br>
+│ &nbsp;&nbsp;└── 08_競品展會對標與合作可能.html<br>
+├── 策略/<br>
+│ &nbsp;&nbsp;├── 策略_01_招攬歐美遊戲廠商參展.md<br>
+│ &nbsp;&nbsp;└── 策略_02_代展業務發展.md<br>
+└── 資料/<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├── 01_歷屆規模總覽.md<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├── 02_2025展商名單.md<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├── 03_客群分析.md<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├── 04_2026展會狀態與追蹤.md<br>
+&nbsp;&nbsp;&nbsp;&nbsp;└── 05_參展商ROI分析.md
+    </div>
+  </div>
+
+</div>
+
+<script>
+function applyTheme(theme){
+  document.body.classList.toggle('light', theme === 'light');
+  document.querySelectorAll('.theme-toggle').forEach(btn=>{
+    btn.textContent = theme === 'light' ? '深色模式' : '淺色模式';
+  });
+}
+function toggleTheme(){
+  const next = document.body.classList.contains('light') ? 'dark' : 'light';
+  localStorage.setItem('geight-theme', next);
+  applyTheme(next);
+}
+applyTheme(localStorage.getItem('geight-theme') || 'dark');
+function show(id, btn){
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('pane-'+id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
